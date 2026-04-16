@@ -8,6 +8,7 @@
 	import type { Component } from 'svelte';
 	import { onMount } from 'svelte';
 	import { staggerFadeUp } from '$lib/animations';
+	import { preferences, type PkgManager } from '$lib/stores/preferences.svelte';
 
 	type InstallSnippet = { raw: string; html: string };
 
@@ -21,23 +22,19 @@
 		installBun: InstallSnippet;
 	} = $props();
 
-	type PM = 'bun' | 'pnpm' | 'npm';
-
-	let active: PM = $state('bun');
-
-	const tabs: { id: PM; label: string; icon: Component<{ class?: string }> }[] = [
+	const tabs: { id: PkgManager; label: string; icon: Component<{ class?: string }> }[] = [
 		{ id: 'bun', label: 'bun', icon: BunIcon },
 		{ id: 'pnpm', label: 'pnpm', icon: PnpmIcon },
 		{ id: 'npm', label: 'npm', icon: NpmIcon }
 	];
 
 	let current = $derived.by(() => {
-		const map: Record<PM, InstallSnippet> = {
+		const map: Record<PkgManager, InstallSnippet> = {
 			pnpm: installPnpm,
 			npm: installNpm,
 			bun: installBun
 		};
-		return map[active];
+		return map[preferences.pkgManager];
 	});
 
 	let inner: HTMLDivElement | null = $state(null);
@@ -84,15 +81,16 @@
 			<div class="flex border-b border-slate-800" role="tablist" aria-label="Package manager">
 				{#each tabs as tab (tab.id)}
 					{@const Icon = tab.icon}
+					{@const isActive = preferences.pkgManager === tab.id}
 					<button
 						type="button"
 						role="tab"
-						aria-selected={active === tab.id}
+						aria-selected={isActive}
 						aria-label={tab.label}
 						class="flex-1 min-h-10 px-4 border-none bg-transparent text-slate-300 font-mono text-xs font-medium cursor-pointer transition-colors duration-150 hover:text-white hover:bg-slate-800/50 inline-flex items-center justify-center gap-2"
-						class:!text-white={active === tab.id}
-						class:!bg-slate-800={active === tab.id}
-						onclick={() => (active = tab.id)}
+						class:!text-white={isActive}
+						class:!bg-slate-800={isActive}
+						onclick={() => preferences.setPkgManager(tab.id)}
 					>
 						<Icon class="size-4 shrink-0" />
 						<span>{tab.label}</span>
@@ -100,8 +98,20 @@
 				{/each}
 			</div>
 			<div class="flex items-center gap-2 py-2.5 pr-3 pl-4 sm:pl-5 overflow-hidden">
-				<div class="font-mono text-sm install-code overflow-x-auto flex-1 min-w-0">
-					{@html current.html}
+				<div class="font-mono text-sm install-code overflow-x-auto flex-1 min-w-0 install-stack">
+					<!-- All three variants share one grid cell so the container sizes to
+					     the widest. Only the active one is visible. -->
+					{#each tabs as tab (tab.id)}
+						{@const snippet =
+							tab.id === 'bun' ? installBun : tab.id === 'pnpm' ? installPnpm : installNpm}
+						<div
+							class="install-variant"
+							class:active={preferences.pkgManager === tab.id}
+							aria-hidden={preferences.pkgManager !== tab.id}
+						>
+							{@html snippet.html}
+						</div>
+					{/each}
 				</div>
 				<CopyButton text={current.raw} />
 			</div>
@@ -128,5 +138,17 @@
 		padding: 0 !important;
 		background: transparent !important;
 		white-space: pre;
+	}
+	/* Stack all install variants into one grid cell so the container width
+	   is fixed to the widest snippet (no jitter on tab switch). */
+	.install-stack {
+		display: grid;
+	}
+	.install-variant {
+		grid-area: 1 / 1;
+		visibility: hidden;
+	}
+	.install-variant.active {
+		visibility: visible;
 	}
 </style>
