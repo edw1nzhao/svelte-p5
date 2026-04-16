@@ -47,9 +47,7 @@ jobs:
 
       - name: Publish svelte-p5
         working-directory: packages/core
-        run: pnpm publish --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
 
   publish-components:
     needs: release-please
@@ -74,6 +72,4 @@ jobs:
 
       - name: Publish svelte-p5-components
         working-directory: packages/components
-        run: pnpm publish --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
