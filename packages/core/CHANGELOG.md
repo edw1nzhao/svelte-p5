@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/edw1nzhao/svelte-p5/compare/core-v0.2.1...core-v0.2.2) (2026-04-16)
+
+
+### Bug Fixes
+
+* correct GitHub username in repository URLs (edwinzhao -&gt; edw1nzhao) ([#16](https://github.com/edw1nzhao/svelte-p5/issues/16)) ([4e49478](https://github.com/edw1nzhao/svelte-p5/commit/4e4947882172d57ee0e3862eb0240985722a91a2))
+
 ## [0.2.1](https://github.com/edw1nzhao/svelte-p5/compare/core-v0.2.0...core-v0.2.1) (2026-04-16)
 
 
