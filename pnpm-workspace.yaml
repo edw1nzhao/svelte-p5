@@ -6,7 +6,7 @@ packages:
 # package.json so Renovate/dependabot touches one file instead of five.
 catalog:
   '@sveltejs/package': ^2.3.7
-  '@sveltejs/vite-plugin-svelte': ^5.0.0
+  '@sveltejs/vite-plugin-svelte': ^7.0.0
   '@tsconfig/svelte': ^5.0.0
   '@types/p5': ^1.7.6
   p5: ^1.11.0
