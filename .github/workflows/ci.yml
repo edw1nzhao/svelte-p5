@@ -23,6 +23,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Build first so the example apps can resolve `svelte-p5` and
+      # `svelte-p5-components` via the workspace symlink → dist/ chain
+      # during their typecheck step. `pnpm build` only covers packages/*;
+      # publint also runs here as part of each package's build script.
+      - name: Build packages
+        run: pnpm build
+
       - name: Lint
         run: pnpm lint
 
@@ -31,12 +38,6 @@ jobs:
 
       - name: Test
         run: pnpm test
-
-      - name: Build packages
-        run: pnpm build
-
-      - name: Verify package publint
-        run: pnpm -r --filter './packages/*' exec publint
 
       - name: Verify LICENSE in tarballs
         run: |
