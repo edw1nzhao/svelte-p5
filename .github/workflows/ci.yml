@@ -41,7 +41,7 @@ jobs:
 
       - name: Verify LICENSE in tarballs
         run: |
-          for pkg in packages/core packages/components; do
+          for pkg in packages/core packages/components packages/viz; do
             (cd "$pkg" && npm pack --dry-run --json | jq -e '.[0].files | map(.path) | any(. == "LICENSE")')
           done
 
