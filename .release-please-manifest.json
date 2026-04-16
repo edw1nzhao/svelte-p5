@@ -1,4 +1,5 @@
 {
 	"packages/core": "0.3.0",
-	"packages/components": "0.3.0"
+	"packages/components": "0.3.0",
+	"packages/viz": "0.1.0"
 }

@@ -296,6 +296,39 @@ importers:
         specifier: 'catalog:'
         version: 3.2.4(@types/node@25.6.0)(jiti@2.6.1)(lightningcss@1.32.0)(yaml@2.8.3)
 
+  packages/viz:
+    devDependencies:
+      '@sveltejs/package':
+        specifier: 'catalog:'
+        version: 2.5.7(svelte@5.55.4(@typescript-eslint/types@8.58.2))(typescript@5.9.3)
+      '@sveltejs/vite-plugin-svelte':
+        specifier: 'catalog:'
+        version: 5.1.1(svelte@5.55.4(@typescript-eslint/types@8.58.2))(vite@6.4.2(@types/node@25.6.0)(jiti@2.6.1)(lightningcss@1.32.0)(yaml@2.8.3))
+      '@types/p5':
+        specifier: 'catalog:'
+        version: 1.7.7
+      p5:
+        specifier: 'catalog:'
+        version: 1.11.13
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
+      svelte:
+        specifier: 'catalog:'
+        version: 5.55.4(@typescript-eslint/types@8.58.2)
+      svelte-check:
+        specifier: 'catalog:'
+        version: 4.4.6(picomatch@4.0.4)(svelte@5.55.4(@typescript-eslint/types@8.58.2))(typescript@5.9.3)
+      svelte-p5:
+        specifier: workspace:*
+        version: link:../core
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.4(@types/node@25.6.0)(jiti@2.6.1)(lightningcss@1.32.0)(yaml@2.8.3)
+
   site:
     dependencies:
       '@lucide/svelte':
