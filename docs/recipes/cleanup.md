@@ -1,15 +1,15 @@
 # Cleanup and lifecycle
 
-## The problem
+p5 schedules its draw loop via `requestAnimationFrame` and holds internal references for the canvas, listeners, and timers. The scheduler keeps a strong reference to the next-frame callback, which keeps the p5 instance alive. The only way to release everything is `instance.remove()`, which p5 implements as: cancel the rAF, detach listeners, drop internal references.
 
-`p5-svelte` creates a p5 instance in `onMount` and never tears it down. When the hosting component unmounts, the p5 instance keeps its draw loop running, holds its canvas node in memory, and retains every closure it captured. The visible symptoms:
+If a Svelte wrapper doesn't call `remove()` when the component unmounts, every mount/unmount cycle leaves the previous p5 instance running in the background. Symptoms include:
 
-- HMR reloads stack ghost canvases on top of each other.
-- `{#if showing}<P5Canvas />{/if}` leaks an instance every toggle.
-- SvelteKit route transitions silently accumulate instances.
-- The Performance tab shows `requestAnimationFrame` callbacks from unmounted components.
+- HMR reloads accumulating canvases on top of each other.
+- `{#if showing}<P5Canvas />{/if}` retaining an instance per toggle.
+- SvelteKit route transitions accumulating instances silently.
+- The Performance tab showing `requestAnimationFrame` callbacks from unmounted components.
 
-## The fix
+## How `<P5Canvas>` handles it
 
 `<P5Canvas>` is mostly one `onMount` with a teardown:
 
@@ -74,7 +74,7 @@ The `try/catch` around `remove()` is defensive. During HMR the container can dis
 
 ## HMR
 
-Editing a component that contains a `<P5Canvas>` triggers a normal unmount/remount. No leak, no stacking. If you do see double canvases during HMR, check whether your sketch adds listeners via `window.addEventListener` outside p5's scope — p5's `remove()` can't unwind those. Use `p.mousePressed` and friends, which are tied to the instance.
+Editing a component that contains a `<P5Canvas>` triggers a normal unmount/remount. No leak, no stacking. If you do see double canvases during HMR, check whether your sketch adds listeners via `window.addEventListener` outside p5's scope - p5's `remove()` can't unwind those. Use `p.mousePressed` and friends, which are tied to the instance.
 
 ## Verifying
 

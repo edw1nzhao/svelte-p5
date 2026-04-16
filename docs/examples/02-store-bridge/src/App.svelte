@@ -7,7 +7,7 @@
 	// Disable p5's Friendly Error System before we create any instance (perf win).
 	disableFES();
 
-	// One bridge, many inputs. Every field is reactive — writes from the UI
+	// One bridge, many inputs. Every field is reactive - writes from the UI
 	// are visible to the sketch on the very next frame; writes from inside
 	// the sketch (e.g. from mousePressed) are visible to Svelte immediately.
 	const bridge = createP5Bridge({
@@ -96,7 +96,7 @@
 	<p>
 		One <code>createP5Bridge</code> shared between Svelte UI and the sketch. UI writes flow into the
 		draw loop; sketch writes flow back to the UI. No subscriptions, no <code>bind:</code>
-		chains — just a <code>$state</code> proxy.
+		chains - just a <code>$state</code> proxy.
 	</p>
 
 	<div class="layout">

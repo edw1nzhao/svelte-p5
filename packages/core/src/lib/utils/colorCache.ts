@@ -2,8 +2,8 @@
  * Lazy cache for CSS color strings.
  *
  * p5.color() allocates a p5.Color instance on every call (object + typed
- * arrays + regex parse). Calling it in a draw loop — e.g. to colorize per
- * speaker or per data-point — leaks a lot of garbage. Use a ColorCache to
+ * arrays + regex parse). Calling it in a draw loop - e.g. to colorize per
+ * speaker or per data-point - leaks a lot of garbage. Use a ColorCache to
  * compute each color once and reuse the CSS string.
  *
  * @example

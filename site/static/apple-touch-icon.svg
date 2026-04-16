@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+	<defs>
+		<linearGradient id="g" x1="0" y1="0" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#6366f1" />
+			<stop offset="1" stop-color="#a855f7" />
+		</linearGradient>
+	</defs>
+	<rect width="180" height="180" rx="40" fill="url(#g)" />
+	<g fill="#ffffff" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="62" font-weight="700" text-anchor="middle">
+		<text x="90" y="80" letter-spacing="-3">sp</text>
+		<text x="90" y="142" letter-spacing="-3">5</text>
+	</g>
+</svg>

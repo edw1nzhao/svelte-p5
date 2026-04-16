@@ -1,7 +1,7 @@
 /**
  * A single reactive class for the whole dashboard.
  *
- * The `tick` counter advances independently of any single sketch — if a
+ * The `tick` counter advances independently of any single sketch - if a
  * sketch closes, the others keep animating. This is the correct pattern
  * for shared animation state.
  */

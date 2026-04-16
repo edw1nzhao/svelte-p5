@@ -2,7 +2,7 @@
  * Bridge reactive Svelte state into a p5 sketch closure.
  *
  * Mutations from either side are seen by the other. Because p5's draw loop
- * reads fields on every frame, you don't need effects or subscriptions —
+ * reads fields on every frame, you don't need effects or subscriptions -
  * just read `bridge.state.foo` inside your sketch and write to it from
  * Svelte UI.
  *

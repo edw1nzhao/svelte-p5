@@ -47,4 +47,4 @@ Dense small text with a loaded font. OpenType.js path rendering at 3× DPR is ev
 
 ## Things that don't change
 
-`p.mouseX` and `p.mouseY` stay in CSS pixels regardless of `pixelDensity`. Don't multiply them. `p.width` and `p.height` are also CSS pixels — p5 hides the backing-store scaling from you, which is almost always what you want.
+`p.mouseX` and `p.mouseY` stay in CSS pixels regardless of `pixelDensity`. Don't multiply them. `p.width` and `p.height` are also CSS pixels - p5 hides the backing-store scaling from you, which is almost always what you want.

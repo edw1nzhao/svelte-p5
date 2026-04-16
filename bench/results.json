@@ -1,0 +1,527 @@
+{
+  "when": "2026-04-16T19:41:04.838Z",
+  "config": {
+    "runs": 3,
+    "toggles": 500,
+    "particles": 2000,
+    "fpsWindowMs": 3000
+  },
+  "leak": {
+    "modern": [
+      {
+        "canvases": 1,
+        "created": 500,
+        "removed": 500,
+        "alive": 0,
+        "toggles": 500,
+        "elapsedMs": 4162
+      },
+      {
+        "canvases": 1,
+        "created": 500,
+        "removed": 500,
+        "alive": 0,
+        "toggles": 500,
+        "elapsedMs": 4161
+      },
+      {
+        "canvases": 1,
+        "created": 500,
+        "removed": 500,
+        "alive": 0,
+        "toggles": 500,
+        "elapsedMs": 4160
+      }
+    ],
+    "legacy": [
+      {
+        "canvases": 1,
+        "created": 500,
+        "removed": 0,
+        "alive": 500,
+        "toggles": 500,
+        "elapsedMs": 37775
+      },
+      {
+        "canvases": 1,
+        "created": 500,
+        "removed": 0,
+        "alive": 500,
+        "toggles": 500,
+        "elapsedMs": 39300
+      },
+      {
+        "canvases": 1,
+        "created": 500,
+        "removed": 0,
+        "alive": 500,
+        "toggles": 500,
+        "elapsedMs": 38685
+      }
+    ]
+  },
+  "fps": {
+    "modern": [
+      {
+        "fg": 180,
+        "ghost": 0,
+        "windowMs": 3000.2000000476837,
+        "fps": 59.99600026569534
+      },
+      {
+        "fg": 180,
+        "ghost": 0,
+        "windowMs": 3000.300000011921,
+        "fps": 59.994000599701636
+      },
+      {
+        "fg": 180,
+        "ghost": 0,
+        "windowMs": 3000.2999999523163,
+        "fps": 59.99400060089349
+      }
+    ],
+    "legacy": [
+      {
+        "fg": 180,
+        "ghost": 0,
+        "windowMs": 3000.099999964237,
+        "fps": 59.99800006737965
+      },
+      {
+        "fg": 180,
+        "ghost": 0,
+        "windowMs": 3000.199999988079,
+        "fps": 59.99600026688727
+      },
+      {
+        "fg": 181,
+        "ghost": 0,
+        "windowMs": 3002.399999976158,
+        "fps": 60.28510524961274
+      }
+    ]
+  },
+  "ghostFps": {
+    "modern": {
+      "0": [
+        {
+          "ghostCount": 0,
+          "alive": 1,
+          "fgFps": 59.99600026569534,
+          "ghostFps": 0,
+          "windowMs": 3000.2000000476837,
+          "error": null
+        },
+        {
+          "ghostCount": 0,
+          "alive": 1,
+          "fgFps": 60.32528996061945,
+          "ghostFps": 0,
+          "windowMs": 3000.400000035763,
+          "error": null
+        }
+      ],
+      "10": [
+        {
+          "ghostCount": 10,
+          "alive": 1,
+          "fgFps": 60.32528996061945,
+          "ghostFps": 0,
+          "windowMs": 3000.400000035763,
+          "error": null
+        },
+        {
+          "ghostCount": 10,
+          "alive": 1,
+          "fgFps": 59.998000066187636,
+          "ghostFps": 0,
+          "windowMs": 3000.100000023842,
+          "error": null
+        }
+      ],
+      "25": [
+        {
+          "ghostCount": 25,
+          "alive": 1,
+          "fgFps": 59.998000066187636,
+          "ghostFps": 0,
+          "windowMs": 3000.100000023842,
+          "error": null
+        },
+        {
+          "ghostCount": 25,
+          "alive": 1,
+          "fgFps": 59.99600026688727,
+          "ghostFps": 0,
+          "windowMs": 3000.199999988079,
+          "error": null
+        }
+      ],
+      "50": [
+        {
+          "ghostCount": 50,
+          "alive": 1,
+          "fgFps": 59.99800006737965,
+          "ghostFps": 0,
+          "windowMs": 3000.099999964237,
+          "error": null
+        },
+        {
+          "ghostCount": 50,
+          "alive": 1,
+          "fgFps": 59.99800006737965,
+          "ghostFps": 0,
+          "windowMs": 3000.099999964237,
+          "error": null
+        }
+      ],
+      "100": [
+        {
+          "ghostCount": 100,
+          "alive": 1,
+          "fgFps": 59.99600026569534,
+          "ghostFps": 0,
+          "windowMs": 3000.2000000476837,
+          "error": null
+        },
+        {
+          "ghostCount": 100,
+          "alive": 1,
+          "fgFps": 59.99800006737965,
+          "ghostFps": 0,
+          "windowMs": 3000.099999964237,
+          "error": null
+        }
+      ]
+    },
+    "legacy": {
+      "0": [
+        {
+          "ghostCount": 0,
+          "alive": 1,
+          "fgFps": 59.99600026688727,
+          "ghostFps": 0,
+          "windowMs": 3000.199999988079,
+          "error": null
+        },
+        {
+          "ghostCount": 0,
+          "alive": 1,
+          "fgFps": 59.998000066187636,
+          "ghostFps": 0,
+          "windowMs": 3000.100000023842,
+          "error": null
+        }
+      ],
+      "10": [
+        {
+          "ghostCount": 10,
+          "alive": 11,
+          "fgFps": 59.99600026688727,
+          "ghostFps": 599.9600026688727,
+          "windowMs": 3000.199999988079,
+          "error": null
+        },
+        {
+          "ghostCount": 10,
+          "alive": 11,
+          "fgFps": 59.99600026688727,
+          "ghostFps": 599.9600026688727,
+          "windowMs": 3000.199999988079,
+          "error": null
+        }
+      ],
+      "25": [
+        {
+          "ghostCount": 25,
+          "alive": 26,
+          "fgFps": 59.99600026688727,
+          "ghostFps": 1499.900006672182,
+          "windowMs": 3000.199999988079,
+          "error": null
+        },
+        {
+          "ghostCount": 25,
+          "alive": 26,
+          "fgFps": 59.99800006737965,
+          "ghostFps": 1499.9500016844913,
+          "windowMs": 3000.099999964237,
+          "error": null
+        }
+      ],
+      "50": [
+        {
+          "ghostCount": 50,
+          "alive": 51,
+          "fgFps": 43.33586952960177,
+          "ghostFps": 2166.793476480089,
+          "windowMs": 3022.899999976158,
+          "error": null
+        },
+        {
+          "ghostCount": 50,
+          "alive": 51,
+          "fgFps": 44.71036886036788,
+          "ghostFps": 2235.518443018394,
+          "windowMs": 3041.800000011921,
+          "error": null
+        }
+      ],
+      "100": [
+        {
+          "ghostCount": 100,
+          "alive": 101,
+          "fgFps": 22.803531289791135,
+          "ghostFps": 2280.3531289791135,
+          "windowMs": 3069.699999988079,
+          "error": null
+        },
+        {
+          "ghostCount": 100,
+          "alive": 101,
+          "fgFps": 22.136857868264897,
+          "ghostFps": 2213.6857868264897,
+          "windowMs": 3071.800000011921,
+          "error": null
+        }
+      ]
+    }
+  },
+  "scaling": {
+    "modern": {
+      "100": {
+        "canvases": 1,
+        "created": 100,
+        "removed": 100,
+        "alive": 0,
+        "toggles": 100,
+        "elapsedMs": 834
+      },
+      "250": {
+        "canvases": 1,
+        "created": 250,
+        "removed": 250,
+        "alive": 0,
+        "toggles": 250,
+        "elapsedMs": 2077
+      },
+      "500": {
+        "canvases": 1,
+        "created": 500,
+        "removed": 500,
+        "alive": 0,
+        "toggles": 500,
+        "elapsedMs": 4166
+      }
+    },
+    "legacy": {
+      "100": {
+        "canvases": 1,
+        "created": 100,
+        "removed": 0,
+        "alive": 100,
+        "toggles": 100,
+        "elapsedMs": 1228
+      },
+      "250": {
+        "canvases": 1,
+        "created": 250,
+        "removed": 0,
+        "alive": 250,
+        "toggles": 250,
+        "elapsedMs": 9209
+      },
+      "500": {
+        "canvases": 1,
+        "created": 500,
+        "removed": 0,
+        "alive": 500,
+        "toggles": 500,
+        "elapsedMs": 37859
+      }
+    }
+  },
+  "aggregate": {
+    "leak": {
+      "modern": {
+        "alive": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "std": 0
+        },
+        "time": {
+          "mean": 4161,
+          "median": 4161,
+          "min": 4160,
+          "max": 4162,
+          "std": 0.816496580927726
+        }
+      },
+      "legacy": {
+        "alive": {
+          "mean": 500,
+          "median": 500,
+          "min": 500,
+          "max": 500,
+          "std": 0
+        },
+        "time": {
+          "mean": 38586.666666666664,
+          "median": 38685,
+          "min": 37775,
+          "max": 39300,
+          "std": 626.4494304322488
+        }
+      }
+    },
+    "fps": {
+      "modern": {
+        "mean": 59.99466715543016,
+        "median": 59.99400060089349,
+        "min": 59.994000599701636,
+        "max": 59.99600026569534,
+        "std": 0.0009426513085826288
+      },
+      "legacy": {
+        "mean": 60.09303519462656,
+        "median": 59.99800006737965,
+        "min": 59.99600026688727,
+        "max": 60.28510524961274,
+        "std": 0.13581649216817013
+      }
+    },
+    "ghostFps": {
+      "modern": {
+        "0": {
+          "mean": 60.1606451131574,
+          "median": 60.32528996061945,
+          "min": 59.99600026569534,
+          "max": 60.32528996061945,
+          "std": 0.16464484746205343
+        },
+        "10": {
+          "mean": 60.16164501340354,
+          "median": 60.32528996061945,
+          "min": 59.998000066187636,
+          "max": 60.32528996061945,
+          "std": 0.16364494721590717
+        },
+        "25": {
+          "mean": 59.997000166537454,
+          "median": 59.998000066187636,
+          "min": 59.99600026688727,
+          "max": 59.998000066187636,
+          "std": 0.0009998996501821011
+        },
+        "50": {
+          "mean": 59.99800006737965,
+          "median": 59.99800006737965,
+          "min": 59.99800006737965,
+          "max": 59.99800006737965,
+          "std": 0
+        },
+        "100": {
+          "mean": 59.9970001665375,
+          "median": 59.99800006737965,
+          "min": 59.99600026569534,
+          "max": 59.99800006737965,
+          "std": 0.0009999008421530675
+        }
+      },
+      "legacy": {
+        "0": {
+          "mean": 59.997000166537454,
+          "median": 59.998000066187636,
+          "min": 59.99600026688727,
+          "max": 59.998000066187636,
+          "std": 0.0009998996501821011
+        },
+        "10": {
+          "mean": 59.99600026688727,
+          "median": 59.99600026688727,
+          "min": 59.99600026688727,
+          "max": 59.99600026688727,
+          "std": 0
+        },
+        "25": {
+          "mean": 59.997000167133464,
+          "median": 59.99800006737965,
+          "min": 59.99600026688727,
+          "max": 59.99800006737965,
+          "std": 0.0009999002461889006
+        },
+        "50": {
+          "mean": 44.02311919498483,
+          "median": 44.71036886036788,
+          "min": 43.33586952960177,
+          "max": 44.71036886036788,
+          "std": 0.6872496653830531
+        },
+        "100": {
+          "mean": 22.470194579028018,
+          "median": 22.803531289791135,
+          "min": 22.136857868264897,
+          "max": 22.803531289791135,
+          "std": 0.33333671076311866
+        }
+      }
+    },
+    "scaling": {
+      "modern": {
+        "100": {
+          "canvases": 1,
+          "created": 100,
+          "removed": 100,
+          "alive": 0,
+          "toggles": 100,
+          "elapsedMs": 834
+        },
+        "250": {
+          "canvases": 1,
+          "created": 250,
+          "removed": 250,
+          "alive": 0,
+          "toggles": 250,
+          "elapsedMs": 2077
+        },
+        "500": {
+          "canvases": 1,
+          "created": 500,
+          "removed": 500,
+          "alive": 0,
+          "toggles": 500,
+          "elapsedMs": 4166
+        }
+      },
+      "legacy": {
+        "100": {
+          "canvases": 1,
+          "created": 100,
+          "removed": 0,
+          "alive": 100,
+          "toggles": 100,
+          "elapsedMs": 1228
+        },
+        "250": {
+          "canvases": 1,
+          "created": 250,
+          "removed": 0,
+          "alive": 250,
+          "toggles": 250,
+          "elapsedMs": 9209
+        },
+        "500": {
+          "canvases": 1,
+          "created": 500,
+          "removed": 0,
+          "alive": 500,
+          "toggles": 500,
+          "elapsedMs": 37859
+        }
+      }
+    }
+  }
+}

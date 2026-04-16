@@ -1,4 +1,4 @@
-# 01 — Basic sketch
+# 01 - Basic sketch
 
 The smallest `<P5Canvas>` setup: a sketch function and the component. No state, no UI, no bridge. Start here.
 

@@ -10,7 +10,7 @@ export type SketchFn = (p: p5) => void;
  * Props accepted by the `<P5Canvas>` component.
  */
 export interface P5CanvasProps {
-	/** Your sketch function — assigns p.setup, p.draw, etc. */
+	/** Your sketch function - assigns p.setup, p.draw, etc. */
 	sketch: SketchFn;
 	/** Bindable: the p5 instance, available after mount. `null` before mount or after unmount. */
 	instance?: p5 | null;

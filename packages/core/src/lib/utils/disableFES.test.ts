@@ -12,7 +12,7 @@ describe('disableFES', () => {
 		expect((globalThis as { IS_MINIFIED?: boolean }).IS_MINIFIED).toBe(true);
 	});
 
-	it('is idempotent — calling twice is fine', () => {
+	it('is idempotent - calling twice is fine', () => {
 		disableFES();
 		disableFES();
 		expect((globalThis as { IS_MINIFIED?: boolean }).IS_MINIFIED).toBe(true);

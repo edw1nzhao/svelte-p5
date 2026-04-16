@@ -10,11 +10,11 @@ pnpm add svelte-p5 p5
 pnpm add svelte-p5-components
 ```
 
-You'll need **Svelte 5** and **Node 22+** (24 recommended). Works in SvelteKit SSR out of the box — `p5` is dynamically imported on the client by the wrapper, so you don't need `{#if browser}` guards.
+You'll need **Svelte 5** and **Node 22+** (24 recommended). Works in SvelteKit SSR out of the box - `p5` is dynamically imported on the client by the wrapper, so you don't need `{#if browser}` guards.
 
 Coming from `p5-svelte`? See the [migration guide](./recipes/migration-from-p5-svelte.md) first.
 
-## Layer 1 — just the wrapper
+## Layer 1 - just the wrapper
 
 If you already know p5 and just want a correct-lifecycle Svelte wrapper:
 
@@ -49,7 +49,7 @@ Need the p5 instance from outside the sketch? Use `bind:instance`:
 <button onclick={() => instance?.redraw()}>Force redraw</button>
 ```
 
-## Layer 2 — reactive state bridge
+## Layer 2 - reactive state bridge
 
 When Svelte UI needs to drive sketch state (or vice-versa), skip the subscription boilerplate:
 
@@ -77,7 +77,7 @@ When Svelte UI needs to drive sketch state (or vice-versa), skip the subscriptio
 
 `bridge.state` is a `$state` proxy. Both the Svelte UI and the sketch mutate it directly; the sketch reads live values every frame.
 
-Could you just close over a plain `$state` variable and skip the bridge? Yes — and for single-value cases that's usually cleanest. Reach for `createP5Bridge` when you have 3+ related fields you want to group, or when you want to pass a single `bridge` object between modules without threading individual state through.
+Could you just close over a plain `$state` variable and skip the bridge? Yes - and for single-value cases that's usually cleanest. Reach for `createP5Bridge` when you have 3+ related fields you want to group, or when you want to pass a single `bridge` object between modules without threading individual state through.
 
 For module-scope shared state across many sketches and components, use a **reactive class** in a `.svelte.ts` file:
 
@@ -92,7 +92,7 @@ export const dashboard = new DashboardState();
 
 Import it anywhere. Writes from anywhere propagate to readers. See `docs/examples/03-draggable-dashboard/` for the full pattern.
 
-## Layer 3 — pre-built components
+## Layer 3 - pre-built components
 
 When you want the 80% case solved:
 
@@ -114,9 +114,9 @@ When you want the 80% case solved:
 <DraggableSketch title="Orbit" {sketch} initialX={40} initialY={80} width={480} height={360} />
 ```
 
-Each of these is a thin Svelte 5 component built on Layer 1 + Layer 2. Read their source — they're short.
+Each of these is a thin Svelte 5 component built on Layer 1 + Layer 2. Read their source - they're short.
 
-## Performance — two lines to call before your first sketch
+## Performance - two lines to call before your first sketch
 
 ```ts
 import { disableFES } from 'svelte-p5';

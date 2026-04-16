@@ -22,11 +22,11 @@ export interface FontAtlas {
  * Pre-render a fixed set of strings to an offscreen buffer **once**, then
  * composite them each frame with `p5.image()`. This bypasses the OpenType.js
  * path-rendering slow path that fires for every `p5.text()` call when you've
- * `loadFont()`'d an OTF/TTF file — typically a 10-100× speedup for text-heavy
+ * `loadFont()`'d an OTF/TTF file - typically a 10-100× speedup for text-heavy
  * sketches (word clouds, axis labels, small-multiples titles).
  *
  * Use for a fixed vocabulary (speaker names, category labels, axis ticks).
- * Don't use for per-frame dynamic text — that defeats the point.
+ * Don't use for per-frame dynamic text - that defeats the point.
  *
  * @see https://github.com/processing/p5.js/blob/main/src/core/p5.Renderer2D.js
  */

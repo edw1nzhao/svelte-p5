@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+	<defs>
+		<linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#0f172a" />
+			<stop offset="1" stop-color="#1e1b4b" />
+		</linearGradient>
+		<linearGradient id="badge" x1="0" y1="0" x2="160" y2="160" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#6366f1" />
+			<stop offset="1" stop-color="#a855f7" />
+		</linearGradient>
+		<linearGradient id="grad-text" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#818cf8" />
+			<stop offset="1" stop-color="#c084fc" />
+		</linearGradient>
+	</defs>
+	<rect width="1200" height="630" fill="url(#bg)" />
+
+	<!-- subtle grid -->
+	<g stroke="#1e293b" stroke-width="1" opacity="0.4">
+		<path d="M0 158 H1200 M0 316 H1200 M0 474 H1200 M300 0 V630 M600 0 V630 M900 0 V630" />
+	</g>
+
+	<!-- monogram badge -->
+	<g transform="translate(80 80)">
+		<rect width="160" height="160" rx="36" fill="url(#badge)" />
+		<g fill="#ffffff" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="56" font-weight="700" text-anchor="middle">
+			<text x="80" y="72" letter-spacing="-2">sp</text>
+			<text x="80" y="128" letter-spacing="-2">5</text>
+		</g>
+	</g>
+
+	<!-- title -->
+	<text x="80" y="340" fill="url(#grad-text)" font-family="Inter, system-ui, sans-serif" font-size="84" font-weight="700" letter-spacing="-3">
+		p5 draws pixels.
+	</text>
+	<text x="80" y="430" fill="#f1f5f9" font-family="Inter, system-ui, sans-serif" font-size="84" font-weight="700" letter-spacing="-3">
+		Svelte does everything else.
+	</text>
+
+	<!-- subtitle -->
+	<text x="80" y="500" fill="#94a3b8" font-family="Inter, system-ui, sans-serif" font-size="32" font-weight="500">
+		Svelte 5 + p5.js — correct lifecycle, reactive bridge, components.
+	</text>
+
+	<!-- footer -->
+	<text x="80" y="580" fill="#64748b" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="26" font-weight="500">
+		svelte-p5.dev
+	</text>
+</svg>

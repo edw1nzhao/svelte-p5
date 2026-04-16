@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://svelte-p5.dev/sitemap.xml

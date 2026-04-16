@@ -91,7 +91,7 @@
 				from the toolbar.
 			</p>
 			<p>
-				This window itself is a <code>&lt;DraggableWindow&gt;</code> with arbitrary content — the "custom
+				This window itself is a <code>&lt;DraggableWindow&gt;</code> with arbitrary content - the "custom
 				docs" pattern for info panels next to live sketches.
 			</p>
 		</div>
