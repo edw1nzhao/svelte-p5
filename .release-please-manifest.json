@@ -1,9 +1,4 @@
 {
-<<<<<<< HEAD
 	"packages/core": "0.2.2",
-	"packages/components": "0.2.0"
-=======
-	"packages/core": "0.2.1",
 	"packages/components": "0.2.1"
->>>>>>> origin/main
 }
