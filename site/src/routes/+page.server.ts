@@ -8,7 +8,8 @@ import {
 	draggableSketchSnippet,
 	installPnpmSnippet,
 	installNpmSnippet,
-	installBunSnippet
+	installBunSnippet,
+	type CodeSnippet
 } from '$lib/snippets';
 
 const THEME = 'slack-dark';
@@ -22,20 +23,23 @@ export async function load() {
 	const highlight = (code: string, lang: 'svelte' | 'bash') =>
 		highlighter.codeToHtml(code, { lang, theme: THEME });
 
-	const svelte = (raw: string) => ({ raw, html: highlight(raw, 'svelte') });
 	const bash = (raw: string) => ({ raw, html: highlight(raw, 'bash') });
+	const svelteVariants = (snippet: CodeSnippet) => ({
+		ts: { raw: snippet.ts, html: highlight(snippet.ts, 'svelte') },
+		js: { raw: snippet.js, html: highlight(snippet.js, 'svelte') }
+	});
 
 	return {
 		snippets: {
 			installPnpm: bash(installPnpmSnippet),
 			installNpm: bash(installNpmSnippet),
 			installBun: bash(installBunSnippet),
-			basic: svelte(basicSnippet),
-			bridge: svelte(bridgeSnippet),
-			components: svelte(componentsSnippet),
-			sharedState: svelte(sharedStateSnippet),
-			interaction: svelte(interactionSnippet),
-			draggableSketch: svelte(draggableSketchSnippet)
+			basic: svelteVariants(basicSnippet),
+			bridge: svelteVariants(bridgeSnippet),
+			components: svelteVariants(componentsSnippet),
+			sharedState: svelteVariants(sharedStateSnippet),
+			interaction: svelteVariants(interactionSnippet),
+			draggableSketch: svelteVariants(draggableSketchSnippet)
 		}
 	};
 }
