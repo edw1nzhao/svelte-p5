@@ -9,7 +9,7 @@ catalog:
   '@sveltejs/vite-plugin-svelte': ^5.0.0
   '@tsconfig/svelte': ^5.0.0
   '@types/p5': ^1.7.6
-  p5: ^1.11.0
+  p5: ^2.2.3
   publint: ^0.3.0
   svelte: ^5.0.0
   svelte-check: ^4.1.0
