@@ -23,8 +23,9 @@
     }
   },
   "include-component-in-tag": true,
-  "separate-pull-requests": true,
-  "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
+  "separate-pull-requests": false,
+  "always-update": true,
+  "pull-request-title-pattern": "chore: release ${version}",
   "changelog-sections": [
     { "type": "feat", "section": "Features" },
     { "type": "fix", "section": "Bug Fixes" },
