@@ -1,3 +1,5 @@
+<script lang="ts"></script>
+
 <section class="py-20 px-6 bg-slate-50 border-y border-slate-200">
 	<div class="max-w-6xl mx-auto grid grid-cols-1 gap-12 md:grid-cols-3">
 		<div>

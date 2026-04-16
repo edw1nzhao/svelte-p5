@@ -14,13 +14,20 @@
 		installBun: InstallSnippet;
 	} = $props();
 
-	let active: 'bun' | 'pnpm' | 'npm' = $state('bun');
+	type PM = 'bun' | 'pnpm' | 'npm';
 
-	const tabs = ['bun', 'pnpm', 'npm'] as const;
+	let active: PM = $state('bun' as PM);
 
-	let current = $derived(
-		active === 'pnpm' ? installPnpm : active === 'npm' ? installNpm : installBun
-	);
+	const tabs: PM[] = ['bun', 'pnpm', 'npm'];
+
+	let current = $derived.by(() => {
+		const map: Record<PM, InstallSnippet> = {
+			pnpm: installPnpm,
+			npm: installNpm,
+			bun: installBun
+		};
+		return map[active];
+	});
 </script>
 
 <section

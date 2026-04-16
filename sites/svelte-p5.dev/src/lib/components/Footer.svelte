@@ -1,3 +1,5 @@
+<script lang="ts"></script>
+
 <footer class="border-t border-slate-200 py-8 px-6 bg-slate-50">
 	<div class="max-w-6xl mx-auto flex items-center justify-between">
 		<div class="flex items-center gap-2 text-sm text-slate-500">
