@@ -9,7 +9,7 @@
 - [ ] docs (documentation only)
 - [ ] refactor / perf / style
 - [ ] chore / build / ci / test
-- [ ] breaking change (major bump — include `BREAKING CHANGE:` footer in commit)
+- [ ] breaking change (major bump - include `BREAKING CHANGE:` footer in commit)
 
 ## Package(s) touched
 

@@ -56,14 +56,14 @@
 		return typeof v === 'number' ? `${v}px` : v;
 	}
 
-	// Focus management — each window gets a reactive z-index slot shared
+	// Focus management - each window gets a reactive z-index slot shared
 	// across every DraggableWindow on the page. Clicking brings it to top.
 	const win = registerWindow();
 
 	// Live position. Neodrag's `position` plugin drives the element via
 	// transform; we update this state from onDrag AND on resize/clamp,
 	// and the Compartment re-evaluates to push changes back into neodrag.
-	// `untrack` prevents these props from forming a reactive dep — they're
+	// `untrack` prevents these props from forming a reactive dep - they're
 	// *initial* values only; later position comes from user drag.
 	let pos = $state(untrack(() => ({ x: initialX, y: initialY })));
 
@@ -74,9 +74,13 @@
 
 	function clampToViewport() {
 		if (typeof window === 'undefined') return;
+		// When constrained to a parent, neodrag's `bounds(BoundsFrom.parent())`
+		// already keeps the window inside; viewport math here would be wrong
+		// because positions are relative to the parent, not the viewport.
+		if (constrained === 'parent') return;
 		const vw = window.innerWidth;
 		const vh = window.innerHeight;
-		// Never allow the titlebar above the viewport top — that's the
+		// Never allow the titlebar above the viewport top - that's the
 		// "unreachable" case. Allow partial horizontal overflow so narrow
 		// screens don't trap wide windows, but always keep `minVisible`
 		// pixels of the window on-screen for a grab handle.
@@ -90,7 +94,7 @@
 		};
 	}
 
-	// Keep size fresh (used for clamp math) — ResizeObserver on our own
+	// Keep size fresh (used for clamp math) - ResizeObserver on our own
 	// root element catches CSS resize-from-corner too.
 	$effect(() => {
 		if (!rootEl) return;
@@ -106,7 +110,7 @@
 		return () => ro.disconnect();
 	});
 
-	// Re-clamp on window resize — this is the "snap back in when the
+	// Re-clamp on window resize - this is the "snap back in when the
 	// viewport shrinks" case.
 	$effect(() => {
 		if (typeof window === 'undefined') return;
@@ -139,6 +143,8 @@
 <div
 	bind:this={rootEl}
 	class="draggable-window"
+	class:dw-fixed={constrained !== 'parent'}
+	class:dw-absolute={constrained === 'parent'}
 	style:width={toCssSize(width)}
 	style:height={toCssSize(height)}
 	style:min-width={toCssSize(minWidth)}
@@ -162,7 +168,6 @@
 
 <style>
 	.draggable-window {
-		position: fixed;
 		top: 0;
 		left: 0;
 		display: flex;
@@ -176,6 +181,16 @@
 		overflow: hidden;
 		/* Native resize from the bottom-right corner. */
 		resize: both;
+	}
+	/* Default: float above the viewport (suits constrained="viewport" or "none"). */
+	.dw-fixed {
+		position: fixed;
+	}
+	/* When constrained to a parent, position absolute inside that parent so
+	   the visual position matches the drag bounds. The parent must be a
+	   positioning context (`position: relative` or similar). */
+	.dw-absolute {
+		position: absolute;
 	}
 	.dw-titlebar {
 		display: flex;

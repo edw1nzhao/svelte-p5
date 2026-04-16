@@ -44,6 +44,9 @@
     "README.md",
     "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "scripts": {
     "build": "svelte-package -o dist && publint",

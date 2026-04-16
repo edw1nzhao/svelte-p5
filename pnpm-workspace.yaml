@@ -1,6 +1,7 @@
 packages:
   - 'packages/*'
-  - 'sites/*'
+  - 'site'
+  - 'bench'
   - 'docs/examples/*'
 
 # Centralized devDep versions — referenced as "catalog:" in each

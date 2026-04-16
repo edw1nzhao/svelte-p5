@@ -1,0 +1,22 @@
+{
+	"name": "svelte-p5",
+	"short_name": "svelte-p5",
+	"description": "Svelte 5 + p5.js — correct lifecycle, reactive bridge, components.",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#0f172a",
+	"theme_color": "#6366f1",
+	"icons": [
+		{
+			"src": "/icon.svg",
+			"type": "image/svg+xml",
+			"sizes": "any",
+			"purpose": "any maskable"
+		},
+		{
+			"src": "/apple-touch-icon.svg",
+			"sizes": "180x180",
+			"type": "image/svg+xml"
+		}
+	]
+}

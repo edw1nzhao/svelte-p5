@@ -54,7 +54,7 @@ export default [
 	{
 		// Site uses {@html} for build-time shiki output (safe, not user input)
 		// and anchor links that don't need SvelteKit's resolve().
-		files: ['sites/**/*.svelte'],
+		files: ['site/**/*.svelte'],
 		rules: {
 			'svelte/no-at-html-tags': 'off',
 			'svelte/no-navigation-without-resolve': 'off'

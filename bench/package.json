@@ -1,0 +1,25 @@
+{
+  "name": "@svelte-p5/bench",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "bench": "vite build && node ./run-bench.mjs"
+  },
+  "dependencies": {
+    "svelte-p5": "workspace:*",
+    "p5": "catalog:"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@types/p5": "catalog:",
+    "playwright": "^1.50.0",
+    "svelte": "catalog:",
+    "svelte-check": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

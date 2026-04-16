@@ -4,7 +4,7 @@ on:
   push:
     branches: ['main']
     paths:
-      - 'sites/svelte-p5.dev/**'
+      - 'site/**'
       - 'packages/**'
   workflow_dispatch:
 
@@ -45,7 +45,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'sites/svelte-p5.dev/build'
+          path: 'site/build'
 
   deploy:
     needs: build

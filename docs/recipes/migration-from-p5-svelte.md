@@ -4,9 +4,9 @@ If you're on [`p5-svelte`](https://github.com/tonyketcham/p5-svelte) (last relea
 
 ## Why move
 
-- Svelte 5 native. Runes, `$bindable`, `$effect`. No legacy reactivity.
-- No memory leak. `<P5Canvas>` calls `instance.remove()` on unmount; `p5-svelte`'s component does not, which stacks ghost canvases on HMR, route transitions, and every `{#if}` toggle.
-- Active maintenance, conventional commits, release-please, dependabot.
+- Svelte 5 native. Runes, `$bindable`, `$effect`.
+- `<P5Canvas>` calls `instance.remove()` on unmount, so `{#if}` toggles, route transitions, and HMR don't accumulate p5 instances. See the [cleanup recipe](./cleanup.md) for what that means in practice and the [perf comparison](../perf-comparison.md) for numbers.
+- Active maintenance: conventional commits, release-please, dependabot.
 - Performance utilities (`disableFES`, `createColorCache`, `createFontAtlas`) included.
 - Optional higher-level layer (auto-resize, FPS, draggable windows) in `svelte-p5-components`.
 
@@ -76,7 +76,7 @@ After:
 
 ## State: replacing manual subscription
 
-`p5-svelte` didn't ship a state bridge, so most users wired up writable stores by hand.
+`p5-svelte` focused on the canvas wrapper itself, leaving state management to the consumer (typically writable stores). svelte-p5 ships `createP5Bridge` for the same job, plus reactive class patterns for shared state.
 
 Before:
 
@@ -120,7 +120,7 @@ No `subscribe`, no mirror variable.
 
 ## What you should notice after migrating
 
-Detached-canvas counts stay flat on `{#if}` toggles. HMR no longer stacks canvases. Route transitions with a `<P5Canvas>` inside release properly. You don't do anything to get this — it's the whole reason to move.
+Detached-canvas counts stay flat on `{#if}` toggles, HMR no longer accumulates canvases, and route transitions with a `<P5Canvas>` inside release cleanly. You don't do anything to get this; the wrapper handles it.
 
 ## Dependency version
 

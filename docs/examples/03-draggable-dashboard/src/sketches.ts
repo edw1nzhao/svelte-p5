@@ -4,7 +4,7 @@ import { dashboard } from './sharedState.svelte';
 /**
  * Three sketches that all read from the shared dashboard state.
  * Because the state is a `$state` proxy, reading fields inside the
- * draw loop always sees the latest values — no subscriptions needed.
+ * draw loop always sees the latest values - no subscriptions needed.
  */
 
 export const orbitSketch = (p: p5) => {
