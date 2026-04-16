@@ -1,0 +1,59 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "packages": {
+    "packages/core": {
+      "release-type": "node",
+      "component": "core",
+      "package-name": "svelte-p5",
+      "changelog-path": "CHANGELOG-next.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": false,
+      "draft": false,
+      "prerelease": true,
+      "prerelease-type": "alpha"
+    },
+    "packages/components": {
+      "release-type": "node",
+      "component": "components",
+      "package-name": "svelte-p5-components",
+      "changelog-path": "CHANGELOG-next.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": false,
+      "draft": false,
+      "prerelease": true,
+      "prerelease-type": "alpha"
+    },
+    "packages/viz": {
+      "release-type": "node",
+      "component": "viz",
+      "package-name": "svelte-p5-viz",
+      "changelog-path": "CHANGELOG-next.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": false,
+      "draft": false,
+      "prerelease": true,
+      "prerelease-type": "alpha"
+    }
+  },
+  "include-component-in-tag": true,
+  "separate-pull-requests": false,
+  "always-update": true,
+  "plugins": [
+    {
+      "type": "node-workspace",
+      "updatePeerDependencies": true
+    }
+  ],
+  "pull-request-title-pattern": "chore: release alpha ${version}",
+  "changelog-sections": [
+    { "type": "feat", "section": "Features" },
+    { "type": "fix", "section": "Bug Fixes" },
+    { "type": "perf", "section": "Performance" },
+    { "type": "refactor", "section": "Refactors" },
+    { "type": "docs", "section": "Documentation" },
+    { "type": "build", "section": "Build" },
+    { "type": "ci", "section": "CI" },
+    { "type": "chore", "section": "Chores", "hidden": true },
+    { "type": "test", "section": "Tests", "hidden": true }
+  ]
+}
