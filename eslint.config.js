@@ -44,7 +44,11 @@ export default [
 	},
 	{
 		rules: {
-			'@typescript-eslint/no-explicit-any': 'off'
+			'@typescript-eslint/no-explicit-any': 'off',
+			// ESLint 10 enabled this rule. Svelte 5's `$bindable(default)`
+			// and `$props()` destructuring with defaults look like useless
+			// assignments to the linter but are actually meaningful API.
+			'no-useless-assignment': 'off'
 		}
 	}
 ];
