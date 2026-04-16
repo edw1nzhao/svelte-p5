@@ -63,31 +63,24 @@
 		expanded || maxVisible === undefined ? entities : entities.slice(0, maxVisible)
 	);
 
+	const groupKeys = $derived.by(() => {
+		const keys: string[] = [];
+		for (const e of visibleEntities) {
+			const k = e.group ?? '';
+			if (!keys.includes(k)) keys.push(k);
+		}
+		return keys;
+	});
+
+	const hasGroupBoundaries = $derived(groupKeys.some((k) => k !== ''));
+
 	const hiddenCount = $derived(
 		maxVisible === undefined || expanded ? 0 : Math.max(0, entities.length - maxVisible)
 	);
 
-	// Preserve insertion order within groups. Plain-object bucket rather than
-	// Map to keep the derived value trivially reactive — the lint rule against
-	// mutable Map instances inside runes is a useful guard even though this
-	// one is throwaway.
-	const grouped = $derived.by(() => {
-		const buckets: Record<string, Entity[]> = {};
-		const order: string[] = [];
-		for (const e of visibleEntities) {
-			const key = e.group ?? '';
-			let bucket = buckets[key];
-			if (!bucket) {
-				bucket = [];
-				buckets[key] = bucket;
-				order.push(key);
-			}
-			bucket.push(e);
-		}
-		return order.map((key) => ({ key, entities: buckets[key] ?? [] }));
-	});
-
-	const hasGroups = $derived(grouped.some((g) => g.key !== ''));
+	function entitiesInGroup(key: string): Entity[] {
+		return visibleEntities.filter((e) => (e.group ?? '') === key);
+	}
 
 	function isVisible(e: Entity) {
 		return e.visible !== false;
@@ -103,17 +96,17 @@
 	}
 </script>
 
-<div class="entity-toggle-list {className}" data-has-groups={hasGroups}>
+<div class="entity-toggle-list {className}" data-has-groups={hasGroupBoundaries}>
 	{#if heading}
 		<div class="entity-toggle-list__heading">{heading}</div>
 	{/if}
 
-	{#each grouped as group (group.key)}
-		{#if hasGroups && group.key}
-			<div class="entity-toggle-list__group-label">{group.key}</div>
+	{#each groupKeys as key (key)}
+		{#if hasGroupBoundaries && key}
+			<div class="entity-toggle-list__group-label">{key}</div>
 		{/if}
 		<div class="entity-toggle-list__row">
-			{#each group.entities as entity (entity.id)}
+			{#each entitiesInGroup(key) as entity (entity.id)}
 				<div class="entity-toggle-list__item" class:is-hidden={!isVisible(entity)}>
 					{#if onColorChange}
 						<label
