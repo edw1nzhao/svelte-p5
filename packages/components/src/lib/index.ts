@@ -6,3 +6,4 @@ export { default as DraggableSketch } from './DraggableSketch.svelte';
 export { default as CanvasFrame } from './CanvasFrame.svelte';
 export { default as SplitPane } from './SplitPane.svelte';
 export { default as HoverTooltip } from './HoverTooltip.svelte';
+export { default as EntityToggleList, type Entity } from './EntityToggleList.svelte';
