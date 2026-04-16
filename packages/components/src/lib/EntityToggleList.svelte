@@ -76,13 +76,15 @@
 		const order: string[] = [];
 		for (const e of visibleEntities) {
 			const key = e.group ?? '';
-			if (!(key in buckets)) {
-				buckets[key] = [];
+			let bucket = buckets[key];
+			if (!bucket) {
+				bucket = [];
+				buckets[key] = bucket;
 				order.push(key);
 			}
-			buckets[key].push(e);
+			bucket.push(e);
 		}
-		return order.map((key) => ({ key, entities: buckets[key] }));
+		return order.map((key) => ({ key, entities: buckets[key] ?? [] }));
 	});
 
 	const hasGroups = $derived(grouped.some((g) => g.key !== ''));
