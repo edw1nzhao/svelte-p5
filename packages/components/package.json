@@ -46,7 +46,9 @@
   "scripts": {
     "build": "svelte-package -o dist && publint",
     "typecheck": "svelte-check --tsconfig ./tsconfig.json",
-    "test": "echo \"no tests yet\" && exit 0"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@neodrag/svelte": "3.0.0-next.8"
@@ -60,11 +62,18 @@
     "svelte-p5": "workspace:*",
     "@sveltejs/package": "catalog:",
     "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/svelte": "catalog:",
+    "@testing-library/user-event": "catalog:",
     "@types/p5": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "happy-dom": "catalog:",
     "p5": "catalog:",
     "publint": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
   }
 }
