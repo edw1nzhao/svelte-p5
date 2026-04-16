@@ -1,0 +1,46 @@
+{
+  "name": "svelte-p5-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Svelte 5 + p5.js integration toolkit — layered primitives, components, and patterns",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edwinzhao/svelte-p5.git"
+  },
+  "homepage": "https://github.com/edwinzhao/svelte-p5#readme",
+  "bugs": {
+    "url": "https://github.com/edwinzhao/svelte-p5/issues"
+  },
+  "author": "Edwin Zhao",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r --filter './packages/*' build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "prettier --check . && eslint .",
+    "lint:fix": "prettier --write . && eslint . --fix",
+    "test": "pnpm -r test",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@eslint/js": "^9.18.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
+    "eslint-config-prettier": "^10.0.0",
+    "eslint-plugin-svelte": "^3.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.0",
+    "prettier": "^3.4.0",
+    "prettier-plugin-svelte": "^3.3.0",
+    "svelte-eslint-parser": "^1.0.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.20.0"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "engines": {
+    "node": ">=22"
+  }
+}

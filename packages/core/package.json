@@ -1,0 +1,68 @@
+{
+  "name": "svelte-p5",
+  "version": "0.1.0",
+  "description": "Svelte 5 + p5.js integration primitives — <P5Canvas> wrapper, rune bridge, and performance utilities",
+  "keywords": [
+    "svelte",
+    "svelte5",
+    "p5",
+    "p5.js",
+    "creative-coding",
+    "canvas",
+    "visualization",
+    "generative-art"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edwinzhao/svelte-p5.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/edwinzhao/svelte-p5/tree/main/packages/core#readme",
+  "bugs": {
+    "url": "https://github.com/edwinzhao/svelte-p5/issues"
+  },
+  "author": "Edwin Zhao",
+  "license": "MIT",
+  "type": "module",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "default": "./dist/utils/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "svelte-package -o dist && publint",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "peerDependencies": {
+    "p5": ">=1.11.0 <3",
+    "svelte": "^5.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/package": "catalog:",
+    "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@types/p5": "catalog:",
+    "p5": "catalog:",
+    "publint": "catalog:",
+    "svelte": "catalog:",
+    "svelte-check": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

@@ -1,0 +1,34 @@
+min_version = "2024.9.5"
+
+[tools]
+node = "24"
+pnpm = "10"
+bun = "latest"
+
+[env]
+_.path = ['{{config_root}}/node_modules/.bin']
+NODE_ENV = "{{ env.NODE_ENV | default(value='development') }}"
+
+[tasks.install]
+description = "Install all workspace dependencies"
+run = "pnpm install"
+
+[tasks.build]
+description = "Build every package in the workspace"
+run = "pnpm -r build"
+
+[tasks.typecheck]
+description = "Type-check every package"
+run = "pnpm -r typecheck"
+
+[tasks.lint]
+description = "Run prettier + eslint across the repo"
+run = "pnpm lint"
+
+[tasks.test]
+description = "Run tests in every package"
+run = "pnpm -r test"
+
+[tasks.example]
+description = "Start the basic example dev server"
+run = "pnpm --filter ./docs/examples/01-basic dev"

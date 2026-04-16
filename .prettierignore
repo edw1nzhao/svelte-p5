@@ -1,0 +1,7 @@
+node_modules
+dist
+build
+.svelte-kit
+pnpm-lock.yaml
+CHANGELOG.md
+.release-please-manifest.json

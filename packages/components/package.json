@@ -1,0 +1,67 @@
+{
+  "name": "svelte-p5-components",
+  "version": "0.1.0",
+  "description": "Higher-level Svelte 5 components built on svelte-p5: responsive canvas, FPS monitor, sketch debug overlay, draggable windows",
+  "keywords": [
+    "svelte",
+    "svelte5",
+    "p5",
+    "p5.js",
+    "draggable",
+    "dashboard",
+    "visualization",
+    "components"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edwinzhao/svelte-p5.git",
+    "directory": "packages/components"
+  },
+  "homepage": "https://github.com/edwinzhao/svelte-p5/tree/main/packages/components#readme",
+  "bugs": {
+    "url": "https://github.com/edwinzhao/svelte-p5/issues"
+  },
+  "author": "Edwin Zhao",
+  "license": "MIT",
+  "type": "module",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "svelte-package -o dist && publint",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json",
+    "test": "echo \"no tests yet\" && exit 0"
+  },
+  "dependencies": {
+    "@neodrag/svelte": "3.0.0-next.8"
+  },
+  "peerDependencies": {
+    "svelte-p5": "workspace:^",
+    "p5": ">=1.11.0 <3",
+    "svelte": "^5.0.0"
+  },
+  "devDependencies": {
+    "svelte-p5": "workspace:*",
+    "@sveltejs/package": "catalog:",
+    "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@types/p5": "catalog:",
+    "p5": "catalog:",
+    "publint": "catalog:",
+    "svelte": "catalog:",
+    "svelte-check": "catalog:",
+    "typescript": "catalog:"
+  }
+}

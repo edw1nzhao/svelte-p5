@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: jdx/mise-action@v3
+        with:
+          cache: true
+          experimental: true
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Verify package publint
+        run: pnpm -r --filter './packages/*' exec publint
+
+      - name: Verify LICENSE in tarballs
+        run: |
+          for pkg in packages/core packages/components; do
+            (cd "$pkg" && npm pack --dry-run --json | jq -e '.[0].files | map(.path) | any(. == "LICENSE")')
+          done
+
+  commitlint:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: jdx/mise-action@v3
+        with:
+          cache: true
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Validate commits
+        run: pnpm exec commitlint --from=${{ github.event.pull_request.base.sha }} --to=${{ github.event.pull_request.head.sha }} --verbose

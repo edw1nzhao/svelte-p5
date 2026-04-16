@@ -1,0 +1,26 @@
+{
+  "name": "@svelte-p5-example/01-basic",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "dependencies": {
+    "svelte-p5": "workspace:*",
+    "p5": "catalog:"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@tsconfig/svelte": "catalog:",
+    "@types/p5": "catalog:",
+    "svelte": "catalog:",
+    "svelte-check": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}
