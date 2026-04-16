@@ -1,0 +1,119 @@
+name: release-please (next)
+
+# Prerelease pipeline. Mirrors .github/workflows/release-please.yml but
+# targets the `next` branch, uses a separate manifest so alpha versions
+# don't collide with stable, and publishes to npm with `--tag next` so
+# `pnpm add svelte-p5` still resolves to `latest` while
+# `pnpm add svelte-p5@next` pulls the alpha.
+#
+# A commit on `next` with a conventional message triggers release-please
+# to open a release PR on `next`. Merging that PR cuts a prerelease:
+# e.g. 0.2.2 → 0.3.0-alpha.0, 0.3.0-alpha.0 → 0.3.0-alpha.1. When the
+# feature is ready, merge `next` into `main` and the stable-channel
+# workflow takes over (dropping the -alpha.N suffix).
+
+on:
+  push:
+    branches: [next]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          config-file: release-please-config-next.json
+          manifest-file: .release-please-manifest-next.json
+          target-branch: next
+
+  publish-core:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/core') }}
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: next
+
+      - uses: jdx/mise-action@v4
+        with:
+          cache: true
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm -r --filter './packages/*' build
+
+      - name: Publish svelte-p5 (alpha)
+        working-directory: packages/core
+        run: npm publish --tag next
+
+  publish-components:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/components') }}
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: next
+
+      - uses: jdx/mise-action@v4
+        with:
+          cache: true
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm -r --filter './packages/*' build
+
+      - name: Publish svelte-p5-components (alpha)
+        working-directory: packages/components
+        run: npm publish --tag next
+
+  publish-viz:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/viz') }}
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: next
+
+      - uses: jdx/mise-action@v4
+        with:
+          cache: true
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm -r --filter './packages/*' build
+
+      - name: Publish svelte-p5-viz (alpha)
+        working-directory: packages/viz
+        run: npm publish --tag next
