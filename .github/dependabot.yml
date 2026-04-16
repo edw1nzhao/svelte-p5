@@ -1,5 +1,7 @@
 version: 2
 updates:
+  # npm — weekly, grouped by severity. Majors are a separate PR per dep
+  # (not batched) so we can review them individually.
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
@@ -10,13 +12,26 @@ updates:
       prefix: 'chore'
       include: 'scope'
     groups:
-      dev-deps:
+      # One PR for all minor + patch updates across dev deps.
+      dev-deps-minor:
         dependency-type: 'development'
-      peer-deps:
+        update-types:
+          - 'minor'
+          - 'patch'
+      # One PR for all minor + patch updates across runtime deps.
+      peer-deps-minor:
         patterns:
           - 'svelte'
           - 'p5'
           - '@neodrag/*'
+        update-types:
+          - 'minor'
+          - 'patch'
+    ignore:
+      # p5 v2 is a deliberate future release (see README roadmap). Bumps
+      # to p5@2+ will be reintroduced when we explicitly support them.
+      - dependency-name: 'p5'
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: 'github-actions'
     directory: '/'
@@ -24,3 +39,7 @@ updates:
       interval: 'monthly'
     commit-message:
       prefix: 'ci'
+    groups:
+      gh-actions:
+        patterns:
+          - '*'
