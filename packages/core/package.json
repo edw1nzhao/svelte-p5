@@ -1,6 +1,6 @@
 {
   "name": "svelte-p5",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Svelte 5 + p5.js integration primitives — <P5Canvas> wrapper, rune bridge, and performance utilities",
   "keywords": [
     "svelte",
