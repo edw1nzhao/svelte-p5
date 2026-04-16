@@ -50,5 +50,14 @@ export default [
 			// assignments to the linter but are actually meaningful API.
 			'no-useless-assignment': 'off'
 		}
+	},
+	{
+		// Site uses {@html} for build-time shiki output (safe, not user input)
+		// and anchor links that don't need SvelteKit's resolve().
+		files: ['sites/**/*.svelte'],
+		rules: {
+			'svelte/no-at-html-tags': 'off',
+			'svelte/no-navigation-without-resolve': 'off'
+		}
 	}
 ];

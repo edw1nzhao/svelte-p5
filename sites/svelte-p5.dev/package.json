@@ -1,0 +1,31 @@
+{
+  "name": "@svelte-p5/site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
+  },
+  "dependencies": {
+    "svelte-p5": "workspace:*",
+    "svelte-p5-components": "workspace:*",
+    "p5": "catalog:",
+    "animejs": "^4.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-static": "^3.0.0",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/p5": "catalog:",
+    "shiki": "^3.0.0",
+    "svelte": "catalog:",
+    "svelte-check": "catalog:",
+    "tailwindcss": "^4.0.0",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}
