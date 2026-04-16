@@ -73,3 +73,28 @@ jobs:
       - name: Publish svelte-p5-components
         working-directory: packages/components
         run: npm publish
+
+  publish-viz:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/viz') }}
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: jdx/mise-action@v4
+        with:
+          cache: true
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm -r --filter './packages/*' build
+
+      - name: Publish svelte-p5-viz
+        working-directory: packages/viz
+        run: npm publish
