@@ -44,8 +44,7 @@
 				<CodeDemo
 					title="The basics"
 					description="A minimal sketch. The wrapper handles lifecycle and cleanup."
-					codeHtml={data.snippets.basic.html}
-					codeRaw={data.snippets.basic.raw}
+					code={data.snippets.basic}
 				>
 					{#snippet demo()}
 						<BasicDemo />
@@ -55,8 +54,7 @@
 				<CodeDemo
 					title="Reactive state bridge"
 					description="Svelte UI and p5 sketch share state through a $state proxy. Move the sliders."
-					codeHtml={data.snippets.bridge.html}
-					codeRaw={data.snippets.bridge.raw}
+					code={data.snippets.bridge}
 				>
 					{#snippet demo()}
 						<BridgeDemo />
@@ -66,8 +64,7 @@
 				<CodeDemo
 					title="Pre-built components"
 					description="Responsive canvas with HiDPI and FPS monitoring - one import away."
-					codeHtml={data.snippets.components.html}
-					codeRaw={data.snippets.components.raw}
+					code={data.snippets.components}
 				>
 					{#snippet demo()}
 						<ComponentsDemo />
@@ -77,8 +74,7 @@
 				<CodeDemo
 					title="Shared state across sketches"
 					description="One bridge, two canvases. Both sketches read the same $state every frame, so a single slider drives them in sync."
-					codeHtml={data.snippets.sharedState.html}
-					codeRaw={data.snippets.sharedState.raw}
+					code={data.snippets.sharedState}
 				>
 					{#snippet demo()}
 						<SharedStateDemo />
@@ -88,8 +84,7 @@
 				<CodeDemo
 					title="Mouse interaction & hit-testing"
 					description="Click to spawn particles. Hover the labeled circles - the hit-test result flows back into Svelte UI through the bridge."
-					codeHtml={data.snippets.interaction.html}
-					codeRaw={data.snippets.interaction.raw}
+					code={data.snippets.interaction}
 				>
 					{#snippet demo()}
 						<InteractionDemo />
@@ -99,8 +94,7 @@
 				<CodeDemo
 					title="Floating draggable sketches"
 					description="DraggableSketch wraps a sketch in a movable, resizable window. constrained='parent' keeps it inside its container."
-					codeHtml={data.snippets.draggableSketch.html}
-					codeRaw={data.snippets.draggableSketch.raw}
+					code={data.snippets.draggableSketch}
 				>
 					{#snippet demo()}
 						<DraggableSketchDemo />
