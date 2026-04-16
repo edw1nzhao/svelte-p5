@@ -48,7 +48,8 @@
     "build": "svelte-package -o dist && publint",
     "typecheck": "svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "peerDependencies": {
     "p5": ">=1.11.0 <3",
@@ -59,12 +60,14 @@
     "@sveltejs/package": "catalog:",
     "@sveltejs/vite-plugin-svelte": "catalog:",
     "@types/p5": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
     "p5": "catalog:",
     "publint": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
     "svelte-p5": "workspace:*",
     "typescript": "catalog:",
+    "vite": "catalog:",
     "vitest": "catalog:"
   }
 }
