@@ -94,6 +94,90 @@ function escapeHtml(s: string): string {
 	return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+const PMS = ['bun', 'pnpm', 'npm'] as const;
+type PM = (typeof PMS)[number];
+
+/**
+ * Translate one line of a pnpm-flavored bash snippet to the target package
+ * manager. Returns:
+ *   - the rewritten line on success
+ *   - the line unchanged if it's a comment, blank, or already PM-agnostic
+ *   - null if the line is not safely translatable (e.g. uses `--filter`,
+ *     pipes, or chained commands), in which case the whole block should be
+ *     left as a normal code block.
+ *
+ * Conservative on purpose: better to leave a docs block alone than to emit
+ * a "bun" variant that doesn't actually work. See the call-site in `code()`.
+ */
+function translatePnpmLine(line: string, target: PM): string | null {
+	const trimmed = line.trim();
+	if (trimmed === '' || trimmed.startsWith('#')) return line;
+
+	// Reject lines we can't faithfully translate.
+	if (/--filter|--workspace|--recursive|(^|\s)-r(\s|$)|&&|\|\||;|`/.test(trimmed)) return null;
+
+	const m = trimmed.match(/^pnpm\s+(.*)$/);
+	if (!m || !m[1]) return null;
+	const rest = m[1].trim();
+
+	const replace = (re: RegExp, sub: string) => line.replace(re, sub);
+
+	let sub = rest.match(/^dlx\s+(.+)$/);
+	if (sub) {
+		if (target === 'pnpm') return line;
+		if (target === 'npm') return replace(/pnpm\s+dlx\s+/, 'npx ');
+		if (target === 'bun') return replace(/pnpm\s+dlx\s+/, 'bunx ');
+	}
+
+	sub = rest.match(/^add\s+(.+)$/);
+	if (sub) {
+		if (target === 'pnpm') return line;
+		if (target === 'npm') return replace(/pnpm\s+add\s+/, 'npm install ');
+		if (target === 'bun') return replace(/pnpm\s+add\s+/, 'bun add ');
+	}
+
+	sub = rest.match(/^(remove|rm)\s+(.+)$/);
+	if (sub) {
+		if (target === 'pnpm') return replace(/pnpm\s+rm\s+/, 'pnpm remove ');
+		if (target === 'npm') return replace(/pnpm\s+(remove|rm)\s+/, 'npm uninstall ');
+		if (target === 'bun') return replace(/pnpm\s+(remove|rm)\s+/, 'bun remove ');
+	}
+
+	if (rest === 'install' || rest === 'i') {
+		if (target === 'pnpm') return replace(/pnpm\s+i\b/, 'pnpm install');
+		if (target === 'npm') return replace(/pnpm\s+(install|i)\b/, 'npm install');
+		if (target === 'bun') return replace(/pnpm\s+(install|i)\b/, 'bun install');
+	}
+
+	sub = rest.match(/^run\s+(.+)$/);
+	if (sub) {
+		if (target === 'pnpm') return line;
+		if (target === 'npm') return replace(/pnpm\s+run\s+/, 'npm run ');
+		if (target === 'bun') return replace(/pnpm\s+run\s+/, 'bun run ');
+	}
+
+	if (rest === 'test') {
+		if (target === 'pnpm') return line;
+		if (target === 'npm') return replace(/pnpm\s+test\b/, 'npm test');
+		if (target === 'bun') return replace(/pnpm\s+test\b/, 'bun run test');
+	}
+
+	return null;
+}
+
+function translatePnpmBlock(source: string, target: PM): string | null {
+	const lines = source.split('\n');
+	const out: string[] = [];
+	let hasPnpmCommand = false;
+	for (const line of lines) {
+		if (line.trim().startsWith('pnpm ') || line.trim() === 'pnpm i') hasPnpmCommand = true;
+		const t = translatePnpmLine(line, target);
+		if (t === null) return null;
+		out.push(t);
+	}
+	return hasPnpmCommand ? out.join('\n') : null;
+}
+
 /**
  * Decode the basic HTML entities marked emits (apostrophes become `&#39;`,
  * ampersands `&amp;`, etc.) for plain-text uses like the TOC, where Svelte
@@ -184,6 +268,41 @@ export async function renderDoc(doc: DocEntry): Promise<RenderedDoc> {
 				}
 				const id = `cb${++codeBlockId}`;
 				const langLabel = safeLang === 'text' ? '' : safeLang;
+
+				// Bash blocks that look like simple package-manager commands get
+				// rendered as a tabbed figure with bun/pnpm/npm variants. Only
+				// emit if every line translates cleanly (see translatePnpmBlock).
+				if (safeLang === 'bash') {
+					const variants: Partial<Record<PM, { source: string; html: string }>> = {};
+					let ok = true;
+					for (const pm of PMS) {
+						const translated = translatePnpmBlock(text, pm);
+						if (translated === null) {
+							ok = false;
+							break;
+						}
+						try {
+							variants[pm] = {
+								source: translated,
+								html: highlighter.codeToHtml(translated, { lang: 'bash', theme: THEME })
+							};
+						} catch {
+							ok = false;
+							break;
+						}
+					}
+					if (ok) {
+						const blocks = PMS.map(
+							(pm) =>
+								`<div class="pm-block" data-pm="${pm}"${pm === 'bun' ? '' : ' hidden'}>${variants[pm]!.html}</div>`
+						).join('');
+						const dataAttrs = PMS.map(
+							(pm) => `data-source-${pm}="${escapeHtml(variants[pm]!.source)}"`
+						).join(' ');
+						return `<figure class="code-block pm-tabs" data-cbid="${id}" data-pm-tabs ${dataAttrs}><div class="pm-tabs-mount" aria-hidden="true"></div>${blocks}</figure>`;
+					}
+				}
+
 				// Wrap in a figure so the copy button is anchored relative to the block,
 				// and stash the raw source on a data-attribute for client-side copy.
 				return `<figure class="code-block" data-source="${escapeHtml(text)}" data-cbid="${id}">${langLabel ? `<figcaption class="code-lang">${langLabel}</figcaption>` : ''}${html}</figure>`;
