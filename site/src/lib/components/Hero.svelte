@@ -2,6 +2,10 @@
 	import HeroSketch from '$lib/demos/HeroSketch.svelte';
 	import CopyButton from './CopyButton.svelte';
 	import Badges from './Badges.svelte';
+	import BunIcon from './icons/BunIcon.svelte';
+	import PnpmIcon from './icons/PnpmIcon.svelte';
+	import NpmIcon from './icons/NpmIcon.svelte';
+	import type { Component } from 'svelte';
 	import { onMount } from 'svelte';
 	import { staggerFadeUp } from '$lib/animations';
 
@@ -21,7 +25,11 @@
 
 	let active: PM = $state('bun');
 
-	const tabs: PM[] = ['bun', 'pnpm', 'npm'];
+	const tabs: { id: PM; label: string; icon: Component<{ class?: string }> }[] = [
+		{ id: 'bun', label: 'bun', icon: BunIcon },
+		{ id: 'pnpm', label: 'pnpm', icon: PnpmIcon },
+		{ id: 'npm', label: 'npm', icon: NpmIcon }
+	];
 
 	let current = $derived.by(() => {
 		const map: Record<PM, InstallSnippet> = {
@@ -74,17 +82,20 @@
 			class="inline-flex flex-col bg-slate-900 rounded-xl overflow-hidden mb-6 max-w-full"
 		>
 			<div class="flex border-b border-slate-800" role="tablist" aria-label="Package manager">
-				{#each tabs as tab (tab)}
+				{#each tabs as tab (tab.id)}
+					{@const Icon = tab.icon}
 					<button
 						type="button"
 						role="tab"
-						aria-selected={active === tab}
-						class="flex-1 min-h-10 px-4 border-none bg-transparent text-slate-500 font-mono text-xs font-medium cursor-pointer transition-all duration-150 hover:text-slate-400"
-						class:!text-slate-200={active === tab}
-						class:!bg-slate-800={active === tab}
-						onclick={() => (active = tab)}
+						aria-selected={active === tab.id}
+						aria-label={tab.label}
+						class="flex-1 min-h-10 px-4 border-none bg-transparent text-slate-300 font-mono text-xs font-medium cursor-pointer transition-colors duration-150 hover:text-white hover:bg-slate-800/50 inline-flex items-center justify-center gap-2"
+						class:!text-white={active === tab.id}
+						class:!bg-slate-800={active === tab.id}
+						onclick={() => (active = tab.id)}
 					>
-						{tab}
+						<Icon class="size-4 shrink-0" />
+						<span>{tab.label}</span>
 					</button>
 				{/each}
 			</div>
