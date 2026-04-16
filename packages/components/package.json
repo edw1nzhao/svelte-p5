@@ -1,6 +1,6 @@
 {
   "name": "svelte-p5-components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Higher-level Svelte 5 components built on svelte-p5: responsive canvas, FPS monitor, sketch debug overlay, draggable windows",
   "keywords": [
     "svelte",
