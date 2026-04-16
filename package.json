@@ -5,11 +5,11 @@
   "description": "Svelte 5 + p5.js integration toolkit — layered primitives, components, and patterns",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edwinzhao/svelte-p5.git"
+    "url": "git+https://github.com/edw1nzhao/svelte-p5.git"
   },
-  "homepage": "https://github.com/edwinzhao/svelte-p5#readme",
+  "homepage": "https://github.com/edw1nzhao/svelte-p5#readme",
   "bugs": {
-    "url": "https://github.com/edwinzhao/svelte-p5/issues"
+    "url": "https://github.com/edw1nzhao/svelte-p5/issues"
   },
   "author": "Edwin Zhao",
   "license": "MIT",

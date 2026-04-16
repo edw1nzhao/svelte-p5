@@ -136,4 +136,4 @@ SSR is the same story. `<P5Canvas>` dynamically imports p5 on the client, so Sve
 
 ## Stuck?
 
-Open an [issue](https://github.com/edwinzhao/svelte-p5/issues) with your before/after and I'll help.
+Open an [issue](https://github.com/edw1nzhao/svelte-p5/issues) with your before/after and I'll help.
