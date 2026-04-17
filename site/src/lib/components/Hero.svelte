@@ -47,11 +47,13 @@
 	class="relative min-h-[34rem] flex items-center justify-center overflow-hidden pt-12 pb-16 sm:pt-20 sm:pb-20 px-4 sm:px-6"
 >
 	<HeroSketch />
-	<!-- Readability scrim -->
-	<div
-		aria-hidden="true"
-		class="absolute inset-0 bg-gradient-to-b from-white/40 via-white/20 to-white/60 pointer-events-none"
-	></div>
+	<!-- Glassy readability mask: backdrop-filter blurs the sketch behind the
+	     text area, and a radial alpha mask fades that blur out toward the
+	     edges so the animated dots stay fully visible at the perimeter. The
+	     radial background gradient adds a soft white tint in the same region
+	     so the text (especially the indigo gradient in the h1) keeps
+	     contrast without a flat scrim dominating the whole hero. -->
+	<div aria-hidden="true" class="hero-glass absolute inset-0 pointer-events-none"></div>
 
 	<div bind:this={inner} class="relative z-10 text-center max-w-2xl">
 		<h1
@@ -60,18 +62,20 @@
 			style="font-size: clamp(2rem, 1.5rem + 3vw, 3.25rem); text-wrap: balance;"
 		>
 			<span class="bg-gradient-to-br from-indigo-500 to-purple-500 bg-clip-text text-transparent"
-				>p5 draws pixels.</span
+				>Creative coding,</span
 			>
 			<br />
-			Svelte does everything else.
+			reactively.
 		</h1>
 		<p
 			data-anim
 			class="leading-relaxed text-slate-600 mb-7 max-w-xl mx-auto"
 			style="font-size: clamp(1rem, 0.95rem + 0.4vw, 1.125rem); text-wrap: pretty;"
 		>
-			A modern Svelte 5 toolkit for p5.js. Correct lifecycle management, reactive state bridging,
-			and pre-built components for creative coding.
+			A Svelte 5 toolkit for p5.js: clean lifecycles, a reactive <code
+				class="font-mono text-[0.92em] text-indigo-600 bg-indigo-50/60 px-1.5 py-0.5 rounded"
+				>$state</code
+			> bridge between sketch and UI, and pre-built components. Pre-1.0 and evolving.
 		</p>
 
 		<div
@@ -121,8 +125,14 @@
 			<Badges />
 		</div>
 
+		<!-- Feature pills picked to carry weight for both primary audiences:
+		     creative product devs (reactive bridge, HiDPI pain-point, lifecycle
+		     correctness) and educators/learners (clean unmount for HMR-heavy
+		     classrooms, Svelte 5 as the target stack). Previous pills
+		     (SSR safe / Tree-shakeable / TypeScript) were bundler-centric and
+		     didn't speak to the audience this library actually serves. -->
 		<div data-anim class="flex flex-wrap justify-center gap-2 mt-6">
-			{#each ['Svelte 5 runes', 'SSR safe', 'Tree-shakeable', 'TypeScript'] as badge (badge)}
+			{#each ['Reactive $state bridge', 'HiDPI + auto-resize', 'Clean unmount', 'Svelte 5 runes'] as badge (badge)}
 				<span
 					class="text-xs font-medium px-3 py-1.5 rounded-full bg-indigo-500/8 text-indigo-500 border border-indigo-500/15"
 					>{badge}</span
@@ -133,6 +143,20 @@
 </section>
 
 <style>
+	/* Hero readability tint. Soft white gradient confined to a narrow ellipse
+	   directly behind the text column (max-w-2xl = 42rem) so the animated
+	   dots stay fully visible on the left and right thirds of the hero.
+	   Bumped opacity to 0.42 to carry readability on its own — earlier
+	   versions paired this with a backdrop-filter blur, which made every
+	   dot passing through the center look fuzzy. Plain tint is crisper. */
+	.hero-glass {
+		background: radial-gradient(
+			ellipse 38% 45% at 50% 50%,
+			rgb(255 255 255 / 0.42),
+			rgb(255 255 255 / 0) 70%
+		);
+	}
+
 	.install-code :global(pre) {
 		margin: 0;
 		padding: 0 !important;

@@ -6,20 +6,26 @@
 		<meta name="theme-color" content="#6366f1" />
 		<meta name="color-scheme" content="light" />
 
-		<title>svelte-p5 — Svelte 5 + p5.js toolkit</title>
+		<title>svelte-p5 — creative coding for Svelte 5, reactively</title>
+		<!-- Meta description pulls double duty: (1) Describes the library
+		     for search-engine surface area with the exact phrases the
+		     audience searches ("Svelte 5 p5.js", "creative coding"), and
+		     (2) signals the p5-svelte successor relationship so the first
+		     search result for "p5 svelte" disambiguates itself from the
+		     4-year-old incumbent. Length ≈155 chars, Google's ceiling. -->
 		<meta
 			name="description"
-			content="Svelte 5 + p5.js integration toolkit. Correct lifecycle, reactive state bridge, and pre-built components for creative coding."
+			content="A Svelte 5 toolkit for p5.js creative coding. Reactive $state bridge, clean lifecycles, HiDPI components. Successor to p5-svelte, built for Svelte 5 runes."
 		/>
 		<link rel="canonical" href="https://svelte-p5.dev/" />
 
 		<!-- Open Graph -->
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="svelte-p5" />
-		<meta property="og:title" content="svelte-p5 — Svelte 5 + p5.js toolkit" />
+		<meta property="og:title" content="svelte-p5 — creative coding for Svelte 5, reactively" />
 		<meta
 			property="og:description"
-			content="Svelte 5 + p5.js. Correct lifecycle, reactive state bridge, pre-built components."
+			content="A Svelte 5 toolkit for p5.js: reactive $state bridge, clean lifecycles, HiDPI components. Creative coding that feels native to Svelte."
 		/>
 		<meta property="og:url" content="https://svelte-p5.dev/" />
 		<meta property="og:image" content="https://svelte-p5.dev/og.svg" />
@@ -28,12 +34,23 @@
 
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="svelte-p5 — Svelte 5 + p5.js toolkit" />
+		<meta
+			name="twitter:title"
+			content="svelte-p5 — creative coding for Svelte 5, reactively"
+		/>
 		<meta
 			name="twitter:description"
-			content="Correct lifecycle, reactive state bridge, pre-built components for Svelte 5 + p5.js."
+			content="A Svelte 5 toolkit for p5.js: reactive $state bridge, clean lifecycles, HiDPI components."
 		/>
 		<meta name="twitter:image" content="https://svelte-p5.dev/og.svg" />
+
+		<!-- Additional search signals for the p5 + creative-coding audience
+		     and educators. Keywords meta isn't weighted by Google directly,
+		     but helps Bing and appears in LLM index snippets. -->
+		<meta
+			name="keywords"
+			content="svelte, p5.js, creative coding, generative art, svelte 5, runes, p5-svelte, data visualization, interactive web, teaching code, Processing, canvas"
+		/>
 
 		<!-- Icons -->
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -48,13 +65,15 @@
 		     the TLS handshake isn't a waterfall bottleneck for their images. -->
 		<link rel="preconnect" href="https://img.shields.io" crossorigin />
 
-		<!-- JSON-LD: SoftwareSourceCode -->
+		<!-- JSON-LD: SoftwareSourceCode. Description mirrors the meta
+		     description so snippet consistency holds across search / LLM /
+		     structured-data surfaces. -->
 		<script type="application/ld+json">
 			{
 				"@context": "https://schema.org",
 				"@type": "SoftwareSourceCode",
 				"name": "svelte-p5",
-				"description": "Svelte 5 + p5.js integration toolkit. Correct lifecycle, reactive state bridge, and pre-built components for creative coding.",
+				"description": "A Svelte 5 toolkit for p5.js creative coding. Reactive $state bridge, clean lifecycles, HiDPI components. Successor to p5-svelte, built for Svelte 5 runes.",
 				"codeRepository": "https://github.com/edw1nzhao/svelte-p5",
 				"programmingLanguage": ["TypeScript", "Svelte"],
 				"license": "https://opensource.org/licenses/MIT",
