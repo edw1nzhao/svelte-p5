@@ -2,6 +2,20 @@
 
 Two channels: **stable** (`main`, npm dist-tag `latest`) and **alpha** (`next`, npm dist-tag `next`). Both are driven entirely by [release-please](https://github.com/googleapis/release-please) — version bumps, changelogs, and publishes are automatic when conventional-commit messages land on the right branch.
 
+For the contributor-facing view (which branch to target, how the sync PR works, alpha→beta transitions), see [`.github/CONTRIBUTING.md#branch--release-model`](../.github/CONTRIBUTING.md#branch--release-model). This document is the deep-dive reference.
+
+## Workflows that drive releases
+
+Three GitHub Actions workflows form the release pipeline:
+
+| File                                        | Trigger                    | Responsibility                                                                                                      |
+| ------------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `.github/workflows/release-please.yml`      | push to `main`             | Stable release-please orchestration; calls `publish.yml` with `--tag latest`; opens post-release sync PR to `next`. |
+| `.github/workflows/release-please-next.yml` | push to `next`             | Alpha release-please orchestration; calls `publish.yml` with `--tag next`.                                          |
+| `.github/workflows/publish.yml`             | `workflow_call` (reusable) | Holds the actual `npm publish` step. Registered as the **trusted publisher** on npmjs.com for all three packages.   |
+
+Both release-please workflows delegate the publish step to the same reusable `publish.yml`. This matters for npm OIDC trusted publishing: npm only supports one trusted-publisher config per package, and it pins the workflow file. OIDC's `job_workflow_ref` claim reflects the _called_ workflow, so registering `publish.yml` as the publisher covers both stable and alpha channels with a single trust entry. **Do not rename `publish.yml`** without updating the trusted publisher on all three packages at npmjs.com.
+
 ## Conventional commits
 
 Every commit on `main` or `next` must match:
@@ -71,12 +85,17 @@ The first commit on `next` with a `feat:` message will trigger `release-please` 
 | Alpha stabilised, merged to main | 0.3.0           | (caught up)    | `latest`=0.3.0, `next`=0.3.0                                         |
 | Patch fix on stable              | 0.3.1           | 0.3.0          | `latest`=0.3.1, `next`=0.3.0 (stale; bump by merging main into next) |
 
-## When to `git merge main` into `next`
+## Keeping `next` in sync with `main`
 
-Periodically, especially after a stable release lands, merge `main` into `next`. This keeps the alpha branch from drifting and lets `release-please` pick up the stable patches so the next alpha is based on the latest code.
+Automated. After every successful stable release, `release-please.yml` runs a `sync-next` job that opens a `chore: sync main into next` PR merging the new main commits into `next`. Review the diff and merge — the alpha-specific files (`.release-please-manifest-next.json`, `CHANGELOG-next.md`, `release-please-config-next.json`) should never appear in that diff. If they do, investigate before merging.
+
+Why this matters: if `next` drifts too far from `main`, alpha versions miss recent stable fixes and the eventual alpha → stable promotion produces a noisy diff. Keeping the gap small keeps the promotion clean.
+
+If for some reason the sync PR doesn't fire (e.g. a manual hotfix landed outside release-please), you can still sync manually:
 
 ```bash
 git checkout next
+git pull
 git merge main
 git push origin next
 ```
