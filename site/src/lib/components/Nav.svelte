@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { Menu, X, Package, BookOpen, FlaskConical } from '@lucide/svelte';
+	import { Menu, X, Package, BookOpen, FlaskConical, ChevronDown } from '@lucide/svelte';
 	import GithubIcon from './icons/GithubIcon.svelte';
 	import Logo from './Logo.svelte';
 	import { page } from '$app/state';
 
 	let scrolled = $state(false);
 	let drawerEl: HTMLDialogElement | null = $state(null);
+	let packagesOpen = $state(false);
+	let packagesContainer: HTMLDivElement | null = $state(null);
 
 	function handleScroll() {
 		scrolled = window.scrollY > 10;
@@ -28,25 +30,37 @@
 		{ href: '/#examples', label: 'Examples', icon: FlaskConical }
 	];
 
-	const externalLinks = [
+	// Single source of truth for the packages list. Used by the desktop
+	// Packages dropdown AND the mobile drawer's externalLinks — both
+	// render from this array so adding a fourth package is a one-line change.
+	const packages = [
 		{
 			href: 'https://www.npmjs.com/package/svelte-p5',
-			label: 'svelte-p5',
-			sub: 'npm',
-			icon: Package
+			name: 'svelte-p5',
+			label: 'core',
+			description: 'Primitives: <P5Canvas>, createP5Bridge'
 		},
 		{
 			href: 'https://www.npmjs.com/package/svelte-p5-components',
-			label: 'svelte-p5-components',
-			sub: 'npm',
-			icon: Package
+			name: 'svelte-p5-components',
+			label: 'components',
+			description: 'Sketch, FPSMonitor, DraggableWindow'
 		},
 		{
 			href: 'https://www.npmjs.com/package/svelte-p5-viz',
-			label: 'svelte-p5-viz',
+			name: 'svelte-p5-viz',
+			label: 'viz',
+			description: 'Panel contract, registry, scenes'
+		}
+	];
+
+	const externalLinks = [
+		...packages.map((p) => ({
+			href: p.href,
+			label: p.name,
 			sub: 'npm',
 			icon: Package
-		},
+		})),
 		{
 			href: 'https://github.com/edw1nzhao/svelte-p5',
 			label: 'GitHub',
@@ -56,6 +70,46 @@
 	];
 
 	let isDocs = $derived(page.url.pathname.startsWith('/docs'));
+
+	// Click-outside + Escape dismiss for the Packages dropdown. Only attached
+	// while the menu is open so we don't burn listeners in the common state.
+	$effect(() => {
+		if (!packagesOpen) return;
+		function onPointerDown(e: MouseEvent) {
+			if (packagesContainer && !packagesContainer.contains(e.target as Node)) {
+				packagesOpen = false;
+			}
+		}
+		function onKey(e: KeyboardEvent) {
+			if (e.key === 'Escape') packagesOpen = false;
+		}
+		document.addEventListener('mousedown', onPointerDown);
+		document.addEventListener('keydown', onKey);
+		return () => {
+			document.removeEventListener('mousedown', onPointerDown);
+			document.removeEventListener('keydown', onKey);
+		};
+	});
+
+	// Hover-open for the Packages dropdown. A short close delay gives the
+	// cursor time to traverse the small gap between button and menu without
+	// the menu snapping shut. Touch/click toggling still works (handled
+	// inline on the button) for platforms without a reliable hover state.
+	let hoverCloseTimer: ReturnType<typeof setTimeout> | null = null;
+	function openPackages() {
+		if (hoverCloseTimer) {
+			clearTimeout(hoverCloseTimer);
+			hoverCloseTimer = null;
+		}
+		packagesOpen = true;
+	}
+	function schedulePackagesClose() {
+		if (hoverCloseTimer) clearTimeout(hoverCloseTimer);
+		hoverCloseTimer = setTimeout(() => {
+			packagesOpen = false;
+			hoverCloseTimer = null;
+		}, 140);
+	}
 </script>
 
 <svelte:window onscroll={handleScroll} />
@@ -87,36 +141,64 @@
 
 			<div class="w-px h-6 bg-slate-200 mx-2"></div>
 
-			<a
-				href="https://www.npmjs.com/package/svelte-p5"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="px-3 h-10 inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 no-underline transition-colors hover:text-slate-900 rounded-md hover:bg-slate-100"
-				title="svelte-p5 on npm"
+			<!-- Packages dropdown: one button replaces three inline pills so the
+			     nav scales as we add packages without burning horizontal space.
+			     Opens on hover (cursor crossing the 4px gap is covered by the
+			     140ms close timer) and on click (for touch + keyboard). Dismissed
+			     by outside click, Escape, or cursor leaving the container. Each
+			     link also closes the menu on click so the next open is fresh. -->
+			<!-- role="none" marks the wrapper as presentational: the button child
+			     carries all interaction semantics; the wrapper's only job is to
+			     host the hover zone for the dropdown bridge. -->
+			<div
+				bind:this={packagesContainer}
+				role="none"
+				class="relative"
+				onmouseenter={openPackages}
+				onmouseleave={schedulePackagesClose}
 			>
-				<Package class="size-4" />
-				core
-			</a>
-			<a
-				href="https://www.npmjs.com/package/svelte-p5-components"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="px-3 h-10 inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 no-underline transition-colors hover:text-slate-900 rounded-md hover:bg-slate-100"
-				title="svelte-p5-components on npm"
-			>
-				<Package class="size-4" />
-				components
-			</a>
-			<a
-				href="https://www.npmjs.com/package/svelte-p5-viz"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="px-3 h-10 inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 no-underline transition-colors hover:text-slate-900 rounded-md hover:bg-slate-100"
-				title="svelte-p5-viz on npm"
-			>
-				<Package class="size-4" />
-				viz
-			</a>
+				<button
+					type="button"
+					onclick={() => (packagesOpen = !packagesOpen)}
+					onfocus={openPackages}
+					aria-expanded={packagesOpen}
+					aria-haspopup="menu"
+					class="px-3 h-10 inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 rounded-md hover:bg-slate-100"
+				>
+					<Package class="size-4" />
+					Packages
+					<ChevronDown
+						class="size-3.5 transition-transform duration-150 {packagesOpen ? 'rotate-180' : ''}"
+					/>
+				</button>
+
+				{#if packagesOpen}
+					<div role="menu" class="absolute top-full right-0 pt-1 min-w-[16rem] z-50">
+						<!-- Inner card with the visible styling; outer div provides the
+						     4px hover bridge (pt-1) so the mouse can cross from button
+						     to menu without triggering mouseleave on the wrapper. -->
+						<div class="rounded-md border border-slate-200 bg-white shadow-lg py-1">
+							{#each packages as pkg (pkg.href)}
+								<a
+									role="menuitem"
+									href={pkg.href}
+									target="_blank"
+									rel="noopener noreferrer"
+									onclick={() => (packagesOpen = false)}
+									class="flex items-start gap-3 px-3 py-2.5 no-underline hover:bg-slate-50"
+								>
+									<Package class="size-4 text-slate-400 mt-0.5 shrink-0" />
+									<div class="flex flex-col leading-tight">
+										<span class="font-mono text-sm font-medium text-slate-900">{pkg.name}</span>
+										<span class="text-xs text-slate-500 mt-0.5">{pkg.description}</span>
+									</div>
+								</a>
+							{/each}
+						</div>
+					</div>
+				{/if}
+			</div>
+
 			<a
 				href="https://github.com/edw1nzhao/svelte-p5"
 				target="_blank"
