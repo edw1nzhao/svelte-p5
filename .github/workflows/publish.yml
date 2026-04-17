@@ -9,6 +9,20 @@ name: publish
 # the `job_workflow_ref` claim, which points at this file regardless of
 # which top-level workflow triggered the call.
 #
+# The `--provenance` flag on `npm publish` is load-bearing: it forces npm to
+# exchange the GitHub Actions OIDC token for a publish credential and emit a
+# signed provenance statement. Without it, npm's auto-detection of "I'm
+# running in Actions, use OIDC" is unreliable under workflow_call — it
+# silently falls through to unauthenticated publishing and the registry
+# returns 404 on the PUT. The explicit flag makes the OIDC exchange
+# deterministic and, when it does fail, surfaces a clear error instead of a
+# misleading "package not found".
+#
+# The workflow_dispatch trigger exists so a maintainer can retroactively
+# publish an existing git tag without cutting a new release-please PR. Use
+# when a tag was created but the publish step failed (e.g. historical
+# releases before this workflow was hardened).
+#
 # Preview / canary builds do NOT go through here — they use pkg-pr-new in
 # ci.yml, which publishes to pkg.pr.new's CDN (not the npm registry) and
 # doesn't need trusted-publisher OIDC.
@@ -31,6 +45,25 @@ on:
       ref:
         description: 'Git ref to check out (defaults to the triggering ref)'
         required: false
+        type: string
+  workflow_dispatch:
+    inputs:
+      package-dir:
+        description: 'Path to the package to publish'
+        required: true
+        type: choice
+        options:
+          - packages/core
+          - packages/components
+          - packages/viz
+      npm-tag:
+        description: 'npm dist-tag'
+        required: false
+        type: string
+        default: latest
+      ref:
+        description: 'Git ref to check out (branch, tag, or SHA). Use a tag like components-v0.4.1 to republish a specific release.'
+        required: true
         type: string
 
 jobs:
@@ -60,4 +93,4 @@ jobs:
 
       - name: Publish ${{ inputs.package-dir }} with tag ${{ inputs.npm-tag }}
         working-directory: ${{ inputs.package-dir }}
-        run: npm publish --tag ${{ inputs.npm-tag }}
+        run: npm publish --provenance --tag ${{ inputs.npm-tag }}
