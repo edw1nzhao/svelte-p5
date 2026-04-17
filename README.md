@@ -21,7 +21,7 @@ Svelte 5 bindings for p5.js. Low-level primitives if you want control, pre-built
 
 Built for Svelte 5 runes and instance-based p5; the API is `bind:instance` instead of event dispatchers.
 
-## Quick start
+## Quick starts
 
 ```bash
 pnpm add svelte-p5 p5
