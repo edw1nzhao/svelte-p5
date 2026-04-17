@@ -48,61 +48,76 @@
 	});
 </script>
 
-<div bind:this={root} class="code-demo-root grid grid-cols-1 gap-8 md:grid-cols-2">
-	<!-- Left: title, description, code -->
-	<div data-anim class="min-w-0">
-		<div class="mb-4">
-			<h3 class="text-xl font-semibold text-slate-900 mb-1">{title}</h3>
-			<p class="text-sm text-slate-500 leading-relaxed">{description}</p>
-		</div>
-		<div class="border border-slate-800 rounded-xl overflow-hidden bg-[var(--color-code-bg)]">
-			<div class="flex items-center justify-between gap-3 px-4 py-2 border-b border-slate-800">
-				<div class="flex items-center gap-3 min-w-0">
-					<span
-						class="font-mono text-[0.6875rem] font-medium text-slate-500 uppercase tracking-wider"
-						>Svelte</span
-					>
-					<div
-						class="inline-flex rounded-md overflow-hidden border border-slate-700/60"
-						role="tablist"
-						aria-label="Code language"
-					>
-						{#each langs as lang (lang.id)}
-							{@const isActive = preferences.codeLang === lang.id}
-							<button
-								type="button"
-								role="tab"
-								aria-selected={isActive}
-								class="lang-tab"
-								class:active={isActive}
-								onclick={() => preferences.setCodeLang(lang.id)}
-							>
-								{lang.label}
-							</button>
-						{/each}
-					</div>
+<!--
+  Grid layout on md+: 2 columns × 2 rows.
+    row 1: [title + desc] | (empty)
+    row 2: [code card]    | [demo]
+  Row 2's height comes from the code card (demo is h-full, contributes no
+  intrinsic height), so the demo aligns top+bottom with the card specifically
+  — not with the full left column. Mobile collapses to a single column and
+  the three cells (title, card, demo) stack in source order.
+-->
+<div
+	bind:this={root}
+	class="code-demo-root grid grid-cols-1 gap-8 md:grid-cols-2 md:grid-rows-[auto_auto] md:gap-x-8 md:gap-y-4"
+>
+	<!-- Row 1, col 1: title + description -->
+	<div data-anim class="min-w-0 md:col-start-1 md:row-start-1">
+		<h3 class="text-xl font-semibold text-slate-900 mb-1">{title}</h3>
+		<p class="text-sm text-slate-500 leading-relaxed">{description}</p>
+	</div>
+
+	<!-- Row 2, col 1: code card -->
+	<div
+		data-anim
+		class="min-w-0 md:col-start-1 md:row-start-2 border border-slate-800 rounded-xl overflow-hidden bg-[var(--color-code-bg)]"
+	>
+		<div class="flex items-center justify-between gap-3 px-4 py-2 border-b border-slate-800">
+			<div class="flex items-center gap-3 min-w-0">
+				<span class="font-mono text-[0.6875rem] font-medium text-slate-500 uppercase tracking-wider"
+					>Svelte</span
+				>
+				<div
+					class="inline-flex rounded-md overflow-hidden border border-slate-700/60"
+					role="tablist"
+					aria-label="Code language"
+				>
+					{#each langs as lang (lang.id)}
+						{@const isActive = preferences.codeLang === lang.id}
+						<button
+							type="button"
+							role="tab"
+							aria-selected={isActive}
+							class="lang-tab"
+							class:active={isActive}
+							onclick={() => preferences.setCodeLang(lang.id)}
+						>
+							{lang.label}
+						</button>
+					{/each}
 				</div>
-				<CopyButton text={current.raw} />
 			</div>
-			<div class="code-scroll">
-				{#each langs as lang (lang.id)}
-					<div class="code-variant" class:active={preferences.codeLang === lang.id}>
-						{#if lang.id === 'ts'}
-							{@html code.ts.html}
-						{:else}
-							{@html code.js.html}
-						{/if}
-					</div>
-				{/each}
-			</div>
+			<CopyButton text={current.raw} />
+		</div>
+		<div class="code-scroll">
+			{#each langs as lang (lang.id)}
+				<div class="code-variant" class:active={preferences.codeLang === lang.id}>
+					{#if lang.id === 'ts'}
+						{@html code.ts.html}
+					{:else}
+						{@html code.js.html}
+					{/if}
+				</div>
+			{/each}
 		</div>
 	</div>
 
-	<!-- Right: demo, stretches to match code height -->
-	<div data-anim class="flex items-end">
+	<!-- Row 2, col 2: demo. md:row-start-2 keeps it out of row 1 so it
+	     references only the code card's height, not title + card combined. -->
+	<div data-anim class="flex md:col-start-2 md:row-start-2">
 		<div
 			bind:this={demoSlot}
-			class="w-full border border-slate-200 rounded-xl overflow-hidden demo-container bg-slate-100"
+			class="w-full h-full border border-slate-200 rounded-xl overflow-hidden demo-container bg-slate-100"
 		>
 			{#if demoVisible}
 				{@render demo()}

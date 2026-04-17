@@ -21,12 +21,14 @@
 	};
 </script>
 
-<!-- min-h-80 reserves vertical space: other demos push this container open
-     via their canvas's intrinsic height, but DraggableSketch is absolutely
-     positioned and contributes nothing to flow height. Without a floor, the
-     container collapses to 0 and overflow-hidden clips the draggable entirely. -->
+<!-- h-full fills the CodeDemo cell, which the shared grid sizes to match
+     the bordered code card on the left. The DraggableSketch window itself
+     is absolutely positioned and contributes nothing to flow height, so
+     without a sized parent the container would collapse to 0 and
+     overflow-hidden would clip the window entirely — h-full gives it real
+     pixels to work with. -->
 <div
-	class="relative h-full min-h-80 bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 overflow-hidden"
+	class="relative h-full bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 overflow-hidden"
 >
 	<!-- Subtle grid backdrop -->
 	<svg
