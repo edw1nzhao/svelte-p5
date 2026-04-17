@@ -1,8 +1,13 @@
 @import 'tailwindcss';
 
+/* Self-hosted variable fonts. Browsers fetch only the subsets they need
+   (unicode-range), so Latin-only visitors download ~20 KiB total. */
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource-variable/jetbrains-mono/wght.css';
+
 @theme {
-	--font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
+	--font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 	--color-accent: #6366f1;
 	--color-accent-light: #818cf8;
 	--color-surface: #f8fafc;

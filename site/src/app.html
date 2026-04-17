@@ -40,13 +40,9 @@
 		<link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
 		<link rel="manifest" href="/site.webmanifest" />
 
-		<!-- Fonts -->
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-			rel="stylesheet"
-		/>
+		<!-- Fonts: self-hosted via @fontsource-variable (imported in app.css).
+		     Preloaded by the hooks.server.ts resolve filter so FCP/LCP isn't
+		     blocked on font CSS discovery. -->
 
 		<!-- JSON-LD: SoftwareSourceCode -->
 		<script type="application/ld+json">

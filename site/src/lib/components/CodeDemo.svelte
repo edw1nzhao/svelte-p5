@@ -28,14 +28,27 @@
 	let current = $derived(code[preferences.codeLang]);
 
 	let root: HTMLDivElement | null = $state(null);
+	let demoSlot: HTMLDivElement | null = $state(null);
+	let demoVisible = $state(false);
+
 	onMount(() => {
 		whenVisible(root, (el) => {
 			staggerFadeUp(el, '[data-anim]', { staggerMs: 90 });
 		});
+
+		// Mount the p5 sketch only once its slot is close to the viewport.
+		// Larger rootMargin so the sketch is running by the time the user scrolls to it.
+		whenVisible(
+			demoSlot,
+			() => {
+				demoVisible = true;
+			},
+			{ rootMargin: '300px 0px', threshold: 0 }
+		);
 	});
 </script>
 
-<div bind:this={root} class="grid grid-cols-1 gap-8 md:grid-cols-2">
+<div bind:this={root} class="code-demo-root grid grid-cols-1 gap-8 md:grid-cols-2">
 	<!-- Left: title, description, code -->
 	<div data-anim class="min-w-0">
 		<div class="mb-4">
@@ -88,17 +101,42 @@
 	<!-- Right: demo, stretches to match code height -->
 	<div data-anim class="flex items-end">
 		<div
+			bind:this={demoSlot}
 			class="w-full border border-slate-200 rounded-xl overflow-hidden demo-container bg-slate-100"
 		>
-			{@render demo()}
+			{#if demoVisible}
+				{@render demo()}
+			{:else}
+				<div class="demo-placeholder" aria-hidden="true"></div>
+			{/if}
 		</div>
 	</div>
 </div>
 
 <style>
+	/* Skip rendering work for off-screen demos. The intrinsic-size hint matches
+	   the typical rendered height so scrollbar position stays stable. */
+	.code-demo-root {
+		content-visibility: auto;
+		contain-intrinsic-size: auto 480px;
+	}
+
 	.demo-container > :global(*) {
 		width: 100%;
 		height: 100%;
+	}
+
+	/* Reserve space for the sketch before it lazy-mounts so scrolling is stable. */
+	.demo-placeholder {
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		background: repeating-linear-gradient(
+			45deg,
+			rgb(241 245 249),
+			rgb(241 245 249) 12px,
+			rgb(226 232 240) 12px,
+			rgb(226 232 240) 24px
+		);
 	}
 
 	/* Canvas fills container but preserves aspect ratio - no stretching */
