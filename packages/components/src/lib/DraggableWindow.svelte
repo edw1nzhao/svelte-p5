@@ -72,36 +72,59 @@
 	let size = $state(untrack(() => ({ w: typeof width === 'number' ? width : 480, h: 40 })));
 	let rootEl: HTMLDivElement | null = $state(null);
 
-	function clampToViewport() {
-		if (typeof window === 'undefined') return;
-		// When constrained to a parent, neodrag's `bounds(BoundsFrom.parent())`
-		// already keeps the window inside; viewport math here would be wrong
-		// because positions are relative to the parent, not the viewport.
-		if (constrained === 'parent') return;
-		const vw = window.innerWidth;
-		const vh = window.innerHeight;
-		// Never allow the titlebar above the viewport top - that's the
-		// "unreachable" case. Allow partial horizontal overflow so narrow
-		// screens don't trap wide windows, but always keep `minVisible`
-		// pixels of the window on-screen for a grab handle.
-		const minX = -(size.w - minVisible);
-		const maxX = vw - minVisible;
-		const minY = 0;
-		const maxY = vh - minVisible;
-		pos = {
-			x: Math.max(minX, Math.min(maxX, pos.x)),
-			y: Math.max(minY, Math.min(maxY, pos.y))
-		};
+	// Clamp `pos` back inside whatever sandbox `constrained` points at.
+	// Runs on drag end (drag might overshoot during pointer-move) AND on
+	// any resize of the sandbox (window → viewport mode, parent element →
+	// parent mode) so the window snaps back into view when its container
+	// shrinks underneath it.
+	function clamp() {
+		if (typeof window === 'undefined' || !rootEl) return;
+
+		if (constrained === 'parent') {
+			// Position is relative to the parent's padding-box, so bounds
+			// are [0, parentSize - windowSize]. Falls through to no-op if
+			// the window is somehow larger than the parent (Math.max(0, ...)).
+			const parent = rootEl.parentElement;
+			if (!parent) return;
+			const r = parent.getBoundingClientRect();
+			const maxX = Math.max(0, r.width - size.w);
+			const maxY = Math.max(0, r.height - size.h);
+			pos = {
+				x: Math.max(0, Math.min(maxX, pos.x)),
+				y: Math.max(0, Math.min(maxY, pos.y))
+			};
+			return;
+		}
+
+		if (constrained === 'viewport') {
+			// Never allow the titlebar above the viewport top - that's the
+			// "unreachable" case. Allow partial horizontal overflow so narrow
+			// screens don't trap wide windows, but always keep `minVisible`
+			// pixels of the window on-screen for a grab handle.
+			const vw = window.innerWidth;
+			const vh = window.innerHeight;
+			const minX = -(size.w - minVisible);
+			const maxX = vw - minVisible;
+			const minY = 0;
+			const maxY = vh - minVisible;
+			pos = {
+				x: Math.max(minX, Math.min(maxX, pos.x)),
+				y: Math.max(minY, Math.min(maxY, pos.y))
+			};
+		}
+		// 'none': no clamping.
 	}
 
 	// Keep size fresh (used for clamp math) - ResizeObserver on our own
-	// root element catches CSS resize-from-corner too.
+	// root element catches CSS resize-from-corner too. We also re-clamp
+	// after each size change so corner-resizing past a bound snaps back.
 	$effect(() => {
 		if (!rootEl) return;
 		const el = rootEl;
 		const ro = new ResizeObserver(() => {
 			const r = el.getBoundingClientRect();
 			size = { w: r.width, h: r.height };
+			clamp();
 		});
 		ro.observe(el);
 		// seed
@@ -110,13 +133,28 @@
 		return () => ro.disconnect();
 	});
 
-	// Re-clamp on window resize - this is the "snap back in when the
-	// viewport shrinks" case.
+	// Re-clamp on window resize - the "snap back when the viewport shrinks"
+	// case. Harmless in parent mode (clamp() handles parent bounds too), so
+	// we keep a single global listener instead of branching.
 	$effect(() => {
 		if (typeof window === 'undefined') return;
-		const onResize = () => clampToViewport();
+		const onResize = () => clamp();
 		window.addEventListener('resize', onResize);
 		return () => window.removeEventListener('resize', onResize);
+	});
+
+	// Parent mode: watch the parent element's size too. A flex/grid row
+	// resizing around us wouldn't trigger `window.resize`, so without this
+	// the window can end up stranded outside a shrunken container until the
+	// user nudges it.
+	$effect(() => {
+		if (typeof window === 'undefined') return;
+		if (constrained !== 'parent' || !rootEl) return;
+		const parent = rootEl.parentElement;
+		if (!parent) return;
+		const ro = new ResizeObserver(() => clamp());
+		ro.observe(parent);
+		return () => ro.disconnect();
 	});
 
 	// The neodrag `position` plugin takes a `current: {x, y}` and forces
@@ -132,7 +170,7 @@
 			onDrag: ({ offset }) => {
 				pos = { x: offset.x, y: offset.y };
 			},
-			onDragEnd: () => clampToViewport()
+			onDragEnd: () => clamp()
 		}),
 		...(constrained === 'viewport' ? [bounds(BoundsFrom.viewport())] : []),
 		...(constrained === 'parent' ? [bounds(BoundsFrom.parent())] : []),
