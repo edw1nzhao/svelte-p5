@@ -1,0 +1,68 @@
+name: Post Cloudflare preview URL to PR
+
+# Cloudflare Workers does not post preview-URL comments on PRs natively
+# (that's a Pages-only feature — confirmed in the CF GitHub App's own
+# description). The Workers GH App still emits deployment status checks
+# and updates the PR's Deployments sidebar, which is enough for most
+# review flows. This workflow adds the comment on top of that for the
+# cases where a reviewer expects one — it's a sticky comment that
+# auto-updates on each push rather than piling duplicates on every push.
+#
+# Triggered by `deployment_status` events from the CF GH App. Only posts
+# on successful, non-production deployments; main branch deploys produce
+# no comment because there's no PR.
+
+on:
+  deployment_status:
+
+permissions:
+  pull-requests: write
+  deployments: read
+  contents: read
+
+jobs:
+  comment:
+    # Only react to a successful deployment on a non-production ref.
+    # `github.event.deployment.ref` is the branch or tag being deployed;
+    # `github.event.deployment_status.state` tracks the CF build outcome.
+    if: >
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.ref != 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find the open PR for the deployed branch
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ref = context.payload.deployment.ref;
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:${ref}`
+            });
+            if (prs.length === 0) {
+              core.info(`No open PR found for ref "${ref}" — skipping comment.`);
+              return '';
+            }
+            core.info(`Found PR #${prs[0].number} for ref "${ref}"`);
+            return prs[0].number.toString();
+          result-encoding: string
+
+      - name: Post sticky comment with preview URL
+        if: steps.pr.outputs.result != ''
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          number: ${{ steps.pr.outputs.result }}
+          header: cf-preview
+          message: |
+            ### 🚀 Cloudflare preview deployed
+
+            | | |
+            | --- | --- |
+            | **URL** | ${{ github.event.deployment_status.environment_url }} |
+            | **Commit** | `${{ github.event.deployment.sha }}` |
+            | **Environment** | ${{ github.event.deployment.environment }} |
+
+            *This comment updates on each push.*
