@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { P5Canvas } from 'svelte-p5';
+	import { Sketch } from 'svelte-p5-components';
 	import type p5 from 'p5';
 	import { onMount } from 'svelte';
 
@@ -38,32 +38,62 @@
 
 	const sketch = (p: p5) => {
 		const dots: { x: number; y: number; vx: number; vy: number; hue: number }[] = [];
-		// Only desktop reaches this path (mobile is short-circuited above),
-		// but keep the mobile-tuned constants in case the breakpoint changes.
 		const COUNT = isMobile ? 30 : 60;
 		const LINK_DIST = isMobile ? 120 : 180;
+		// Speed floor: when a dot's squared velocity drops below this we nudge
+		// it with a tiny random impulse so the ambient drift never fully dies.
+		// Tuned so the nudge is invisible frame-to-frame but keeps motion alive.
+		const MIN_SPEED_SQ = 0.0008;
+
+		// Canvas size tracking so we can react to resizes. Dots are placed in
+		// the placeholder canvas during setup (we don't know the real size
+		// yet — <Sketch>'s ResizeObserver doesn't fire until after setup), so
+		// we redistribute on the first real-size frame and rescale on every
+		// subsequent resize. Without this, dots stay clustered in the upper-
+		// left 800×520 and the rest of the hero renders empty.
+		let prevW = 0;
+		let prevH = 0;
 
 		p.setup = () => {
-			p.createCanvas(p.windowWidth, 520);
-			p.pixelDensity(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+			// Initial size is a placeholder; <Sketch>'s ResizeObserver calls
+			// resizeCanvas() with the actual container dimensions immediately
+			// after mount, so createCanvas just needs to produce something valid.
+			p.createCanvas(800, 520);
 			p.colorMode(p.HSB, 360, 100, 100, 1);
 			p.noStroke();
 			for (let i = 0; i < COUNT; i++) {
 				dots.push({
 					x: p.random(p.width),
 					y: p.random(p.height),
-					vx: p.random(-0.4, 0.4),
-					vy: p.random(-0.4, 0.4),
+					vx: p.random(-0.12, 0.12),
+					vy: p.random(-0.12, 0.12),
 					hue: p.random(220, 280)
 				});
 			}
 		};
 
-		p.windowResized = () => {
-			p.resizeCanvas(p.windowWidth, 520);
-		};
-
 		p.draw = () => {
+			// React to any canvas size change: first-frame redistribute across
+			// the now-known bounds, and on later resizes rescale positions
+			// proportionally so dots keep their visual distribution.
+			if (p.width !== prevW || p.height !== prevH) {
+				if (prevW > 0 && prevH > 0) {
+					const sx = p.width / prevW;
+					const sy = p.height / prevH;
+					for (const dot of dots) {
+						dot.x *= sx;
+						dot.y *= sy;
+					}
+				} else {
+					for (const dot of dots) {
+						dot.x = p.random(p.width);
+						dot.y = p.random(p.height);
+					}
+				}
+				prevW = p.width;
+				prevH = p.height;
+			}
+
 			p.background(0, 0, 100);
 			p.strokeWeight(1);
 			for (let i = 0; i < dots.length; i++) {
@@ -79,18 +109,55 @@
 			for (const dot of dots) {
 				dot.x += dot.vx;
 				dot.y += dot.vy;
-				if (dot.x < 0 || dot.x > p.width) dot.vx *= -1;
-				if (dot.y < 0 || dot.y > p.height) dot.vy *= -1;
+
+				// Clamp to bounds AND flip velocity, so dots can't get stranded
+				// outside the canvas when a resize shrinks the container.
+				if (dot.x < 0) {
+					dot.x = 0;
+					dot.vx *= -1;
+				} else if (dot.x > p.width) {
+					dot.x = p.width;
+					dot.vx *= -1;
+				}
+				if (dot.y < 0) {
+					dot.y = 0;
+					dot.vy *= -1;
+				} else if (dot.y > p.height) {
+					dot.y = p.height;
+					dot.vy *= -1;
+				}
+
+				// Mouse attraction with falloff: stronger the closer the dot is
+				// to the cursor, fading to zero at 200px. This makes the hover
+				// feel responsive near the pointer without the distant dots
+				// flying in from the edges.
 				const mx = p.mouseX - dot.x;
 				const my = p.mouseY - dot.y;
 				const md = Math.sqrt(mx * mx + my * my);
 				if (md < 200 && md > 0) {
-					dot.vx += (mx / md) * 0.01;
-					dot.vy += (my / md) * 0.01;
+					const strength = 0.025 * (1 - md / 200);
+					dot.vx += (mx / md) * strength;
+					dot.vy += (my / md) * strength;
 				}
-				dot.vx *= 0.995;
-				dot.vy *= 0.995;
-				p.fill(dot.hue, 45, 75, 0.6);
+
+				// Friction keeps mouse-kicks from accumulating indefinitely.
+				dot.vx *= 0.99;
+				dot.vy *= 0.99;
+
+				// Floor: if friction has damped us below the floor, add a small
+				// random impulse. Guarantees the ambient motion never flatlines.
+				const speedSq = dot.vx * dot.vx + dot.vy * dot.vy;
+				if (speedSq < MIN_SPEED_SQ) {
+					dot.vx += (p.random() - 0.5) * 0.06;
+					dot.vy += (p.random() - 0.5) * 0.06;
+				}
+
+				// Slightly more saturated + more opaque than the original draft
+				// so dots read as crisp circles rather than soft washes. The hero
+				// uses no backdrop-filter blur anymore, so there's nothing else
+				// softening them and these values can carry visual weight on
+				// their own.
+				p.fill(dot.hue, 55, 78, 0.85);
 				p.circle(dot.x, dot.y, 8);
 			}
 		};
@@ -99,7 +166,12 @@
 
 <div class="hero-backdrop absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
 	{#if shouldMount}
-		<P5Canvas {sketch} />
+		<!-- <Sketch> from svelte-p5-components wraps <P5Canvas> and adds a
+		     ResizeObserver on its parent that calls p.resizeCanvas() whenever
+		     the container changes size, plus applies p.pixelDensity(devicePixelRatio)
+		     on ready. That's what makes circles stay true-round on resize and
+		     sharp on HiDPI displays — neither happens with raw <P5Canvas>. -->
+		<Sketch {sketch} />
 	{/if}
 </div>
 
