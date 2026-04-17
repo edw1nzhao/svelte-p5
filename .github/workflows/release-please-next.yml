@@ -1,16 +1,22 @@
 name: release-please (next)
 
-# Prerelease pipeline. Mirrors .github/workflows/release-please.yml but
-# targets the `next` branch, uses a separate manifest so alpha versions
-# don't collide with stable, and publishes to npm with `--tag next` so
-# `pnpm add svelte-p5` still resolves to `latest` while
+# Prerelease pipeline. Mirrors release-please.yml but targets the `next`
+# branch, uses a separate manifest and config so alpha versions don't
+# collide with stable, and publishes with the `next` dist-tag so
+# `pnpm add svelte-p5` still resolves to latest while
 # `pnpm add svelte-p5@next` pulls the alpha.
 #
-# A commit on `next` with a conventional message triggers release-please
-# to open a release PR on `next`. Merging that PR cuts a prerelease:
-# e.g. 0.2.2 → 0.3.0-alpha.0, 0.3.0-alpha.0 → 0.3.0-alpha.1. When the
-# feature is ready, merge `next` into `main` and the stable-channel
-# workflow takes over (dropping the -alpha.N suffix).
+# Flow:
+# - A conventional-commit push to `next` triggers release-please to open a
+#   release PR on `next`. Merging that PR cuts a prerelease
+#   (e.g. 0.2.2 → 0.3.0-alpha.0 → 0.3.0-alpha.1).
+# - Publish jobs call the reusable publish.yml with --tag next.
+# - When an alpha stabilises, merge `next` into `main` and the stable
+#   pipeline promotes it (dropping the -alpha.N suffix).
+#
+# Keep the alpha manifest and config files (.release-please-manifest-next.json,
+# release-please-config-next.json, CHANGELOG-next.md) isolated to this branch.
+# See .github/CONTRIBUTING.md#branch--release-model.
 
 on:
   push:
@@ -40,80 +46,26 @@ jobs:
   publish-core:
     needs: release-please
     if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/core') }}
-    runs-on: ubuntu-latest
-    environment: npm-publish
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: next
-
-      - uses: jdx/mise-action@v4
-        with:
-          cache: true
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm -r --filter './packages/*' build
-
-      - name: Publish svelte-p5 (alpha)
-        working-directory: packages/core
-        run: npm publish --tag next
+    uses: ./.github/workflows/publish.yml
+    with:
+      package-dir: packages/core
+      npm-tag: next
+      ref: next
 
   publish-components:
     needs: release-please
     if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/components') }}
-    runs-on: ubuntu-latest
-    environment: npm-publish
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: next
-
-      - uses: jdx/mise-action@v4
-        with:
-          cache: true
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm -r --filter './packages/*' build
-
-      - name: Publish svelte-p5-components (alpha)
-        working-directory: packages/components
-        run: npm publish --tag next
+    uses: ./.github/workflows/publish.yml
+    with:
+      package-dir: packages/components
+      npm-tag: next
+      ref: next
 
   publish-viz:
     needs: release-please
     if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/viz') }}
-    runs-on: ubuntu-latest
-    environment: npm-publish
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: next
-
-      - uses: jdx/mise-action@v4
-        with:
-          cache: true
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm -r --filter './packages/*' build
-
-      - name: Publish svelte-p5-viz (alpha)
-        working-directory: packages/viz
-        run: npm publish --tag next
+    uses: ./.github/workflows/publish.yml
+    with:
+      package-dir: packages/viz
+      npm-tag: next
+      ref: next

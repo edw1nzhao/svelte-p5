@@ -1,0 +1,60 @@
+name: publish
+
+# Reusable workflow that builds and publishes a single package to npm using
+# OIDC trusted publishing (https://docs.npmjs.com/trusted-publishers).
+#
+# This file is the one registered as the trusted publisher on npmjs.com for
+# each of svelte-p5, svelte-p5-components, and svelte-p5-viz. Both the
+# stable (release-please.yml) and alpha (release-please-next.yml) pipelines
+# call into here, so a single trust configuration per package covers both
+# channels. npm's OIDC validates the `job_workflow_ref` claim, which points
+# at this file regardless of which top-level workflow triggered the call.
+#
+# Do NOT rename this file without updating the trusted publisher entry for
+# all three packages on npmjs.com.
+
+on:
+  workflow_call:
+    inputs:
+      package-dir:
+        description: 'Path to the package to publish (e.g. packages/core)'
+        required: true
+        type: string
+      npm-tag:
+        description: 'npm dist-tag (latest, next, etc.)'
+        required: false
+        type: string
+        default: latest
+      ref:
+        description: 'Git ref to check out (defaults to the triggering ref)'
+        required: false
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: jdx/mise-action@v4
+        with:
+          cache: true
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm -r --filter './packages/*' build
+
+      - name: Publish ${{ inputs.package-dir }} with tag ${{ inputs.npm-tag }}
+        working-directory: ${{ inputs.package-dir }}
+        run: npm publish --tag ${{ inputs.npm-tag }}

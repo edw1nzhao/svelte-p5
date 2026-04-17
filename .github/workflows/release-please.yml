@@ -1,5 +1,14 @@
 name: release-please
 
+# Stable channel. A conventional-commit push to main opens/updates a
+# release-please PR; merging it cuts tags + GitHub releases, and the
+# publish-* jobs below call the reusable publish.yml to ship each
+# affected package to npm with the `latest` dist-tag.
+#
+# After a successful release, sync-next opens a PR that merges main into
+# next so the alpha branch stays in sync with stable. See
+# .github/CONTRIBUTING.md#branch--release-model for the full flow.
+
 on:
   push:
     branches: [main]
@@ -27,74 +36,51 @@ jobs:
   publish-core:
     needs: release-please
     if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/core') }}
-    runs-on: ubuntu-latest
-    environment: npm-publish
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: jdx/mise-action@v4
-        with:
-          cache: true
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm -r --filter './packages/*' build
-
-      - name: Publish svelte-p5
-        working-directory: packages/core
-        run: npm publish
+    uses: ./.github/workflows/publish.yml
+    with:
+      package-dir: packages/core
+      npm-tag: latest
 
   publish-components:
     needs: release-please
     if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/components') }}
-    runs-on: ubuntu-latest
-    environment: npm-publish
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: jdx/mise-action@v4
-        with:
-          cache: true
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm -r --filter './packages/*' build
-
-      - name: Publish svelte-p5-components
-        working-directory: packages/components
-        run: npm publish
+    uses: ./.github/workflows/publish.yml
+    with:
+      package-dir: packages/components
+      npm-tag: latest
 
   publish-viz:
     needs: release-please
     if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/viz') }}
+    uses: ./.github/workflows/publish.yml
+    with:
+      package-dir: packages/viz
+      npm-tag: latest
+
+  sync-next:
+    needs: [release-please, publish-core, publish-components, publish-viz]
+    # always() so we run even when a subset of publish-* jobs skipped
+    # (only the affected packages publish on any given release).
+    if: ${{ always() && needs.release-please.outputs.releases_created == 'true' }}
     runs-on: ubuntu-latest
-    environment: npm-publish
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v6
-
-      - uses: jdx/mise-action@v4
         with:
-          cache: true
+          fetch-depth: 0
 
-      - uses: actions/setup-node@v6
+      - name: Open sync PR from main into next
+        uses: tretuna/sync-branches@1.4.0
         with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FROM_BRANCH: main
+          TO_BRANCH: next
+          PULL_REQUEST_TITLE: 'chore: sync main into next'
+          PULL_REQUEST_BODY: |
+            Automated post-release sync. A stable release just shipped on `main`; this PR forwards those commits into `next` so the alpha branch stays aligned.
 
-      - run: pnpm install --frozen-lockfile
+            Review the diff — the alpha-only files (`.release-please-manifest-next.json`, `CHANGELOG-next.md`, `release-please-config-next.json`) should be untouched. If they appear here, something went wrong; do not merge without investigating.
 
-      - run: pnpm -r --filter './packages/*' build
-
-      - name: Publish svelte-p5-viz
-        working-directory: packages/viz
-        run: npm publish
+            See `.github/CONTRIBUTING.md#branch--release-model` for context.
