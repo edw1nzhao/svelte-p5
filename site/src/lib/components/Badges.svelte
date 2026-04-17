@@ -14,9 +14,14 @@
 			src: `https://img.shields.io/github/actions/workflow/status/${REPO}/ci.yml?branch=main&style=${STYLE}&label=CI&labelColor=1e293b&color=10b981`
 		},
 		{
-			alt: 'Site deploy status',
-			href: `https://github.com/${REPO}/actions/workflows/deploy-site.yml`,
-			src: `https://img.shields.io/github/actions/workflow/status/${REPO}/deploy-site.yml?branch=main&style=${STYLE}&label=site&labelColor=1e293b&color=6366f1`
+			// The site now deploys via the Cloudflare Workers GitHub App, not a
+			// GitHub Actions workflow. CF doesn't create GitHub Deployment
+			// records, so there's nothing for a shields.io status badge to
+			// query — static "hosted on" badge instead of a broken workflow
+			// status. Links to the live production site.
+			alt: 'Hosted on Cloudflare Workers',
+			href: 'https://svelte-p5.dev',
+			src: `https://img.shields.io/badge/hosted_on-Cloudflare_Workers-f38020?style=${STYLE}&labelColor=1e293b&logo=cloudflare&logoColor=white`
 		},
 		{
 			alt: 'svelte-p5 npm version',

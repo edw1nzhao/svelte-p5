@@ -21,8 +21,12 @@
 	};
 </script>
 
+<!-- min-h-80 reserves vertical space: other demos push this container open
+     via their canvas's intrinsic height, but DraggableSketch is absolutely
+     positioned and contributes nothing to flow height. Without a floor, the
+     container collapses to 0 and overflow-hidden clips the draggable entirely. -->
 <div
-	class="relative h-full bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 overflow-hidden"
+	class="relative h-full min-h-80 bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 overflow-hidden"
 >
 	<!-- Subtle grid backdrop -->
 	<svg
