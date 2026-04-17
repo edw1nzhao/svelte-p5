@@ -1,6 +1,6 @@
 {
   "name": "svelte-p5-viz",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Visualization panel contract, registry, and scene-config types for svelte-p5. Composable, no-code-ready building blocks for canvas-based dashboards.",
   "keywords": [
     "svelte",

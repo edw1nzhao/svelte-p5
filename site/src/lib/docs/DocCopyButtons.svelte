@@ -2,51 +2,71 @@
 	import { onMount, untrack } from 'svelte';
 	import { mount, unmount } from 'svelte';
 	import CodeCopyBtn from './CodeCopyBtn.svelte';
+	import PmTabBar from './PmTabBar.svelte';
+	import { PKG_MANAGERS, type PkgManager } from '$lib/stores/preferences.svelte';
 
 	let { html }: { html: string } = $props();
 
 	let container: HTMLDivElement | null = $state(null);
-	const buttonInstances: Array<ReturnType<typeof mount>> = [];
+	const instances: Array<ReturnType<typeof mount>> = [];
 
-	function attachButtons() {
-		if (!container) return;
-
-		// Tear down any previously-mounted buttons (route changes)
-		while (buttonInstances.length) {
-			const inst = buttonInstances.pop();
+	function teardown() {
+		while (instances.length) {
+			const inst = instances.pop();
 			try {
 				if (inst) unmount(inst);
 			} catch {
 				// already gone
 			}
 		}
+	}
+
+	function attach() {
+		if (!container) return;
+		teardown();
 
 		const blocks = container.querySelectorAll('figure.code-block');
 		blocks.forEach((block) => {
-			const source = (block as HTMLElement).dataset.source ?? '';
-			if (!source) return;
+			const el = block as HTMLElement;
 
+			// Tabbed package-manager block: mount the tab bar (which owns its
+			// own copy button), no plain copy button.
+			if (el.classList.contains('pm-tabs')) {
+				const mountTarget = el.querySelector<HTMLElement>('.pm-tabs-mount');
+				if (!mountTarget) return;
+				const sources = {} as Record<PkgManager, string>;
+				let allFound = true;
+				for (const pm of PKG_MANAGERS) {
+					const src = el.dataset[`source${pm[0]!.toUpperCase()}${pm.slice(1)}`];
+					if (!src) {
+						allFound = false;
+						break;
+					}
+					sources[pm] = src;
+				}
+				if (!allFound) return;
+				const inst = mount(PmTabBar, {
+					target: mountTarget,
+					props: { figure: el, sources }
+				});
+				instances.push(inst);
+				return;
+			}
+
+			// Standard code block: mount the floating copy button.
+			const source = el.dataset.source ?? '';
+			if (!source) return;
 			const slot = document.createElement('div');
 			slot.className = 'code-copy-slot';
 			block.appendChild(slot);
-
 			const inst = mount(CodeCopyBtn, { target: slot, props: { source } });
-			buttonInstances.push(inst);
+			instances.push(inst);
 		});
 	}
 
 	onMount(() => {
-		attachButtons();
-		return () => {
-			while (buttonInstances.length) {
-				const inst = buttonInstances.pop();
-				try {
-					if (inst) unmount(inst);
-				} catch {
-					// noop
-				}
-			}
-		};
+		attach();
+		return teardown;
 	});
 
 	// Re-attach when html changes (route change in same layout)
@@ -56,7 +76,7 @@
 		const _ = html;
 		void _;
 		untrack(() => {
-			queueMicrotask(attachButtons);
+			queueMicrotask(attach);
 		});
 	});
 </script>

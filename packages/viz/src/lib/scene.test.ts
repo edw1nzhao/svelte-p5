@@ -39,7 +39,12 @@ describe('SceneConfig shape', () => {
 				second: 'right'
 			}
 		};
-		expectTypeOf(scene.layout).toMatchTypeOf<SplitSceneLayout>();
+		// Narrow via the discriminator rather than toMatchTypeOf: the union
+		// doesn't structurally satisfy any single variant.
+		if (scene.layout.kind === 'split') {
+			const split: SplitSceneLayout = scene.layout;
+			expectTypeOf(split).toEqualTypeOf<SplitSceneLayout>();
+		}
 	});
 
 	it('accepts a 2×2 grid', () => {
@@ -59,7 +64,10 @@ describe('SceneConfig shape', () => {
 				panels: ['a', 'b', 'c', 'd']
 			}
 		};
-		expectTypeOf(scene.layout).toMatchTypeOf<GridSceneLayout>();
+		if (scene.layout.kind === 'grid') {
+			const grid: GridSceneLayout = scene.layout;
+			expectTypeOf(grid).toEqualTypeOf<GridSceneLayout>();
+		}
 	});
 
 	it('per-panel config is an arbitrary object', () => {

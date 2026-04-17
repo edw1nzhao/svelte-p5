@@ -176,6 +176,25 @@
 		padding-top: 2rem;
 	}
 
+	/* Tabbed package-manager block: tab bar replaces the figcaption strip,
+	   so the inner shiki block doesn't need extra top padding. */
+	:global(.prose-doc figure.code-block.pm-tabs pre.shiki) {
+		padding-top: 1rem;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
+	:global(.prose-doc figure.code-block.pm-tabs) {
+		border: 1px solid rgb(30 41 59);
+		border-radius: 0.5rem;
+		overflow: hidden;
+	}
+	:global(.prose-doc figure.code-block.pm-tabs pre.shiki) {
+		border: 0;
+	}
+	:global(.prose-doc figure.code-block.pm-tabs .pm-block[hidden]) {
+		display: none;
+	}
+
 	/* p5 reference autolinks: subtle dotted underline */
 	:global(.prose-doc a.p5-ref) {
 		text-decoration: underline dotted;

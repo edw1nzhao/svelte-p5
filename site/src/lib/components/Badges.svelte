@@ -4,11 +4,8 @@
 	// `flat-square` is sharp; `for-the-badge` is pill-shaped - too loud.
 	const STYLE = 'flat';
 
-	// Use shields.io's dynamic JSON endpoint to read the bare version string
-	// from npm's registry - strips the leading `v` that the standard
-	// `npm/v/<pkg>` badge prepends.
 	const npmVersion = (pkg: string, label: string) =>
-		`https://img.shields.io/badge/dynamic/json?url=https://registry.npmjs.org/${pkg}/latest&query=$.version&prefix=&style=${STYLE}&label=${label}&labelColor=1e293b&color=6366f1`;
+		`https://img.shields.io/npm/v/${pkg}?style=${STYLE}&label=${label}&labelColor=1e293b&color=6366f1`;
 
 	const badges = [
 		{

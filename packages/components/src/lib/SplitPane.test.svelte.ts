@@ -84,7 +84,8 @@ describe('<SplitPane>', () => {
 		await fireEvent.keyDown(divider, { key: 'ArrowDown' });
 
 		expect(onresize).toHaveBeenCalledTimes(1);
-		const [call] = onresize.mock.calls;
+		const call = onresize.mock.calls[0];
+		if (!call) throw new Error('onresize call unexpectedly missing');
 		expect(call[0].sizes[0]).toBeGreaterThan(50);
 		expect(call[0].sizes[1]).toBeLessThan(50);
 		expect(call[0].sizes[0] + call[0].sizes[1]).toBeCloseTo(100);
