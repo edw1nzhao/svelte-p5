@@ -1,0 +1,25 @@
+# Cloudflare Workers config for the svelte-p5 documentation site.
+#
+# The site is a pure static SvelteKit build (adapter-static, output at
+# site/build). Workers Static Assets serves that bundle at the edge without
+# a Worker script, which is the modern CF pattern for documentation/content
+# sites — no runtime code on deploy, fast cold-start, SPA fallback handled
+# by the [assets] block below.
+#
+# Add a `main = "..."` line and remove the static-only assumption if we
+# ever introduce edge rendering (SSR, API routes, middleware).
+
+name = "svelte-p5-site"
+compatibility_date = "2025-04-01"
+
+[assets]
+directory = "./site/build"
+not_found_handling = "404-page"
+
+# Per-environment overrides. Preview deployments (anything not on main) get
+# the same static bundle; the dashboard routes them to preview URLs
+# automatically. Keep this block in sync with the Production env vars so
+# consumers of preview builds see the same behaviour as production.
+[env.production]
+
+[env.preview]
