@@ -6,6 +6,14 @@
 pnpm add svelte-p5-viz svelte-p5 p5
 ```
 
+To test an unreleased commit, install the preview build from [pkg.pr.new](https://pkg.pr.new/):
+
+```bash
+pnpm add \
+  https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5-viz@main \
+  https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5@main
+```
+
 ## What this is
 
 A set of TypeScript types and tiny runtime helpers that let multiple visualizations share one canvas, coordinate hover state, and serialize to JSON. It is deliberately thin: no actual visualization code ships in this package. Visualizations live in your app (or eventually in a separate viz-pack) and implement the contract below.

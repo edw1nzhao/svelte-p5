@@ -89,7 +89,16 @@ The site lives in [`site/`](./site) and the perf benchmark in [`bench/`](./bench
 
 ## Releases
 
-Automated via [release-please](https://github.com/googleapis/release-please-action) with a monorepo manifest. Merging a conventional-commit (`feat:`, `fix:`, `feat!:`) to `main` maintains a release PR per package; merging that PR publishes to npm.
+Two channels off `main`:
+
+- **Stable** — `pnpm add svelte-p5`. Automated via [release-please](https://github.com/googleapis/release-please-action) with a monorepo manifest. Merging a conventional-commit (`feat:`, `fix:`, `feat!:`) to `main` maintains a release PR per package; merging that PR publishes to npm.
+- **Canary preview** — every PR and every push to `main` publishes per-commit preview builds via [pkg-pr-new](https://pkg.pr.new/). Install any commit directly:
+
+  ```bash
+  pnpm add https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5@<sha-or-main>
+  ```
+
+  Handy for testing a fix before the stable release lands. Full details in [`docs/releasing.md`](./docs/releasing.md#canary-preview-builds).
 
 ## Roadmap
 

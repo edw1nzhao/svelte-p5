@@ -1,12 +1,12 @@
 name: release-please
 
-# Stable channel. A conventional-commit push to main opens/updates a
-# release-please PR; merging it cuts tags + GitHub releases, and the
-# publish-* jobs below call the reusable publish.yml to ship each
-# affected package to npm with the `latest` dist-tag.
+# Stable release pipeline. A conventional-commit push to main opens/updates
+# a release-please PR; merging it cuts tags + GitHub releases, and the
+# publish-* jobs below call the reusable publish.yml to ship each affected
+# package to npm with the `latest` dist-tag.
 #
-# After a successful release, sync-next opens a PR that merges main into
-# next so the alpha branch stays in sync with stable. See
+# Preview / canary builds are handled separately in ci.yml via pkg-pr-new —
+# no dedicated workflow, no dist-tag, no manifest. See
 # .github/CONTRIBUTING.md#branch--release-model for the full flow.
 
 on:
@@ -56,31 +56,3 @@ jobs:
     with:
       package-dir: packages/viz
       npm-tag: latest
-
-  sync-next:
-    needs: [release-please, publish-core, publish-components, publish-viz]
-    # always() so we run even when a subset of publish-* jobs skipped
-    # (only the affected packages publish on any given release).
-    if: ${{ always() && needs.release-please.outputs.releases_created == 'true' }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Open sync PR from main into next
-        uses: tretuna/sync-branches@1.4.0
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FROM_BRANCH: main
-          TO_BRANCH: next
-          PULL_REQUEST_TITLE: 'chore: sync main into next'
-          PULL_REQUEST_BODY: |
-            Automated post-release sync. A stable release just shipped on `main`; this PR forwards those commits into `next` so the alpha branch stays aligned.
-
-            Review the diff — the alpha-only files (`.release-please-manifest-next.json`, `CHANGELOG-next.md`, `release-please-config-next.json`) should be untouched. If they appear here, something went wrong; do not merge without investigating.
-
-            See `.github/CONTRIBUTING.md#branch--release-model` for context.

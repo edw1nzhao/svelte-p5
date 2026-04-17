@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [main, next]
+    branches: [main]
   push:
-    branches: [main, next]
+    branches: [main]
 
 permissions:
   contents: read
@@ -12,6 +12,13 @@ permissions:
 jobs:
   lint-and-build:
     runs-on: ubuntu-latest
+    # pkg-pr-new needs pull-requests: write to drop the sticky install-URL
+    # comment on PRs. Safe on forks — GitHub Actions automatically downgrades
+    # the token to read-only for PRs from forks, so external contributors
+    # can't exploit the permission.
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v6
 
@@ -44,6 +51,17 @@ jobs:
           for pkg in packages/core packages/components packages/viz; do
             (cd "$pkg" && npm pack --dry-run --json | jq -e '.[0].files | map(.path) | any(. == "LICENSE")')
           done
+
+      # Continuous preview publishing via pkg-pr-new. Every PR + every push
+      # to main publishes preview tarballs keyed by commit SHA to pkg.pr.new's
+      # CDN and drops a sticky PR comment with exact install URLs. Replaces
+      # the old `next` branch / `@alpha` dist-tag flow — no version bump, no
+      # manifest ceremony, no npm registry pollution. Workspace deps between
+      # the three packages are rewritten to each other's preview URLs
+      # automatically so `pnpm add <url>` installs a coherent set.
+      - name: Publish preview packages
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+        run: pnpm dlx pkg-pr-new publish './packages/core' './packages/components' './packages/viz'
 
   commitlint:
     runs-on: ubuntu-latest

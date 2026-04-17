@@ -4,11 +4,14 @@ name: publish
 # OIDC trusted publishing (https://docs.npmjs.com/trusted-publishers).
 #
 # This file is the one registered as the trusted publisher on npmjs.com for
-# each of svelte-p5, svelte-p5-components, and svelte-p5-viz. Both the
-# stable (release-please.yml) and alpha (release-please-next.yml) pipelines
-# call into here, so a single trust configuration per package covers both
-# channels. npm's OIDC validates the `job_workflow_ref` claim, which points
-# at this file regardless of which top-level workflow triggered the call.
+# each of svelte-p5, svelte-p5-components, and svelte-p5-viz. It's called by
+# release-please.yml when a stable release PR merges. npm's OIDC validates
+# the `job_workflow_ref` claim, which points at this file regardless of
+# which top-level workflow triggered the call.
+#
+# Preview / canary builds do NOT go through here — they use pkg-pr-new in
+# ci.yml, which publishes to pkg.pr.new's CDN (not the npm registry) and
+# doesn't need trusted-publisher OIDC.
 #
 # Do NOT rename this file without updating the trusted publisher entry for
 # all three packages on npmjs.com.

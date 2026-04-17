@@ -4,7 +4,7 @@ Thanks for the interest. Main use case is my own four projects, but issues and P
 
 ## Ground rules
 
-- PRs, not direct commits to `main` or `next`.
+- PRs, not direct commits to `main`.
 - Conventional Commits. `commitlint` runs on `commit-msg`.
 - `prettier` and `eslint` run on `pre-commit` via `lint-staged`.
 - Tests must pass in CI before merge.
@@ -53,55 +53,45 @@ Tabs for indentation (see `.editorconfig`).
 
 ## Branch & release model
 
-Two long-lived branches, two npm dist-tags. Everything below is automated — contributors pick which branch to target and land conventional commits; release-please handles versioning, changelogs, and npm publishing.
+One long-lived branch (`main`) with two distribution channels:
 
-| Branch | npm dist-tag | Published version example | When to use                                                                                            |
-| ------ | ------------ | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `main` | `latest`     | `svelte-p5@0.3.0`         | All stable work. Default target.                                                                       |
-| `next` | `next`       | `svelte-p5@0.3.0-alpha.2` | Experimental or breaking work that needs real-world validation before stabilisation. Opt-in for users. |
+| Channel            | How to install                                                    | Source                                                                                                              | Version scheme         |
+| ------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| **Stable**         | `pnpm add svelte-p5`                                              | Commits on `main` accumulate into a release-please PR; merging it publishes to npm with the `latest` dist-tag       | `svelte-p5@0.3.0`      |
+| **Canary preview** | `pnpm add https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5@<sha>` | Every PR + every push to `main` publishes a preview build to [pkg.pr.new](https://pkg.pr.new/~/edw1nzhao/svelte-p5) | CDN tarball per commit |
 
-Users install stable with `pnpm add svelte-p5`, alpha with `pnpm add svelte-p5@next`.
+No `next` branch, no `@alpha` dist-tag, no sync PRs. Canary previews replace all of that.
 
 ### Which branch should my PR target?
 
-- **Default: `main`.** Features, fixes, docs, CI — unless they're experimental.
-- **`next`:** only when the change needs alpha validation first (large refactor, new public API you want feedback on, breaking change).
+`main`. Always.
 
-A PR targeting `next` eventually reaches `main` by one of:
+### How canary previews work
 
-1. **Fast path** (most cases): open the same PR against `main` once you've validated it on alpha. No merge-back needed.
-2. **Merge-back path:** when a whole feature has stabilised on `next`, open a PR to merge `next` → `main`. The next `release-please` run on `main` promotes the feature to stable (drops the `-alpha.N` suffix).
+On every PR + every push to `main`, the `ci.yml` workflow runs `pkg-pr-new publish` against all three packages. The bot drops a sticky comment on the PR with exact `pnpm add` URLs you can install in any project to test the change end-to-end:
+
+```bash
+pnpm add https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5@<sha>
+pnpm add https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5-components@<sha>
+pnpm add https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5-viz@<sha>
+```
+
+No npm account needed, no version bump, no release PR. Workspace deps between the three packages are rewritten to each other's preview URLs automatically, so `pnpm add <url>` installs a coherent set.
+
+The latest build from `main` is also available at `@main` as a rolling tag:
+
+```bash
+pnpm add https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5@main
+```
 
 ### Release pipelines
 
-Three GitHub Actions workflows drive releases. You shouldn't need to touch them for normal contributions, but they're worth knowing exist:
+Two GitHub Actions workflows drive stable releases. You shouldn't need to touch them for normal contributions:
 
-- **`.github/workflows/release-please.yml`** — stable channel. Triggers on push to `main`. Opens a release PR; merging it tags, releases, and publishes with `latest`.
-- **`.github/workflows/release-please-next.yml`** — alpha channel. Triggers on push to `next`. Same shape but uses the `-next` config/manifest pair and publishes with `--tag next`.
-- **`.github/workflows/publish.yml`** — reusable workflow called by both pipelines. It holds the actual build + `npm publish` steps. This is the file registered as the **trusted publisher** on npmjs.com for all three packages. npm's OIDC validates `job_workflow_ref` against this file regardless of which top-level workflow called it, so one trust configuration per package covers both channels. **Do not rename this file** without updating the trust config on npmjs.com for each package.
+- **`.github/workflows/release-please.yml`** — triggers on push to `main`. Opens/updates a release PR; merging it tags, releases, and publishes with `latest`.
+- **`.github/workflows/publish.yml`** — reusable workflow called by `release-please.yml`. Holds the actual build + `npm publish` steps. Registered as the **trusted publisher** on npmjs.com for all three packages. **Do not rename this file** without updating the trust config on npmjs.com.
 
-### Keeping `next` in sync with `main`
-
-After every successful stable release on `main`, `release-please.yml` automatically opens a sync PR (`chore: sync main into next`) that merges the new main commits into `next`. Review it and merge.
-
-Why it matters: if `next` drifts too far from `main`, alpha versions start regressing (they won't contain recent stable fixes) and eventually alpha → stable promotion produces a noisy diff. The automated PR keeps the gap small.
-
-The alpha-specific files — `.release-please-manifest-next.json`, `CHANGELOG-next.md`, `release-please-config-next.json` — are untouched by `main`, so the sync merge has no expected conflicts. If any of those files show up in the sync diff, something's off; investigate before merging.
-
-### Alpha → beta transition (manual)
-
-If the alpha stabilises partially and you want to switch to a `beta` prerelease tag, release-please can't flip `prerelease-type` cleanly ([upstream issue](https://github.com/googleapis/release-please/issues/2447)). The manual procedure:
-
-1. Update `prerelease-type` from `"alpha"` to `"beta"` in `release-please-config-next.json`.
-2. On `next`, land an empty commit with a `Release-As:` footer for each affected package:
-
-   ```bash
-   git commit --allow-empty -m "chore: prerelease 0.3.0-beta.0
-
-   Release-As: 0.3.0-beta.0"
-   ```
-
-3. release-please will open a release PR at the requested version; merge it to cut the first beta.
+Preview publishing is a step inside `.github/workflows/ci.yml` — no dedicated workflow.
 
 ### Breaking changes
 
@@ -113,6 +103,8 @@ feat(core)!: rename onReady to onMount
 BREAKING CHANGE: <Canvas> no longer fires `onReady`. Migrate to `onMount`.
 ```
 
+If you want extra validation time before a breaking change hits stable users, share the pkg.pr.new preview URL from the PR and get feedback before merging. The preview URL is the replacement for the old "land it on alpha first" flow.
+
 ### Emergency manual publish
 
 If release-please is wedged and a fix needs to ship now, the manual procedure is documented in [`docs/releasing.md`](../docs/releasing.md#emergency--manual-publish). Don't use it routinely — it bypasses the trust chain and the manifest updates that release-please relies on.
@@ -121,9 +113,8 @@ If release-please is wedged and a fix needs to ship now, the manual procedure is
 
 Recommended settings on GitHub (not contributor-facing, but documented here so they don't get lost):
 
-- `main` and `next`: require PR before merging; require status checks (`lint-and-build`, `commitlint`) to pass; disallow force-push; disallow deletion.
-- Do not require linear history on `next` — release-please creates merge commits we need to preserve.
-- Allow GitHub Actions to create and approve PRs (needed for the sync-main-to-next PR).
+- `main`: require PR before merging; require status checks (`lint-and-build`, `commitlint`) to pass; disallow force-push; disallow deletion; require linear history.
+- Allow GitHub Actions to create and approve PRs (needed for the release-please PR).
 
 ## Releases
 
