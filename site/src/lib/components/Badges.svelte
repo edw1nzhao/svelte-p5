@@ -34,6 +34,11 @@
 			src: npmVersion('svelte-p5-components', 'components')
 		},
 		{
+			alt: 'svelte-p5-viz npm version',
+			href: 'https://www.npmjs.com/package/svelte-p5-viz',
+			src: npmVersion('svelte-p5-viz', 'viz')
+		},
+		{
 			alt: 'License',
 			href: `https://github.com/${REPO}/blob/main/LICENSE`,
 			src: `https://img.shields.io/npm/l/svelte-p5?style=${STYLE}&label=license&labelColor=1e293b&color=64748b`

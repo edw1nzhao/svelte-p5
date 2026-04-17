@@ -43,6 +43,12 @@
 					label: 'svelte-p5-components',
 					icon: Package,
 					ext: true
+				},
+				{
+					href: 'https://www.npmjs.com/package/svelte-p5-viz',
+					label: 'svelte-p5-viz',
+					icon: Package,
+					ext: true
 				}
 			]
 		},

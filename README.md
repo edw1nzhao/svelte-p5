@@ -10,6 +10,7 @@ Svelte 5 bindings for p5.js. Low-level primitives if you want control, pre-built
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | [`svelte-p5`](./packages/core)                  | [![npm](https://img.shields.io/npm/v/svelte-p5?label=&color=6366f1)](https://www.npmjs.com/package/svelte-p5)                       | `<P5Canvas>`, `createP5Bridge`, a handful of perf utilities                           |
 | [`svelte-p5-components`](./packages/components) | [![npm](https://img.shields.io/npm/v/svelte-p5-components?label=&color=6366f1)](https://www.npmjs.com/package/svelte-p5-components) | `<Sketch>`, `<FPSMonitor>`, `<SketchDebug>`, `<DraggableWindow>`, `<DraggableSketch>` |
+| [`svelte-p5-viz`](./packages/viz)               | [![npm](https://img.shields.io/npm/v/svelte-p5-viz?label=&color=6366f1)](https://www.npmjs.com/package/svelte-p5-viz)               | `VizPanel` contract, `createPanelRegistry`, `createSceneState`, `SceneConfig` types   |
 
 ## What it adds
 

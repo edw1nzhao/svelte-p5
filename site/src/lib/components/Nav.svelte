@@ -42,6 +42,12 @@
 			icon: Package
 		},
 		{
+			href: 'https://www.npmjs.com/package/svelte-p5-viz',
+			label: 'svelte-p5-viz',
+			sub: 'npm',
+			icon: Package
+		},
+		{
 			href: 'https://github.com/edw1nzhao/svelte-p5',
 			label: 'GitHub',
 			sub: 'edw1nzhao/svelte-p5',
@@ -100,6 +106,16 @@
 			>
 				<Package class="size-4" />
 				components
+			</a>
+			<a
+				href="https://www.npmjs.com/package/svelte-p5-viz"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="px-3 h-10 inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 no-underline transition-colors hover:text-slate-900 rounded-md hover:bg-slate-100"
+				title="svelte-p5-viz on npm"
+			>
+				<Package class="size-4" />
+				viz
 			</a>
 			<a
 				href="https://github.com/edw1nzhao/svelte-p5"
