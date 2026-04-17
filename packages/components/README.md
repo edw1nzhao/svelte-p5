@@ -8,6 +8,16 @@ Higher-level Svelte 5 components built on [`svelte-p5`](../core). The pieces tha
 pnpm add svelte-p5 svelte-p5-components p5
 ```
 
+To test a change that's merged on `main` but not yet released, install the preview build from [pkg.pr.new](https://pkg.pr.new/):
+
+```bash
+pnpm add \
+  https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5@main \
+  https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5-components@main
+```
+
+Pin to a SHA (`@<commit-sha>`) instead of `@main` for reproducible installs.
+
 ## `<Sketch>`
 
 `<P5Canvas>` plus a `ResizeObserver` on the parent element and automatic `pixelDensity(devicePixelRatio)`. The default you probably want.

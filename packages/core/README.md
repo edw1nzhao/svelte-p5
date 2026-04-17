@@ -8,6 +8,14 @@ Svelte 5 bindings for p5.js. This package is the primitive layer: a canvas wrapp
 pnpm add svelte-p5 p5
 ```
 
+To test a change that's merged on `main` but not yet released — or any specific commit — install the preview build from [pkg.pr.new](https://pkg.pr.new/):
+
+```bash
+pnpm add https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5@main
+# or pin an exact SHA:
+pnpm add https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5@<commit-sha>
+```
+
 ## `<P5Canvas>`
 
 Mounts a p5 sketch in instance mode, cleans it up on unmount.
