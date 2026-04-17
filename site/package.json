@@ -10,6 +10,8 @@
     "typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@lucide/svelte": "^1.8.0",
     "animejs": "^4.0.0",
     "p5": "catalog:",
