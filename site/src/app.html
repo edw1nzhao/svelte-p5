@@ -44,6 +44,10 @@
 		     Preloaded by the hooks.server.ts resolve filter so FCP/LCP isn't
 		     blocked on font CSS discovery. -->
 
+		<!-- Hero badges load from shields.io — warm the connection early so
+		     the TLS handshake isn't a waterfall bottleneck for their images. -->
+		<link rel="preconnect" href="https://img.shields.io" crossorigin />
+
 		<!-- JSON-LD: SoftwareSourceCode -->
 		<script type="application/ld+json">
 			{
