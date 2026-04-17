@@ -4,4 +4,6 @@ build
 .svelte-kit
 pnpm-lock.yaml
 CHANGELOG.md
+CHANGELOG-next.md
 .release-please-manifest.json
+.release-please-manifest-next.json
