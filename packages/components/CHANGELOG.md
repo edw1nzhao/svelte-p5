@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.4.0...components-v0.4.1) (2026-04-17)
+
+
+### Bug Fixes
+
+* **components:** clamp DraggableWindow to parent on resize; reserve d… ([#36](https://github.com/edw1nzhao/svelte-p5/issues/36)) ([4376112](https://github.com/edw1nzhao/svelte-p5/commit/43761124dbf82a3001d828c81e593c95994f1bb2))
+
 ## [0.4.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.3.0...components-v0.4.0) (2026-04-16)
 
 
