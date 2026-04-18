@@ -193,6 +193,11 @@
 			radial-gradient(60% 80% at 20% 30%, rgb(99 102 241 / 0.1), transparent 60%),
 			radial-gradient(50% 70% at 85% 60%, rgb(139 92 246 / 0.08), transparent 55%),
 			linear-gradient(to bottom, rgb(248 250 252), rgb(241 245 249));
+		/* Give the hero its own named view-transition so the canvas snapshot
+		   gets a dedicated fade instead of participating in the root fade,
+		   which can look jank mid-animation over a live canvas. This does NOT
+		   prevent p5 remount across routes — it only smooths the visual swap. */
+		view-transition-name: hero-backdrop;
 	}
 
 	/* Canvas must fill the hero - needs !important to override p5's inline styles.

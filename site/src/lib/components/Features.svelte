@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { staggerFadeUp } from '$lib/animations';
 	import { whenVisible } from '$lib/whenVisible.svelte';
+	import { tilt } from '$lib/actions/tilt';
 
 	let grid: HTMLDivElement | null = $state(null);
 	onMount(() => {
@@ -13,7 +14,7 @@
 
 <section class="py-20 px-6 bg-slate-50 border-y border-slate-200">
 	<div bind:this={grid} class="max-w-6xl mx-auto grid grid-cols-1 gap-12 md:grid-cols-3">
-		<div data-anim>
+		<div use:tilt data-anim>
 			<div
 				class="size-10 flex items-center justify-center bg-indigo-500/8 text-indigo-500 rounded-[0.625rem] mb-4"
 			>
@@ -46,7 +47,7 @@
 			</p>
 		</div>
 
-		<div data-anim>
+		<div use:tilt data-anim>
 			<div
 				class="size-10 flex items-center justify-center bg-indigo-500/8 text-indigo-500 rounded-[0.625rem] mb-4"
 			>
@@ -83,7 +84,7 @@
 			</p>
 		</div>
 
-		<div data-anim>
+		<div use:tilt data-anim>
 			<div
 				class="size-10 flex items-center justify-center bg-indigo-500/8 text-indigo-500 rounded-[0.625rem] mb-4"
 			>

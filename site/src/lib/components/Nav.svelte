@@ -114,8 +114,13 @@
 
 <svelte:window onscroll={handleScroll} />
 
+<!-- Scroll progress bar: scroll-driven CSS animation (graceful no-op on
+     browsers without animation-timeline support). Renders just under the
+     sticky nav — skinny, accent-colored, non-interactive. -->
+<div class="scroll-progress" aria-hidden="true"></div>
+
 <nav
-	class="fixed top-0 inset-x-0 z-40 transition-all duration-200 border-b"
+	class="site-header fixed top-0 inset-x-0 z-40 transition-all duration-200 border-b"
 	class:bg-white={scrolled || isDocs}
 	class:backdrop-blur-xl={scrolled || isDocs}
 	class:border-slate-200={scrolled || isDocs}
@@ -124,7 +129,7 @@
 >
 	<div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3">
 		<a href="/" class="flex items-center gap-2.5 no-underline min-h-11" aria-label="svelte-p5 home">
-			<Logo class="size-8" />
+			<Logo class="size-8" wink={!isDocs} />
 			<span class="font-mono font-semibold text-lg text-slate-900">svelte-p5</span>
 		</a>
 
@@ -177,7 +182,10 @@
 						<!-- Inner card with the visible styling; outer div provides the
 						     4px hover bridge (pt-1) so the mouse can cross from button
 						     to menu without triggering mouseleave on the wrapper. -->
-						<div class="rounded-md border border-slate-200 bg-white shadow-lg py-1">
+						<!-- menu-popover class wires up the CSS `@starting-style` fade +
+						     translate-up entry so the dropdown eases in instead of
+						     popping. Zero JS, zero library cost. -->
+						<div class="menu-popover rounded-md border border-slate-200 bg-white shadow-lg py-1">
 							{#each packages as pkg (pkg.href)}
 								<a
 									role="menuitem"
@@ -185,7 +193,7 @@
 									target="_blank"
 									rel="noopener noreferrer"
 									onclick={() => (packagesOpen = false)}
-									class="flex items-start gap-3 px-3 py-2.5 no-underline hover:bg-slate-50"
+									class="flex items-start gap-3 px-3 py-2.5 no-underline transition-colors duration-150 hover:bg-slate-50"
 								>
 									<Package class="size-4 text-slate-400 mt-0.5 shrink-0" />
 									<div class="flex flex-col leading-tight">
