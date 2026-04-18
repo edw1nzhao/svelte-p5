@@ -43,16 +43,33 @@
 	});
 </script>
 
+<!--
+  Hero vertical sizing strategy:
+
+  - Mobile: fixed `min-h-[42rem]` (~672px). Viewport-based units on mobile
+    cause layout jumps when the URL bar collapses/expands; a rem value is
+    stable and tall enough to feel substantial without overwhelming small
+    screens.
+
+  - sm+ (tablets and up): `sm:min-h-[85svh]`. The `svh` unit is the
+    "small viewport height" — it pins to the viewport with collapsed
+    browser chrome, so no reflow as the user scrolls. 85% leaves a
+    sliver of the next section peeking so visitors know to keep scrolling
+    (the "content is below" affordance top sites use).
+
+  - Extra vertical padding (sm:pt-24 sm:pb-28) creates breathing room
+    around the hero content so the taller section doesn't feel like
+    a column of text stretched to fill empty space.
+-->
 <section
-	class="relative min-h-[34rem] flex items-center justify-center overflow-hidden pt-12 pb-16 sm:pt-20 sm:pb-20 px-4 sm:px-6"
+	class="relative min-h-[42rem] sm:min-h-[85svh] flex items-center justify-center overflow-hidden pt-16 pb-20 sm:pt-24 sm:pb-28 px-4 sm:px-6"
 >
 	<HeroSketch />
-	<!-- Glassy readability mask: backdrop-filter blurs the sketch behind the
-	     text area, and a radial alpha mask fades that blur out toward the
-	     edges so the animated dots stay fully visible at the perimeter. The
-	     radial background gradient adds a soft white tint in the same region
-	     so the text (especially the indigo gradient in the h1) keeps
-	     contrast without a flat scrim dominating the whole hero. -->
+	<!-- Glassy readability backdrop. Tight radial ellipse behind the text
+	     column with a sharp mask edge — fully opaque in the middle (crisp
+	     glass), narrow transition band, transparent outside. Keeps the
+	     animated dots fully sharp in the outer ⅔ of the hero while giving
+	     the text a real frosted-glass backdrop instead of a flat white scrim. -->
 	<div aria-hidden="true" class="hero-glass absolute inset-0 pointer-events-none"></div>
 
 	<div bind:this={inner} class="relative z-10 text-center max-w-2xl">
@@ -143,18 +160,51 @@
 </section>
 
 <style>
-	/* Hero readability tint. Soft white gradient confined to a narrow ellipse
-	   directly behind the text column (max-w-2xl = 42rem) so the animated
-	   dots stay fully visible on the left and right thirds of the hero.
-	   Bumped opacity to 0.42 to carry readability on its own — earlier
-	   versions paired this with a backdrop-filter blur, which made every
-	   dot passing through the center look fuzzy. Plain tint is crisper. */
+	/* Hero glassy backdrop. Two stacked layers — a radial white tint and a
+	   backdrop-filter blur — both shaped by the same radial mask so they
+	   fade together.
+
+	   Tuning notes from iteration:
+	   - Ellipse is taller than wide (38% × 58%) because text column is
+	     narrow vertically (h1 + paragraph + install widget + badges
+	     stacks ~22rem) and the glass needs to cover all of it without
+	     spilling into the outer thirds horizontally.
+	   - Blur reduced to 6px (was 10px) so even the center doesn't feel
+	     smeared, just softly frosted.
+	   - Mask uses a LONG ease-out: opaque through 30% of the ellipse,
+	     then fades gradually to transparent by 85%. That 55% transition
+	     band makes the glass blend into the sketch instead of having a
+	     visible hard edge — previous iteration's narrow 15% band felt
+	     abrupt.
+	   - Tint at 0.52 opacity carries text readability on its own, so the
+	     blur is purely aesthetic — readers don't depend on it for contrast.
+
+	   Webkit-prefixed variants for Safari support. Browsers without
+	   backdrop-filter still get the tint, which alone keeps text readable. */
 	.hero-glass {
 		background: radial-gradient(
-			ellipse 38% 45% at 50% 50%,
-			rgb(255 255 255 / 0.42),
-			rgb(255 255 255 / 0) 70%
+			ellipse 38% 72% at 50% 50%,
+			rgb(255 255 255 / 0.52),
+			rgb(255 255 255 / 0) 90%
 		);
+		backdrop-filter: blur(6px) saturate(1.15);
+		-webkit-backdrop-filter: blur(6px) saturate(1.15);
+		mask-image: radial-gradient(ellipse 38% 72% at 50% 50%, black 0%, black 30%, transparent 85%);
+		-webkit-mask-image: radial-gradient(
+			ellipse 38% 72% at 50% 50%,
+			black 0%,
+			black 30%,
+			transparent 85%
+		);
+	}
+
+	/* Reduced-motion: skip GPU-heavy backdrop-filter, keep the tint alone
+	   so text readability is preserved without GPU compositing jitter. */
+	@media (prefers-reduced-motion: reduce) {
+		.hero-glass {
+			backdrop-filter: none;
+			-webkit-backdrop-filter: none;
+		}
 	}
 
 	.install-code :global(pre) {

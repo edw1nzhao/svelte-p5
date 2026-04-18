@@ -100,7 +100,13 @@
 				for (let j = i + 1; j < dots.length; j++) {
 					const d = p.dist(dots[i]!.x, dots[i]!.y, dots[j]!.x, dots[j]!.y);
 					if (d < LINK_DIST) {
-						p.stroke(dots[i]!.hue, 35, 75, (1 - d / LINK_DIST) * 0.2);
+						// Links share the dot palette (saturation 60, darker
+						// brightness 52) so they read as continuous with the
+						// circles instead of as separate pale threads. Alpha
+						// coefficient raised 0.2 -> 0.42 so close pairs pull
+						// solid-enough lines to actually trace the network,
+						// while distant pairs still fade to invisible.
+						p.stroke(dots[i]!.hue, 60, 52, (1 - d / LINK_DIST) * 0.42);
 						p.line(dots[i]!.x, dots[i]!.y, dots[j]!.x, dots[j]!.y);
 					}
 				}
@@ -152,13 +158,16 @@
 					dot.vy += (p.random() - 0.5) * 0.06;
 				}
 
-				// Slightly more saturated + more opaque than the original draft
-				// so dots read as crisp circles rather than soft washes. The hero
-				// uses no backdrop-filter blur anymore, so there's nothing else
-				// softening them and these values can carry visual weight on
-				// their own.
-				p.fill(dot.hue, 55, 78, 0.85);
-				p.circle(dot.x, dot.y, 8);
+				// Higher saturation + darker brightness so dots read as crisp
+				// solid marks against the light hero gradient. The previous
+				// values (saturation 55, brightness 78) gave a ~3:1 contrast
+				// ratio — your eye reads low-contrast edges as soft even
+				// when pixel-level they're sharp (antialiasing on a 10px
+				// circle takes ~20% of the radius, so low-contrast AA looks
+				// smeared). Darker values push contrast closer to 7:1 and
+				// the dots read as defined circles instead of washes.
+				p.fill(dot.hue, 72, 55);
+				p.circle(dot.x, dot.y, 10);
 			}
 		};
 	};
