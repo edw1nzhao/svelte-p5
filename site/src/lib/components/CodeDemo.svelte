@@ -122,7 +122,7 @@
 			{#if demoVisible}
 				{@render demo()}
 			{:else}
-				<div class="demo-placeholder" aria-hidden="true"></div>
+				<div class="demo-shimmer" aria-hidden="true"></div>
 			{/if}
 		</div>
 	</div>
@@ -139,19 +139,6 @@
 	.demo-container > :global(*) {
 		width: 100%;
 		height: 100%;
-	}
-
-	/* Reserve space for the sketch before it lazy-mounts so scrolling is stable. */
-	.demo-placeholder {
-		width: 100%;
-		aspect-ratio: 4 / 3;
-		background: repeating-linear-gradient(
-			45deg,
-			rgb(241 245 249),
-			rgb(241 245 249) 12px,
-			rgb(226 232 240) 12px,
-			rgb(226 232 240) 24px
-		);
 	}
 
 	/* Canvas fills container but preserves aspect ratio - no stretching */
