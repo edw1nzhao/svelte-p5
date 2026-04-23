@@ -5,7 +5,10 @@ export { default as DraggableWindow } from './DraggableWindow.svelte';
 export { default as DraggableSketch } from './DraggableSketch.svelte';
 export { default as CanvasFrame } from './CanvasFrame.svelte';
 export { default as SplitPane } from './SplitPane.svelte';
+export { default as ActivityBar, type ActivityBarItem } from './ActivityBar.svelte';
+export { default as SidePanel } from './SidePanel.svelte';
 export { default as HoverTooltip } from './HoverTooltip.svelte';
+export { default as ContextMenu, type ContextMenuItem } from './ContextMenu.svelte';
 export { default as EntityToggleList, type Entity } from './EntityToggleList.svelte';
 export {
 	default as TimelineTrack,
