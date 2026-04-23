@@ -93,14 +93,14 @@
 		if (event.key === 'ArrowDown' || (orientation === 'vertical' && event.key === 'ArrowRight')) {
 			event.preventDefault();
 			const next = idx < 0 ? 0 : (idx + 1) % buttons.length;
-			buttons[next].focus();
+			buttons[next]?.focus();
 		} else if (
 			event.key === 'ArrowUp' ||
 			(orientation === 'vertical' && event.key === 'ArrowLeft')
 		) {
 			event.preventDefault();
 			const next = idx < 0 ? buttons.length - 1 : (idx - 1 + buttons.length) % buttons.length;
-			buttons[next].focus();
+			buttons[next]?.focus();
 		} else if (event.key === 'Enter' || event.key === ' ') {
 			if (idx >= 0) {
 				event.preventDefault();

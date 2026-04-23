@@ -13,7 +13,7 @@ export { default as EntityToggleList, type Entity } from './EntityToggleList.sve
 export {
 	default as TimelineTrack,
 	type TimelineSegment,
-	type TimelineViewWindow
+	type TimelineSelection
 } from './TimelineTrack.svelte';
 export { default as TimelineScrubber } from './TimelineScrubber.svelte';
 export { createMediaSync, type MediaSync } from './createMediaSync.svelte.js';
