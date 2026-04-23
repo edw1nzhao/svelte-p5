@@ -224,7 +224,8 @@
 		let idx = from;
 		for (let i = 0; i < n; i++) {
 			idx = (idx + dir + n) % n;
-			if (!items[idx].disabled) return idx;
+			const item = items[idx];
+			if (item && !item.disabled) return idx;
 		}
 		return -1;
 	}
@@ -236,7 +237,8 @@
 
 	function lastEnabled(): number {
 		for (let i = items.length - 1; i >= 0; i--) {
-			if (!items[i].disabled) return i;
+			const item = items[i];
+			if (item && !item.disabled) return i;
 		}
 		return -1;
 	}
