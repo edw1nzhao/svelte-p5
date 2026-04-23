@@ -15,17 +15,23 @@
 <button
 	onclick={copy}
 	title="Copy to clipboard"
-	class="flex items-center justify-center size-8 rounded-md border-none bg-transparent text-slate-400 cursor-pointer transition-all duration-150 hover:bg-white/10 hover:text-slate-200"
+	aria-label={copied ? 'Copied' : 'Copy to clipboard'}
+	class="press flex items-center justify-center size-8 rounded-md border-none bg-transparent cursor-pointer hover:bg-white/10"
+	class:text-emerald-300={copied}
+	class:text-slate-400={!copied}
 >
 	{#if copied}
+		<!-- Pop-in check: scale + opacity via @starting-style so the confirmation
+		     feels punchier than a plain swap. Zero JS. -->
 		<svg
+			class="copy-check"
 			xmlns="http://www.w3.org/2000/svg"
 			width="16"
 			height="16"
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
-			stroke-width="2"
+			stroke-width="2.5"
 			stroke-linecap="round"
 			stroke-linejoin="round"
 		>
@@ -48,3 +54,19 @@
 		</svg>
 	{/if}
 </button>
+
+<style>
+	.copy-check {
+		transition:
+			transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1),
+			opacity 120ms ease-out;
+		transform: scale(1);
+		opacity: 1;
+	}
+	@starting-style {
+		.copy-check {
+			transform: scale(0.4);
+			opacity: 0;
+		}
+	}
+</style>

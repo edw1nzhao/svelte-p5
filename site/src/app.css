@@ -91,6 +91,114 @@ select {
 		transition-duration: 0.01ms !important;
 		scroll-behavior: auto !important;
 	}
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
+}
+
+/* View Transitions: short cross-fade between routes on browsers that support
+   the API. The nav is tagged with view-transition-name: site-header so it
+   stays put while main content fades. Firefox ignores and shows an instant
+   swap — graceful no-op. */
+@view-transition {
+	navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.site-header {
+	view-transition-name: site-header;
+}
+::view-transition-group(site-header) {
+	animation-duration: 0ms;
+}
+
+/* Scroll progress indicator — scroll-driven animation on browsers that
+   support `animation-timeline: scroll()`. Sits as a 2px line under the nav.
+   @supports gate means Firefox and older Safari simply don't render it. */
+@supports (animation-timeline: scroll()) {
+	.scroll-progress {
+		position: fixed;
+		top: var(--header-h);
+		left: 0;
+		height: 2px;
+		width: 100%;
+		transform-origin: 0 50%;
+		background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
+		z-index: 39;
+		pointer-events: none;
+		animation: scroll-progress-grow linear;
+		animation-timeline: scroll(root);
+	}
+}
+@keyframes scroll-progress-grow {
+	from {
+		transform: scaleX(0);
+	}
+	to {
+		transform: scaleX(1);
+	}
+}
+
+/* Entry animation for popover-style containers (packages dropdown, menus).
+   @starting-style is the modern replacement for JS-timed opacity ramps.
+   Supported in Chrome 117+, Safari 17.5+, Firefox 129+. Older browsers
+   simply see the element appear — no regression. */
+.menu-popover {
+	transition:
+		opacity 160ms cubic-bezier(0.4, 0, 0.2, 1),
+		transform 160ms cubic-bezier(0.4, 0, 0.2, 1);
+	opacity: 1;
+	transform: translateY(0);
+}
+@starting-style {
+	.menu-popover {
+		opacity: 0;
+		transform: translateY(-4px);
+	}
+}
+
+/* Tactile press feedback on primary action buttons. Scale barely registers
+   visually but gives the cursor a satisfying "click". Add to button/anchor
+   elements that feel like CTAs. */
+.press {
+	transition:
+		transform 120ms cubic-bezier(0.4, 0, 0.2, 1),
+		background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+		color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.press:active {
+	transform: scale(0.97);
+}
+
+/* CSS-only shimmer for demo placeholders. Replaces the static stripes with
+   a subtle light sweep so waiting for the sketch to mount feels alive but
+   not distracting. Transform-only, GPU-cheap. */
+.demo-shimmer {
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	background: linear-gradient(
+		100deg,
+		rgb(241 245 249) 0%,
+		rgb(241 245 249) 40%,
+		rgb(226 232 240) 50%,
+		rgb(241 245 249) 60%,
+		rgb(241 245 249) 100%
+	);
+	background-size: 300% 100%;
+	animation: demo-shimmer-slide 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes demo-shimmer-slide {
+	from {
+		background-position: 150% 0;
+	}
+	to {
+		background-position: -50% 0;
+	}
 }
 
 /* Shiki code block styling — mobile-first */

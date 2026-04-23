@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import type { Snippet } from 'svelte';
-	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import { afterNavigate, beforeNavigate, onNavigate } from '$app/navigation';
 	import Nav from '$lib/components/Nav.svelte';
 	import FeedbackButton from '$lib/components/FeedbackButton.svelte';
 
@@ -29,6 +29,19 @@
 		// Restore the CSS smooth-scroll for subsequent in-page anchor jumps
 		requestAnimationFrame(() => {
 			document.documentElement.style.scrollBehavior = '';
+		});
+	});
+
+	// Cross-fade page content using the View Transitions API on browsers that
+	// support it (Chrome, Edge, Safari 18+). Firefox gracefully no-ops.
+	// The CSS in app.css scopes the transition to `main` so the nav stays put.
+	onNavigate((navigation) => {
+		if (typeof document === 'undefined' || !('startViewTransition' in document)) return;
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
 		});
 	});
 </script>
