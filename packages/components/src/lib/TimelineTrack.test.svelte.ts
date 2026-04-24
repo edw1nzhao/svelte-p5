@@ -50,32 +50,33 @@ describe('<TimelineTrack>', () => {
 		expect(onSegmentClick.mock.calls[0]?.[0]?.id).toBe('s1');
 	});
 
-	it('view window handles render when viewWindow is provided', () => {
+	it('selection handles render when selectionStart/End are provided', () => {
 		const { container } = render(TimelineTrack, {
-			props: { duration: 100, currentTime: 50, viewWindow: { start: 20, end: 80 } }
+			props: { duration: 100, currentTime: 50, selectionStart: 20, selectionEnd: 80 }
 		});
 		expect(container.querySelectorAll('.timeline-track__handle')).toHaveLength(2);
 	});
 
-	it('view window handles hidden when showViewWindowHandles=false', () => {
+	it('selection handles hidden when showSelection=false', () => {
 		const { container } = render(TimelineTrack, {
 			props: {
 				duration: 100,
-				viewWindow: { start: 20, end: 80 },
-				showViewWindowHandles: false
+				selectionStart: 20,
+				selectionEnd: 80,
+				showSelection: false
 			}
 		});
 		expect(container.querySelectorAll('.timeline-track__handle')).toHaveLength(0);
 	});
 
-	it('has role=slider with aria-valuemin/max/now reflecting view window', () => {
+	it('has role=slider with aria covering full duration', () => {
 		const { container } = render(TimelineTrack, {
-			props: { duration: 100, currentTime: 30, viewWindow: { start: 10, end: 90 } }
+			props: { duration: 100, currentTime: 30, selectionStart: 10, selectionEnd: 90 }
 		});
 		const track = container.querySelector('.timeline-track') as HTMLElement;
 		expect(track.getAttribute('role')).toBe('slider');
-		expect(track.getAttribute('aria-valuemin')).toBe('10');
-		expect(track.getAttribute('aria-valuemax')).toBe('90');
+		expect(track.getAttribute('aria-valuemin')).toBe('0');
+		expect(track.getAttribute('aria-valuemax')).toBe('100');
 		expect(track.getAttribute('aria-valuenow')).toBe('30');
 	});
 });
