@@ -18,7 +18,7 @@ catalog:
   happy-dom: ^15.0.0
   p5: ^1.11.0
   publint: ^0.3.0
-  svelte: ^5.0.0
+  svelte: ^5.55.5
   svelte-check: ^4.1.0
   tslib: ^2.8.0
   typescript: ^5.7.0
