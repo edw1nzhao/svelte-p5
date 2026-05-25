@@ -16,7 +16,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "catalog:",
     "@types/p5": "catalog:",
-    "playwright": "^1.50.0",
+    "playwright": "^1.60.0",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
     "typescript": "catalog:",
