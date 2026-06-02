@@ -67,6 +67,11 @@
 		onSegmentClick?: (segment: TimelineSegment) => void;
 		/** Snippet rendered above the hover x position. */
 		hoverPreview?: Snippet<[{ time: number; xPercent: number }]>;
+		/**
+		 * When dragging the selection start handle, also move the playhead to
+		 * the new start (and fire `onSeek`). Default: false.
+		 */
+		playheadFollowsSelectionStart?: boolean;
 		class?: string;
 	}
 
@@ -91,6 +96,7 @@
 		onSpeedChange,
 		onSegmentClick,
 		hoverPreview,
+		playheadFollowsSelectionStart = false,
 		class: className = ''
 	}: Props = $props();
 
@@ -149,6 +155,7 @@
 			{onSelectionCommit}
 			{onSegmentClick}
 			{hoverPreview}
+			{playheadFollowsSelectionStart}
 		/>
 	</div>
 
