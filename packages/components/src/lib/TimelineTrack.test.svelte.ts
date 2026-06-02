@@ -69,6 +69,73 @@ describe('<TimelineTrack>', () => {
 		expect(container.querySelectorAll('.timeline-track__handle')).toHaveLength(0);
 	});
 
+	// --- playheadFollowsSelectionStart -------------------------------------
+	//
+	// Dragging the start handle goes through document-level pointermove
+	// listeners, and the time math depends on the track's bounding rect.
+	// happy-dom reports a 0-width rect by default, so we stub it to map
+	// clientX 1:1 onto a 100-unit timeline (width 100 at left 0).
+	function stubTrackRect(container: HTMLElement) {
+		const track = container.querySelector('.timeline-track') as HTMLElement;
+		track.getBoundingClientRect = () =>
+			({ left: 0, top: 0, width: 100, height: 32, right: 100, bottom: 32, x: 0, y: 0 }) as DOMRect;
+		return track;
+	}
+
+	async function dragStartHandle(container: HTMLElement, toClientX: number) {
+		const handle = container.querySelector('.timeline-track__handle--start') as HTMLElement;
+		handle.setPointerCapture = () => {};
+		await fireEvent.pointerDown(handle, { clientX: 20, pointerId: 1 });
+		// Drag handled at the document level.
+		await fireEvent.pointerMove(document, { clientX: toClientX, pointerId: 1 });
+		await fireEvent.pointerUp(document, { clientX: toClientX, pointerId: 1 });
+	}
+
+	it('with playheadFollowsSelectionStart, dragging the start handle moves currentTime + seeks', async () => {
+		const onSeek = vi.fn();
+		const { container } = render(TimelineTrack, {
+			props: {
+				duration: 100,
+				currentTime: 0,
+				selectionStart: 20,
+				selectionEnd: 80,
+				playheadFollowsSelectionStart: true,
+				onSeek
+			}
+		});
+		stubTrackRect(container);
+		await dragStartHandle(container, 30);
+
+		// Moving the start handle to clientX 30 maps to time 30 on the track.
+		expect(onSeek).toHaveBeenCalled();
+		expect(onSeek.mock.calls.at(-1)?.[0]).toBeCloseTo(30, 5);
+		const playhead = container.querySelector('.timeline-track__playhead') as HTMLElement;
+		expect(playhead.style.left).toBe('30%');
+	});
+
+	it('by default, dragging the start handle does NOT move the playhead', async () => {
+		const onSeek = vi.fn();
+		const onSelectionChange = vi.fn();
+		const { container } = render(TimelineTrack, {
+			props: {
+				duration: 100,
+				currentTime: 0,
+				selectionStart: 20,
+				selectionEnd: 80,
+				onSeek,
+				onSelectionChange
+			}
+		});
+		stubTrackRect(container);
+		await dragStartHandle(container, 30);
+
+		// Selection still updates, but the playhead stays put and no seek fires.
+		expect(onSelectionChange).toHaveBeenCalled();
+		expect(onSeek).not.toHaveBeenCalled();
+		const playhead = container.querySelector('.timeline-track__playhead') as HTMLElement;
+		expect(playhead.style.left).toBe('0%');
+	});
+
 	it('has role=slider with aria covering full duration', () => {
 		const { container } = render(TimelineTrack, {
 			props: { duration: 100, currentTime: 30, selectionStart: 10, selectionEnd: 90 }

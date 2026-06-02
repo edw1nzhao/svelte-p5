@@ -81,6 +81,12 @@
 		onHoverTime?: (time: number | null) => void;
 		/** Snippet rendered above the hover x position. Use for preview tooltips. */
 		hoverPreview?: Snippet<[{ time: number; xPercent: number }]>;
+		/**
+		 * When dragging the selection start handle, also move the playhead to
+		 * the new start (and fire `onSeek`). Handy for "scrub-to-trim" UIs where
+		 * the start handle should preview the frame it lands on. Default: false.
+		 */
+		playheadFollowsSelectionStart?: boolean;
 		class?: string;
 	}
 
@@ -98,6 +104,7 @@
 		onSegmentClick,
 		onHoverTime,
 		hoverPreview,
+		playheadFollowsSelectionStart = false,
 		class: className = ''
 	}: Props = $props();
 
@@ -194,6 +201,10 @@
 			const next = clamp(time, 0, Math.max(0, end - 0.001));
 			selectionStart = next;
 			onSelectionChange?.({ start: next, end });
+			if (playheadFollowsSelectionStart) {
+				currentTime = next;
+				onSeek?.(next);
+			}
 		} else if (dragging === 'selection-end' && hasSelection) {
 			const start = selectionStart as number;
 			const next = clamp(time, Math.min(safeDuration, start + 0.001), safeDuration);
@@ -446,7 +457,14 @@
 		--timeline-playhead-size: 14px;
 		--timeline-playhead-size-active: 20px;
 		--timeline-handle-hit-width: 22px;
-		--timeline-handle-bar-width: 4px;
+		--timeline-handle-bar-width: 5px;
+
+		/* Contrast ring drawn around the playhead knob so it reads against any
+		   rail/segment color. Light-mode fallback; consuming apps override for
+		   dark mode. */
+		--timeline-knob-ring: #ffffff;
+		/* Grip dots inset into the selection handle bars. */
+		--timeline-handle-dot: rgba(255, 255, 255, 0.85);
 	}
 
 	.timeline-track:focus-visible {
@@ -531,13 +549,25 @@
 	.timeline-track__handle-bar {
 		width: var(--timeline-handle-bar-width);
 		height: var(--timeline-rail-height-active);
-		background: var(--timeline-accent);
-		border-radius: 2px;
+		background-color: var(--timeline-accent);
+		/* A vertical column of subtle grip dots, centered on the bar, so the
+		   handle reads as something to grab rather than a plain stripe. */
+		background-image: radial-gradient(
+			circle at center,
+			var(--timeline-handle-dot) 0 1px,
+			transparent 1.4px
+		);
+		background-repeat: repeat-y;
+		background-position: center;
+		background-size: 100% 6px;
+		border-radius: 999px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 		opacity: 0;
 		transition:
 			height 120ms ease,
 			width 120ms ease,
-			opacity 120ms ease;
+			opacity 120ms ease,
+			box-shadow 120ms ease;
 	}
 
 	.timeline-track.is-active .timeline-track__handle-bar {
@@ -602,10 +632,17 @@
 		height: var(--timeline-playhead-size);
 		border-radius: 50%;
 		background: var(--timeline-accent);
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+		/* A contrast ring (border) plus a soft drop shadow so the knob lifts off
+		   the rail. The inset white ring keeps it legible over the red progress
+		   fill it sits on top of. */
+		border: 2px solid var(--timeline-knob-ring);
+		box-shadow:
+			0 1px 3px rgba(0, 0, 0, 0.28),
+			0 0 0 1px rgba(0, 0, 0, 0.06);
+		box-sizing: border-box;
 		transition:
-			width 120ms ease,
-			height 120ms ease,
+			width 110ms cubic-bezier(0.2, 0, 0, 1),
+			height 110ms cubic-bezier(0.2, 0, 0, 1),
 			background-color 120ms ease,
 			box-shadow 120ms ease;
 	}
@@ -620,7 +657,9 @@
 	.timeline-track.is-active .timeline-track__playhead-knob {
 		width: var(--timeline-playhead-size-active);
 		height: var(--timeline-playhead-size-active);
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+		box-shadow:
+			0 3px 8px rgba(0, 0, 0, 0.38),
+			0 0 0 1px rgba(0, 0, 0, 0.06);
 	}
 
 	.timeline-track__hover-line {
