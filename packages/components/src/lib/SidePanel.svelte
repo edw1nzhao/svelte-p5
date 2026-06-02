@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { cubicOut } from 'svelte/easing';
+	import type { TransitionConfig } from 'svelte/transition';
 
 	/**
 	 * Slide-in drawer panel. Renders adjacent to an `ActivityBar` in a
@@ -9,8 +11,10 @@
 	 *
 	 * Layout: the panel's width is bindable and mirrors pointer-drag
 	 * resizes on its right edge. Width is clamped to `[minWidth, maxWidth]`.
-	 * A slide transform handles the open/close animation (no external
-	 * transition dep).
+	 * A symmetric slide+fade handles the open/close animation via Svelte's
+	 * built-in transition system (no external transition dep), so the panel
+	 * eases both in and out whenever `open` toggles. `prefers-reduced-motion`
+	 * collapses the animation to an instant show/hide.
 	 *
 	 * Close affordances:
 	 * - Clicking the × in the default header
@@ -72,6 +76,31 @@
 	let dragStartX = 0;
 	let dragStartWidth = 0;
 
+	// Respect prefers-reduced-motion. Detected once per mount; the slide
+	// transition is the only motion gated on this, so a single read is enough.
+	const prefersReducedMotion =
+		typeof window !== 'undefined' &&
+		typeof window.matchMedia === 'function' &&
+		window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	/**
+	 * Symmetric horizontal slide + fade used for both enter and exit. Built on
+	 * Svelte's built-in transition contract (no external dep): Svelte calls it
+	 * for `in:` and `out:` and plays the same curve forwards/backwards, so the
+	 * panel eases open and eased shut. Under reduced motion the duration drops
+	 * to 0 for an instant show/hide.
+	 */
+	function slideFade(
+		_node: Element,
+		{ duration = 170, offset = -16 }: { duration?: number; offset?: number } = {}
+	): TransitionConfig {
+		return {
+			duration: prefersReducedMotion ? 0 : duration,
+			easing: cubicOut,
+			css: (t: number) => `transform: translateX(${(1 - t) * offset}px); opacity: ${t};`
+		};
+	}
+
 	function handleClose() {
 		onClose?.();
 	}
@@ -119,6 +148,7 @@
 		class="side-panel {open ? 'side-panel--open' : ''} {className}"
 		style:width="{width}px"
 		aria-hidden={!open}
+		transition:slideFade
 	>
 		{#if header}
 			{@render header()}
@@ -168,20 +198,8 @@
 		background: var(--side-panel-bg, #fafafa);
 		border-right: 1px solid var(--side-panel-border, rgba(0, 0, 0, 0.1));
 		box-shadow: var(--side-panel-shadow, 2px 0 6px rgba(0, 0, 0, 0.04));
-		animation: side-panel-slide-in 160ms ease-out;
 		overflow: hidden;
 		min-height: 0;
-	}
-
-	@keyframes side-panel-slide-in {
-		from {
-			transform: translateX(-8px);
-			opacity: 0;
-		}
-		to {
-			transform: translateX(0);
-			opacity: 1;
-		}
 	}
 
 	.side-panel__header {
