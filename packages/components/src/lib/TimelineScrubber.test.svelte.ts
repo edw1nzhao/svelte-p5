@@ -62,14 +62,15 @@ describe('<TimelineScrubber>', () => {
 		expect(onSpeedChange).not.toHaveBeenCalled();
 	});
 
-	it('uses the custom formatTime prop for both edge labels and the current-time readout', () => {
+	it('uses the custom formatTime prop for the current-time and duration readout', () => {
+		// YouTube-style readout shows `currentTime / duration`; there is no
+		// separate start-edge label (that was the pre-redesign layout).
 		const formatTime = (s: number) => `[${Math.round(s)}s]`;
 		const { container } = render(TimelineScrubber, {
 			props: { duration: 120, currentTime: 42, formatTime }
 		});
 		const text = container.textContent ?? '';
-		expect(text).toContain('[0s]');
-		expect(text).toContain('[120s]');
 		expect(text).toContain('[42s]');
+		expect(text).toContain('[120s]');
 	});
 });
