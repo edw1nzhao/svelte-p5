@@ -17,3 +17,4 @@ export {
 } from './TimelineTrack.svelte';
 export { default as TimelineScrubber } from './TimelineScrubber.svelte';
 export { createMediaSync, type MediaSync } from './createMediaSync.svelte.js';
+export { createMediaPlayback, type MediaPlayback } from './createMediaPlayback.svelte.js';
