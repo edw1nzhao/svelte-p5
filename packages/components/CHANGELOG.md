@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.5.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.4.1...components-v0.5.0) (2026-06-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* **components:** timeline selection model and YouTube-style scrubber
+
+### Features
+
+* **components:** add ActivityBar, SidePanel, ContextMenu primitives ([ed6d1b7](https://github.com/edw1nzhao/svelte-p5/commit/ed6d1b74c04d463433a664622e15dbf5a8b28c5b))
+* **components:** add createMediaPlayback orchestrator for per-visualization video playback ([058b3b6](https://github.com/edw1nzhao/svelte-p5/commit/058b3b6b75a3f38b15d8967d4b53aedef86f40fb))
+* **components:** add playheadFollowsSelectionStart option and polish timeline handles ([cb99676](https://github.com/edw1nzhao/svelte-p5/commit/cb99676c33042de54f5b7ac82a8c360b73f77401))
+* **components:** animate SidePanel open and close symmetrically ([ecee286](https://github.com/edw1nzhao/svelte-p5/commit/ecee286af528f6b4cc6d6ca15bb58b692ae8498e))
+* **components:** EntityToggleList inline rename and theme inheritance ([4ffb3f4](https://github.com/edw1nzhao/svelte-p5/commit/4ffb3f4c2b1cf9b707cfac6958939b818fb079d0))
+
+
+### Bug Fixes
+
+* **components:** resolve typecheck errors and gate pre-commit on typecheck ([3dd6a08](https://github.com/edw1nzhao/svelte-p5/commit/3dd6a084bc909abe88247b92ef2b078f2ee1eff3))
+
+
+### Refactors
+
+* **components:** timeline selection model and YouTube-style scrubber ([08e2aa1](https://github.com/edw1nzhao/svelte-p5/commit/08e2aa19ba91323ffe076cfc30b4570ce09559b1))
+
 ## [0.4.1](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.4.0...components-v0.4.1) (2026-04-17)
 
 
