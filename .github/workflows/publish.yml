@@ -82,10 +82,18 @@ jobs:
         with:
           cache: true
 
+      # NOTE: deliberately no `registry-url:` here. setup-node's registry-url
+      # writes `.npmrc` with `_authToken=${NODE_AUTH_TOKEN}`, and with no token
+      # provided that resolves to setup-node's literal placeholder
+      # (`XXXXX-XXXXX-XXXXX-XXXXX`). npm then tries to auth with that bogus
+      # token and never falls through to OIDC trusted publishing -> 404 on the
+      # PUT. Omitting registry-url leaves no `_authToken`, so OIDC is used.
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          registry-url: 'https://registry.npmjs.org'
+
+      # Guarantee an npm new enough for OIDC trusted publishing (>= 11.5.1).
+      - run: npm install -g npm@latest
 
       - run: pnpm install --frozen-lockfile
 
