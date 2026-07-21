@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.6.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.5.0...components-v0.6.0) (2026-07-21)
+
+
+### Features
+
+* **components:** Sketch onResize callback and explicit pixel-density control ([a0ad753](https://github.com/edw1nzhao/svelte-p5/commit/a0ad7531fd8b6456f7e3b882f698a234ed14b354))
+
+
+### Bug Fixes
+
+* **components:** declare @neodrag/core as a direct dependency ([ad5be06](https://github.com/edw1nzhao/svelte-p5/commit/ad5be066facc52c33b9bc3c130ab6490ba3eb634))
+* **components:** publish a real semver range for the svelte-p5 peer ([bd1e46c](https://github.com/edw1nzhao/svelte-p5/commit/bd1e46c6138a668e0c4a398363593342e148784c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 0.4.0
+  * peerDependencies
+    * svelte-p5 bumped from >=0.3.0 <1 to >=0.4.0
+
 ## [0.5.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.4.1...components-v0.5.0) (2026-06-09)
 
 

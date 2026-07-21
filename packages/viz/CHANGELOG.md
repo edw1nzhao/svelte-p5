@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.1](https://github.com/edw1nzhao/svelte-p5/compare/viz-v0.2.0...viz-v0.2.1) (2026-07-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 0.4.0
+  * peerDependencies
+    * svelte-p5 bumped to 0.4.0
+
 ## [0.2.0](https://github.com/edw1nzhao/svelte-p5/compare/viz-v0.1.0...viz-v0.2.0) (2026-04-16)
 
 
