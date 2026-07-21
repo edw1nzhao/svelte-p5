@@ -174,6 +174,22 @@ If your sketch is data-driven and the data only changes occasionally, don't run 
 
 Saves CPU and battery. Only useful when your sketch isn't already animating something.
 
+### The loop-gated variant
+
+Sketches that mix on-demand rendering with occasional animation (playback, transitions) can gate the loop _inside_ `p.draw` instead of one-shot `redraw()`:
+
+```ts
+p.draw = () => {
+	render();
+	advanceAnimationIfPlaying();
+	// keep looping only while something is in motion
+	if (isPlaying || isTransitioning) p.loop();
+	else p.noLoop();
+};
+```
+
+Anything that changes what's on screen — a store write, a mouse move, new data — wakes the sketch with a single `instance.loop()`; the gate at the end of `draw` decides whether to keep running or go back to sleep. This is the pattern for interactive visualization tools: idle at 0% CPU, full frame rate during playback, and callers never need to know which state the sketch is in (`loop()` is safe to call redundantly).
+
 ## Loading state and incremental data
 
 For datasets you're streaming or fetching async, hold a Svelte loading flag and let the sketch decide what to draw:

@@ -7,6 +7,7 @@
   - [Performance](./recipes/performance.md) - the `loadFont()` trap, FES, color caching, font atlas, `drawingContext`
   - [Cleanup & lifecycle](./recipes/cleanup.md) - why `p5-svelte` leaks and how `<P5Canvas>` doesn't
   - [HiDPI / retina](./recipes/hidpi.md) - `pixelDensity`, `<Sketch>`, and when to pin it
+  - [WEBGL sketches](./recipes/webgl.md) - origin recentering, resize semantics, `smooth()`/`setAttributes` context rebuilds, `{#key}` canvas recreation
 - **[Examples](./examples/)** - runnable demos
   - [`01-basic`](./examples/01-basic) - the smallest possible `<P5Canvas>` setup
   - [`02-store-bridge`](./examples/02-store-bridge) - `createP5Bridge` with UI controls
