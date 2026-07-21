@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v0.3.0...core-v0.4.0) (2026-07-21)
+
+
+### Features
+
+* **core:** add generic SketchFn&lt;Ext&gt; and ExtendedP5&lt;Ext&gt; for typed instance extensions ([fd6fb47](https://github.com/edw1nzhao/svelte-p5/commit/fd6fb47b3f921e841bee28698f58cdeaf8b0ad4e))
+
 ## [0.3.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v0.2.2...core-v0.3.0) (2026-04-16)
 
 
