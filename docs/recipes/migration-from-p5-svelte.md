@@ -126,6 +126,14 @@ Detached-canvas counts stay flat on `{#if}` toggles, HMR no longer accumulates c
 
 `p5-svelte` peered on `p5 ^1.4`. This library peers `p5 >=1.11.0 <3`. If you're on an older p5 minor, bump to 1.11.x for the latest bugfixes. p5 2.x support lands in a later release.
 
+## Typing custom instance members
+
+Sketches migrated from `p5-svelte` often carry `(p5 as any).myHelper = ...` casts
+for members installed onto the instance. `SketchFn<Ext>` removes them: declare an
+interface for your custom members, type the sketch as `SketchFn<MyExt>`, and both
+the sketch body and `bind:instance` come out fully typed (`ExtendedP5<MyExt>`).
+See the [core README](../../packages/core/README.md#typed-instance-extensions).
+
 ## What migrating doesn't change
 
 Your sketch code is unchanged. `p.setup`, `p.draw`, `p.loadFont`, every p5 API call ports 1:1.

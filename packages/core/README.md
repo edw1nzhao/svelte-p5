@@ -99,10 +99,41 @@ What each does and when to reach for it lives in the [performance recipe](../../
 ## Type exports
 
 ```ts
-import type { SketchFn, P5CanvasProps, P5Bridge } from 'svelte-p5';
+import type { SketchFn, ExtendedP5, P5CanvasProps, P5Bridge } from 'svelte-p5';
 ```
 
 `SketchFn` is `(p: p5) => void`. `SketchFn`, not `Sketch`, because the components package exports a `<Sketch>` component and the collision would force aliased imports.
+
+### Typed instance extensions
+
+Sketches that install custom members on the instance (`p.myHelper = ...`) can type
+them instead of casting. `SketchFn<Ext>` types the instance inside the sketch as
+`p5 & Ext`, and `ExtendedP5<Ext>` names that same intersection for stores and
+variables that hold the bound instance:
+
+```ts
+interface AppSketchExt {
+	resetView(): void;
+	zoomLevel: number;
+}
+type AppP5 = ExtendedP5<AppSketchExt>;
+
+const sketch: SketchFn<AppSketchExt> = (p) => {
+	p.resetView = () => {
+		/* ... */
+	};
+	p.draw = () => {
+		/* p.zoomLevel is typed */
+	};
+};
+
+let instance: AppP5 | null = $state(null);
+```
+
+```svelte
+<P5Canvas {sketch} bind:instance />
+<!-- instance is inferred as AppP5 | null; instance?.resetView() type-checks -->
+```
 
 ## License
 
