@@ -12,7 +12,12 @@ On a 2× display, a `<canvas>` renders at 1× and the browser upscales, which lo
 <Sketch {sketch} />
 ```
 
-`<Sketch>` calls `p.pixelDensity(window.devicePixelRatio)` once after the p5 instance is created. `hidpi` defaults to `true`; pass `hidpi={false}` if you want to opt out.
+`<Sketch>` calls `p.pixelDensity(window.devicePixelRatio)` once after the p5 instance is created. `hidpi` defaults to `true`.
+
+Two other forms:
+
+- `hidpi={false}` pins `pixelDensity(1)`. This matters because p5's _own_ default is already `devicePixelRatio` — skipping the call wouldn't opt you out of anything.
+- `hidpi={number}` applies that exact density. The escape hatch for large WEBGL canvases: `hidpi={Math.min(window.devicePixelRatio, 2)}` caps the back buffer without giving up crispness on 2× displays.
 
 ## Manually
 
@@ -39,9 +44,9 @@ If you're using bare `<P5Canvas>`:
 
 ## When to skip HiDPI
 
-Pixel-art aesthetics, deliberately crunchy rendering, or anything where you want pixels to be pixels. Leave `pixelDensity(1)`.
+Pixel-art aesthetics, deliberately crunchy rendering, or anything where you want pixels to be pixels. Use `hidpi={false}` (or `pixelDensity(1)` manually).
 
-Very large canvases on high-DPR displays. A 4K canvas at 3× DPR is a 36-megapixel back buffer; fill-rate and memory are real limits. Cap with `p.pixelDensity(Math.min(window.devicePixelRatio, 2))`.
+Very large canvases on high-DPR displays. A 4K canvas at 3× DPR is a 36-megapixel back buffer; fill-rate and memory are real limits. Cap with `hidpi={Math.min(window.devicePixelRatio, 2)}` (or the equivalent `pixelDensity` call).
 
 Dense small text with a loaded font. OpenType.js path rendering at 3× DPR is even slower than at 1×. Cap pixel density, use a font atlas, or fall back to system fonts.
 

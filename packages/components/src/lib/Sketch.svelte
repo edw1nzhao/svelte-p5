@@ -1,16 +1,6 @@
-<script lang="ts">
-	import { P5Canvas, type SketchFn } from 'svelte-p5';
-	import type p5 from 'p5';
-
-	interface Props {
-		sketch: SketchFn;
-		/** Apply `pixelDensity(devicePixelRatio)` on ready. Default: true */
-		hidpi?: boolean;
-		class?: string;
-		style?: string;
-		instance?: p5 | null;
-		onReady?: (instance: p5) => void;
-	}
+<script lang="ts" generics="Ext = unknown">
+	import { P5Canvas, type ExtendedP5 } from 'svelte-p5';
+	import type { SketchProps } from './sketch-types.js';
 
 	let {
 		sketch,
@@ -18,14 +8,22 @@
 		class: className = '',
 		style = 'display: block; width: 100%; height: 100%; overflow: hidden;',
 		instance = $bindable(null),
-		onReady
-	}: Props = $props();
+		onReady,
+		onResize
+	}: SketchProps<Ext> = $props();
 
 	let container: HTMLDivElement | null = $state(null);
 
-	function handleReady(p: p5) {
-		if (hidpi && typeof window !== 'undefined') {
-			p.pixelDensity(window.devicePixelRatio);
+	function handleReady(p: ExtendedP5<Ext>) {
+		if (typeof window !== 'undefined') {
+			if (typeof hidpi === 'number') {
+				p.pixelDensity(hidpi);
+			} else if (hidpi) {
+				p.pixelDensity(window.devicePixelRatio);
+			} else {
+				// p5 defaults to devicePixelRatio, so opting out must be explicit.
+				p.pixelDensity(1);
+			}
 		}
 		// Size immediately to the current container dimensions.
 		if (container) {
@@ -43,7 +41,11 @@
 			if (!entry || !instance) return;
 			const w = Math.max(1, Math.floor(entry.contentRect.width));
 			const h = Math.max(1, Math.floor(entry.contentRect.height));
+			// Skip no-op resizes; this also swallows the observer's initial
+			// fire, which would otherwise double-report the handleReady sizing.
+			if (w === instance.width && h === instance.height) return;
 			instance.resizeCanvas(w, h);
+			onResize?.(instance, w, h);
 		});
 		ro.observe(el);
 		return () => ro.disconnect();
