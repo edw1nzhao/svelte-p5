@@ -1,7 +1,7 @@
-<script lang="ts">
+<script lang="ts" generics="Ext = unknown">
 	import { onMount } from 'svelte';
 	import type p5Type from 'p5';
-	import type { P5CanvasProps } from './types.js';
+	import type { ExtendedP5, P5CanvasProps } from './types.js';
 
 	let {
 		sketch,
@@ -9,7 +9,7 @@
 		class: className = '',
 		style = 'display: block; width: 100%; height: 100%;',
 		onReady
-	}: P5CanvasProps = $props();
+	}: P5CanvasProps<Ext> = $props();
 
 	let container: HTMLDivElement | null = null;
 
@@ -24,9 +24,12 @@
 			if (cancelled || !container) return;
 
 			const p5Ctor = mod.default;
-			local = new p5Ctor((p: p5Type) => sketch(p), container);
-			instance = local;
-			onReady?.(local);
+			// The sketch installs its Ext members during construction (p5 calls the
+			// sketch function synchronously inside the constructor), so by the time
+			// the instance is observable it is already the extended type.
+			local = new p5Ctor((p: p5Type) => sketch(p as ExtendedP5<Ext>), container);
+			instance = local as ExtendedP5<Ext>;
+			onReady?.(local as ExtendedP5<Ext>);
 		})();
 
 		return () => {
