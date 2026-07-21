@@ -55,7 +55,7 @@
     "@neodrag/svelte": "3.0.0-next.8"
   },
   "peerDependencies": {
-    "svelte-p5": "workspace:^",
+    "svelte-p5": ">=0.3.0 <1",
     "p5": ">=1.11.0 <3",
     "svelte": "^5.0.0"
   },
