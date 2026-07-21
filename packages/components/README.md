@@ -41,6 +41,16 @@ Pin to a SHA (`@<commit-sha>`) instead of `@main` for reproducible installs.
 </div>
 ```
 
+Props:
+
+| Prop       | Type                                 | Default | Notes                                                                                                                                                               |
+| ---------- | ------------------------------------ | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sketch`   | `SketchFn<Ext>`                      | —       | Required. Generic over custom instance members (see the core README).                                                                                               |
+| `hidpi`    | `boolean \| number`                  | `true`  | `true` → `devicePixelRatio`, `false` → `pixelDensity(1)`, number → that exact density (cap for large WEBGL canvases: `Math.min(devicePixelRatio, 2)`).              |
+| `instance` | `ExtendedP5<Ext> \| null` (bindable) | `null`  | The p5 instance once mounted.                                                                                                                                       |
+| `onReady`  | `(instance) => void`                 | —       | Fires once after creation, density, and initial sizing.                                                                                                             |
+| `onResize` | `(instance, width, height) => void`  | —       | Fires after each `ResizeObserver`-driven `resizeCanvas` (not the initial sizing). Rebuild size-dependent state here; call `instance.loop()` if you're noLoop-gated. |
+
 ## `<FPSMonitor>`
 
 Absolute-positioned FPS readout. Takes the p5 instance and samples `p.frameRate()` every 30 frames by default.

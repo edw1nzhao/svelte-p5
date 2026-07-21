@@ -1,4 +1,5 @@
 export { default as Sketch } from './Sketch.svelte';
+export type { SketchProps } from './sketch-types.js';
 export { default as FPSMonitor } from './FPSMonitor.svelte';
 export { default as SketchDebug } from './SketchDebug.svelte';
 export { default as DraggableWindow } from './DraggableWindow.svelte';
