@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>p5 instance mode — no build step</title>
+
+		<script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.min.js"></script>
+
+		<style>
+			body {
+				margin: 0;
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 1rem;
+				font-family: system-ui, sans-serif;
+				background: #f8fafc;
+				color: #0f172a;
+			}
+			p {
+				margin: 0;
+				font-size: 0.875rem;
+				color: #475569;
+				text-align: center;
+			}
+			.row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1rem;
+				justify-content: center;
+			}
+			canvas {
+				border-radius: 8px;
+				box-shadow: 0 1px 3px rgb(15 23 42 / 0.15);
+			}
+		</style>
+	</head>
+	<body>
+		<p>
+			<strong>Instance mode.</strong> The same sketch as <code>index.html</code>, written as a
+			reusable function — so it can run twice on one page.
+		</p>
+
+		<div class="row">
+			<div id="left"></div>
+			<div id="right"></div>
+		</div>
+
+		<script>
+			// The only change from global mode: p5's own calls take a `p.`
+			// prefix, and setup/draw are assigned onto `p` instead of declared
+			// as globals. Your own variables (x, vx) don't move.
+			//
+			// Because the sketch is now a function that takes its p5 instance,
+			// it's parameterizable — and it is exactly the shape <P5Canvas>
+			// expects, so this function moves into Svelte unmodified.
+			const bouncingBall = (color, speed) => (p) => {
+				let x = 200;
+				let vx = speed;
+
+				p.setup = () => {
+					p.createCanvas(400, 300);
+					p.noStroke();
+				};
+
+				p.draw = () => {
+					p.background(245);
+
+					x += vx;
+					if (x - 20 < 0 || x + 20 > p.width) vx *= -1;
+
+					p.fill(color);
+					p.circle(x, 150, 40);
+				};
+			};
+
+			// Two independent sketches, each mounted into its own container.
+			// Global mode can't do this — there's only one `window` to hang
+			// setup/draw off of.
+			new p5(bouncingBall('#dc2626', 3), document.getElementById('left'));
+			new p5(bouncingBall('#2563eb', 5), document.getElementById('right'));
+		</script>
+	</body>
+</html>

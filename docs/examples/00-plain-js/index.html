@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>p5 global mode — no build step</title>
+
+		<!-- p5 from a CDN. This is the whole toolchain: one script tag.
+		     Nothing on this page needs npm, a bundler, or a terminal. -->
+		<script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.min.js"></script>
+
+		<style>
+			body {
+				margin: 0;
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 1rem;
+				font-family: system-ui, sans-serif;
+				background: #f8fafc;
+				color: #0f172a;
+			}
+			p {
+				margin: 0;
+				font-size: 0.875rem;
+				color: #475569;
+			}
+			canvas {
+				border-radius: 8px;
+				box-shadow: 0 1px 3px rgb(15 23 42 / 0.15);
+			}
+		</style>
+	</head>
+	<body>
+		<p><strong>Global mode.</strong> Open this file directly in a browser — it just runs.</p>
+
+		<!-- p5 waits for the document, sees that `setup` and `draw` exist on
+		     window, and constructs the sketch for you. That's why there's no
+		     `new p5(...)` anywhere below. -->
+		<script>
+			let x = 200;
+			let vx = 3;
+
+			function setup() {
+				createCanvas(400, 300);
+				noStroke();
+			}
+
+			function draw() {
+				background(245);
+
+				x += vx;
+				if (x - 20 < 0 || x + 20 > width) vx *= -1;
+
+				fill(220, 60, 60);
+				circle(x, 150, 40);
+			}
+		</script>
+	</body>
+</html>

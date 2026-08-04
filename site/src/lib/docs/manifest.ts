@@ -22,6 +22,13 @@ export const docs: readonly DocEntry[] = [
 		section: 'Start'
 	},
 	{
+		slug: 'plain-js',
+		title: 'Plain JS & no build step',
+		description: 'Using p5 without imports, modules, or TypeScript — and where svelte-p5 fits.',
+		file: 'docs/plain-js.md',
+		section: 'Start'
+	},
+	{
 		slug: 'architecture',
 		title: 'Three layers',
 		description: 'Primitives, components, composition.',
