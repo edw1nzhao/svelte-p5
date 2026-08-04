@@ -163,7 +163,7 @@ p5's event hooks are tied to the canvas DOM node. If you need:
 …you can grab the canvas element from `bind:instance` and add listeners yourself. Just remember to remove them on unmount:
 
 ```svelte
-<script>
+<script lang="ts">
 	import { P5Canvas } from 'svelte-p5';
 	import type p5 from 'p5';
 

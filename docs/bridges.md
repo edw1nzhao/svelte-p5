@@ -169,7 +169,7 @@ No. p5's draw runs every frame and reads from your closure. Svelte's `$state` al
 You only need `$effect` if something has to happen _at the moment_ a value changes (e.g. force a redraw on a non-looping sketch):
 
 ```svelte
-<script>
+<script lang="ts">
 	let instance = $state<p5 | null>(null);
 	const bridge = createP5Bridge({ snapshot: 0 });
 
