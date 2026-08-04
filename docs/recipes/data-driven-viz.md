@@ -179,7 +179,7 @@ Saves CPU and battery. Only useful when your sketch isn't already animating some
 For datasets you're streaming or fetching async, hold a Svelte loading flag and let the sketch decide what to draw:
 
 ```svelte
-<script>
+<script lang="ts">
 	let loading = $state(true);
 	let data = $state<DataPoint[]>([]);
 
