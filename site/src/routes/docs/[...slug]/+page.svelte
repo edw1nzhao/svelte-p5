@@ -3,6 +3,7 @@
 	import DocToc from '$lib/docs/DocToc.svelte';
 	import DocCopyButtons from '$lib/docs/DocCopyButtons.svelte';
 	import CopyForAI from '$lib/docs/CopyForAI.svelte';
+	import PlainJsDemo from '$lib/demos/PlainJsDemo.svelte';
 	import { staggerFadeUp } from '$lib/animations';
 	import { onMount } from 'svelte';
 
@@ -46,6 +47,12 @@
 				</p>
 			{/if}
 		</header>
+
+		<!-- The plain-JS page argues that a no-build p5 page is a real option.
+		     Showing one running is more convincing than describing it. -->
+		{#if data.doc.slug === 'plain-js'}
+			<PlainJsDemo />
+		{/if}
 
 		<DocCopyButtons html={data.html} />
 
@@ -176,22 +183,21 @@
 		padding-top: 2rem;
 	}
 
-	/* Tabbed package-manager block: tab bar replaces the figcaption strip,
-	   so the inner shiki block doesn't need extra top padding. */
-	:global(.prose-doc figure.code-block.pm-tabs pre.shiki) {
+	/* Tabbed blocks (package manager, and TypeScript/JavaScript): the tab bar
+	   replaces the figcaption strip, so the inner shiki block doesn't need
+	   extra top padding. */
+	:global(.prose-doc figure.code-block:is(.pm-tabs, .lang-tabs) pre.shiki) {
 		padding-top: 1rem;
+		border: 0;
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;
 	}
-	:global(.prose-doc figure.code-block.pm-tabs) {
+	:global(.prose-doc figure.code-block:is(.pm-tabs, .lang-tabs)) {
 		border: 1px solid rgb(30 41 59);
 		border-radius: 0.5rem;
 		overflow: hidden;
 	}
-	:global(.prose-doc figure.code-block.pm-tabs pre.shiki) {
-		border: 0;
-	}
-	:global(.prose-doc figure.code-block.pm-tabs .pm-block[hidden]) {
+	:global(.prose-doc figure.code-block :is(.pm-block, .lang-block)[hidden]) {
 		display: none;
 	}
 

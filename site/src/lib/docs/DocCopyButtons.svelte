@@ -3,7 +3,13 @@
 	import { mount, unmount } from 'svelte';
 	import CodeCopyBtn from './CodeCopyBtn.svelte';
 	import PmTabBar from './PmTabBar.svelte';
-	import { PKG_MANAGERS, type PkgManager } from '$lib/stores/preferences.svelte';
+	import LangTabBar from './LangTabBar.svelte';
+	import {
+		PKG_MANAGERS,
+		CODE_LANGS,
+		type PkgManager,
+		type CodeLang
+	} from '$lib/stores/preferences.svelte';
 
 	let { html }: { html: string } = $props();
 
@@ -46,6 +52,30 @@
 				}
 				if (!allFound) return;
 				const inst = mount(PmTabBar, {
+					target: mountTarget,
+					props: { figure: el, sources }
+				});
+				instances.push(inst);
+				return;
+			}
+
+			// Tabbed TypeScript/JavaScript block: same deal, the tab bar owns
+			// the copy button so it copies whichever variant is showing.
+			if (el.classList.contains('lang-tabs')) {
+				const mountTarget = el.querySelector<HTMLElement>('.lang-tabs-mount');
+				if (!mountTarget) return;
+				const sources = {} as Record<CodeLang, string>;
+				let allFound = true;
+				for (const lang of CODE_LANGS) {
+					const src = el.dataset[`source${lang[0]!.toUpperCase()}${lang.slice(1)}`];
+					if (!src) {
+						allFound = false;
+						break;
+					}
+					sources[lang] = src;
+				}
+				if (!allFound) return;
+				const inst = mount(LangTabBar, {
 					target: mountTarget,
 					props: { figure: el, sources }
 				});

@@ -16,6 +16,8 @@ import { Marked, type Tokens } from 'marked';
 import { createHighlighter, type Highlighter } from 'shiki';
 import { docs, type DocEntry } from './manifest';
 import { p5Refs, P5_REFERENCE_BASE } from './p5-refs';
+import { toJavaScript } from './ts-to-js';
+import { CODE_LANGS, type CodeLang } from '$lib/stores/preferences.svelte';
 
 // Eagerly load every markdown file under /docs at build time. Vite's glob is
 // statically analyzed, so it picks up files that exist at server-start. New
@@ -64,6 +66,16 @@ async function getSource(file: string): Promise<string | null> {
 const THEME = 'slack-dark';
 const LANGS = ['svelte', 'typescript', 'javascript', 'bash', 'json', 'html', 'css'];
 
+/**
+ * Fence languages as authors write them → the grammar shiki is loaded with.
+ * Docs use ```ts / ```js, which aren't in LANGS and would otherwise fall
+ * through to unhighlighted `text`.
+ */
+const LANG_ALIASES: Record<string, string> = {
+	ts: 'typescript',
+	js: 'javascript'
+};
+
 let highlighterPromise: Promise<Highlighter> | null = null;
 function getHighlighter() {
 	highlighterPromise ??= createHighlighter({ themes: [THEME], langs: LANGS });
@@ -92,6 +104,17 @@ function slugify(s: string): string {
 
 function escapeHtml(s: string): string {
 	return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/**
+ * Escape for use inside a double-quoted HTML attribute.
+ *
+ * `escapeHtml` is not enough here: code samples contain double quotes
+ * (`<script lang="ts">` in every Svelte block), which terminate the attribute
+ * early and truncate the value the copy button reads back.
+ */
+function escapeAttr(s: string): string {
+	return escapeHtml(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 const PMS = ['bun', 'pnpm', 'npm'] as const;
@@ -259,13 +282,18 @@ export async function renderDoc(doc: DocEntry): Promise<RenderedDoc> {
 		renderer: {
 			code({ text, lang }: Tokens.Code) {
 				const language = (lang ?? '').split(/\s/)[0]?.trim() || 'text';
-				const safeLang = LANGS.includes(language) ? language : 'text';
-				let html: string;
-				try {
-					html = highlighter.codeToHtml(text, { lang: safeLang, theme: THEME });
-				} catch {
-					html = `<pre><code>${escapeHtml(text)}</code></pre>`;
-				}
+				const resolved = LANG_ALIASES[language] ?? language;
+				const safeLang = LANGS.includes(resolved) ? resolved : 'text';
+
+				const render = (source: string, forLang: string) => {
+					try {
+						return highlighter.codeToHtml(source, { lang: forLang, theme: THEME });
+					} catch {
+						return `<pre><code>${escapeHtml(source)}</code></pre>`;
+					}
+				};
+
+				const html = render(text, safeLang);
 				const id = `cb${++codeBlockId}`;
 				const langLabel = safeLang === 'text' ? '' : safeLang;
 
@@ -297,15 +325,36 @@ export async function renderDoc(doc: DocEntry): Promise<RenderedDoc> {
 								`<div class="pm-block" data-pm="${pm}"${pm === 'bun' ? '' : ' hidden'}>${variants[pm]!.html}</div>`
 						).join('');
 						const dataAttrs = PMS.map(
-							(pm) => `data-source-${pm}="${escapeHtml(variants[pm]!.source)}"`
+							(pm) => `data-source-${pm}="${escapeAttr(variants[pm]!.source)}"`
 						).join(' ');
 						return `<figure class="code-block pm-tabs" data-cbid="${id}" data-pm-tabs ${dataAttrs}><div class="pm-tabs-mount" aria-hidden="true"></div>${blocks}</figure>`;
 					}
 				}
 
+				// TypeScript samples get a JS variant so readers who don't use
+				// TypeScript can copy something that runs. `toJavaScript` returns
+				// null when a block has no types to strip (an identical second tab
+				// would be noise) or when it can't convert safely.
+				const js = toJavaScript(text, language);
+				if (js !== null) {
+					const jsLang = safeLang === 'svelte' ? 'svelte' : 'javascript';
+					const variants: Record<CodeLang, { source: string; html: string }> = {
+						ts: { source: text, html },
+						js: { source: js, html: render(js, jsLang) }
+					};
+					const blocks = CODE_LANGS.map(
+						(l) =>
+							`<div class="lang-block" data-lang="${l}"${l === 'ts' ? '' : ' hidden'}>${variants[l].html}</div>`
+					).join('');
+					const dataAttrs = CODE_LANGS.map(
+						(l) => `data-source-${l}="${escapeAttr(variants[l].source)}"`
+					).join(' ');
+					return `<figure class="code-block lang-tabs" data-cbid="${id}" data-lang-tabs ${dataAttrs}><div class="lang-tabs-mount" aria-hidden="true"></div>${blocks}</figure>`;
+				}
+
 				// Wrap in a figure so the copy button is anchored relative to the block,
 				// and stash the raw source on a data-attribute for client-side copy.
-				return `<figure class="code-block" data-source="${escapeHtml(text)}" data-cbid="${id}">${langLabel ? `<figcaption class="code-lang">${langLabel}</figcaption>` : ''}${html}</figure>`;
+				return `<figure class="code-block" data-source="${escapeAttr(text)}" data-cbid="${id}">${langLabel ? `<figcaption class="code-lang">${langLabel}</figcaption>` : ''}${html}</figure>`;
 			}
 		},
 		async: false
