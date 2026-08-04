@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>svelte-p5 utilities — no build step</title>
+
+		<script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.min.js"></script>
+
+		<style>
+			body {
+				margin: 0;
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 1rem;
+				font-family: system-ui, sans-serif;
+				background: #f8fafc;
+				color: #0f172a;
+			}
+			p {
+				margin: 0;
+				max-width: 34rem;
+				font-size: 0.875rem;
+				line-height: 1.5;
+				color: #475569;
+				text-align: center;
+			}
+			canvas {
+				border-radius: 8px;
+				box-shadow: 0 1px 3px rgb(15 23 42 / 0.15);
+			}
+		</style>
+	</head>
+	<body>
+		<p>
+			<strong>svelte-p5 utilities, no bundler.</strong> Hover the circle. This page imports
+			<code>hitTest</code> and <code>createColorCache</code> straight from a CDN — no npm, no build.
+		</p>
+		<p>
+			⚠️ Unlike the other two files, this one <strong>must be served over http</strong> — module
+			scripts don't load from <code>file://</code>. Run <code>npx serve .</code> in this folder.
+		</p>
+
+		<div id="sketch"></div>
+
+		<script type="module">
+			// svelte-p5/utils is dependency-free ES modules — no Svelte import
+			// anywhere in it — so a CDN can hand it straight to the browser.
+			// The <P5Canvas> component can't work this way (it ships as .svelte
+			// source that needs a compiler), but these helpers can.
+			import { hitTest, createColorCache } from 'https://esm.sh/svelte-p5/utils';
+
+			// Computes each CSS color string once instead of allocating a
+			// p5.Color on every frame.
+			const colors = createColorCache();
+
+			// Instance mode, not global mode: inside a module, `function setup()`
+			// is scoped to the module rather than to window, so p5's global-mode
+			// detection would never find it.
+			new p5((p) => {
+				p.setup = () => {
+					p.createCanvas(400, 300);
+					p.noStroke();
+				};
+
+				p.draw = () => {
+					p.background(245);
+
+					// hitTest.circle(px, py, cx, cy, diameter)
+					const hovering = hitTest.circle(p.mouseX, p.mouseY, 200, 150, 100);
+
+					p.fill(colors.get(hovering ? 'on' : 'off', () => (hovering ? '#e11d48' : '#94a3b8')));
+					p.circle(200, 150, 100);
+				};
+			}, document.getElementById('sketch'));
+		</script>
+	</body>
+</html>
