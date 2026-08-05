@@ -3,10 +3,10 @@
 
 	// The example file itself, verbatim — one source of truth, so the demo
 	// can't drift from the file readers are told to download.
-	import plainHtml from '../../../../docs/examples/00-plain-js/index.html?raw';
+	import exampleHtml from '../../../../docs/examples/00-no-build/index.html?raw';
 
 	const SOURCE_URL =
-		'https://github.com/edw1nzhao/svelte-p5/blob/main/docs/examples/00-plain-js/index.html';
+		'https://github.com/edw1nzhao/svelte-p5/blob/main/docs/examples/00-no-build/index.html';
 
 	let container: HTMLElement | null = $state(null);
 	let srcdoc = $state('');
@@ -15,12 +15,12 @@
 	$effect(() => {
 		if (!container) return;
 		return whenVisible(container, () => {
-			srcdoc = plainHtml;
+			srcdoc = exampleHtml;
 		});
 	});
 </script>
 
-<figure bind:this={container} class="plain-js-demo">
+<figure bind:this={container} class="no-build-demo">
 	<div class="frame">
 		{#if srcdoc}
 			<iframe {srcdoc} title="A p5 sketch running with no build step" sandbox="allow-scripts"
@@ -30,14 +30,14 @@
 		{/if}
 	</div>
 	<figcaption>
-		Running live: <code>docs/examples/00-plain-js/index.html</code>, unmodified. One script tag from
+		Running live: <code>docs/examples/00-no-build/index.html</code>, unmodified. One script tag from
 		a CDN, no npm and no bundler —
 		<a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">read the file</a>.
 	</figcaption>
 </figure>
 
 <style>
-	.plain-js-demo {
+	.no-build-demo {
 		margin: 0 0 2rem;
 	}
 	.frame {

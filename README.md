@@ -47,14 +47,14 @@ pnpm add svelte-p5 p5
 
 Already using `p5-svelte`? The [migration guide](https://svelte-p5.dev/docs/recipes/migration-from-p5-svelte) is the fastest way over. Otherwise the [getting started guide](https://svelte-p5.dev/docs/getting-started) walks through each layer.
 
-Not using Svelte, or coming from the p5 web editor? [Plain JS & no build step](https://svelte-p5.dev/docs/plain-js) covers what works from a plain `<script>` tag (the utilities do; the component can't, and why), that TypeScript is optional throughout, and the global → instance mode conversion.
+Coming from the p5 web editor, or want this without a bundler? [No build step](https://svelte-p5.dev/docs/no-build-step) covers what works from a plain `<script>` tag — the utilities do, the component can't, and why — plus the global → instance mode conversion.
 
 ## Documentation
 
 Full docs at **[svelte-p5.dev/docs](https://svelte-p5.dev/docs)**:
 
 - [Getting started](https://svelte-p5.dev/docs/getting-started) - install and use the three layers
-- [Plain JS & no build step](https://svelte-p5.dev/docs/plain-js) - no imports, no modules, no TypeScript required
+- [No build step](https://svelte-p5.dev/docs/no-build-step) - script tags, CDNs, and global vs instance mode
 - [Three layers](https://svelte-p5.dev/docs/architecture) - primitives, components, composition
 - [State bridges](https://svelte-p5.dev/docs/bridges) - when to use `$state`, `createP5Bridge`, or a reactive class
 - [Wrapper behavior comparison](https://svelte-p5.dev/docs/perf-comparison) - reproducible benchmark with honest framing on when it matters
@@ -66,7 +66,7 @@ The same markdown also lives in [`docs/`](./docs) for browsing on GitHub.
 
 Four examples in `docs/examples/`, ordered by increasing scope:
 
-- [`00-plain-js`](./docs/examples/00-plain-js) - plain HTML files, no install and no bundler
+- [`00-no-build`](./docs/examples/00-no-build) - plain HTML files, no install and no bundler
 - [`01-basic`](./docs/examples/01-basic) - `<P5Canvas>` and a sketch, nothing else
 - [`02-store-bridge`](./docs/examples/02-store-bridge) - UI sliders drive a particle field through `createP5Bridge`
 - [`03-draggable-dashboard`](./docs/examples/03-draggable-dashboard) - three floating sketches sharing one reactive class
@@ -77,7 +77,7 @@ pnpm --filter @svelte-p5-example/02-store-bridge dev
 pnpm --filter @svelte-p5-example/03-draggable-dashboard dev
 ```
 
-`00-plain-js` has no install step — open its HTML files in a browser directly.
+`00-no-build` has no install step — open its HTML files in a browser directly.
 
 ## Development
 

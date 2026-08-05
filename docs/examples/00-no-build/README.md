@@ -1,4 +1,4 @@
-# 00 - Plain JavaScript, no build step
+# 00 - No build step
 
 Three HTML files, no `package.json`, no install step. This example exists to answer a specific question: **can you use any of this without imports, modules, or a bundler?**
 
@@ -17,7 +17,7 @@ The honest answer, demonstrated in order:
 `with-utils.html` uses `<script type="module">`, which browsers refuse to load over `file://`. Serve the folder:
 
 ```bash
-npx serve docs/examples/00-plain-js
+npx serve docs/examples/00-no-build
 ```
 
 ## What it shows
@@ -35,5 +35,5 @@ If this covers your needs, it's the right answer. A single sketch on a static pa
 
 ## Next
 
-- [Plain JavaScript and no build step](../../plain-js.md) — the full write-up, including the global → instance conversion table.
+- [No build step](../../no-build-step.md) — the full write-up, including the global → instance conversion table.
 - [`01-basic`](../01-basic) — the same sketch inside Svelte, with lifecycle handled for you.
