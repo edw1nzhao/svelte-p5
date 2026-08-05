@@ -14,7 +14,9 @@ You'll need **Svelte 5** and **Node 22+** (24 recommended). Works in SvelteKit S
 
 Coming from `p5-svelte`? See the [migration guide](./recipes/migration-from-p5-svelte.md) first.
 
-**TypeScript is optional.** Every sample below is written in TypeScript, but nothing here requires it - use the JS/TS toggle on any code block to see the plain JavaScript version. If you're coming from the p5 web editor, read [plain JS & no build step](./plain-js.md) first; it covers the global → instance mode conversion that every sample here assumes.
+**TypeScript is optional.** Every sample below is written in TypeScript, but nothing here requires it - use the JS/TS toggle on any code block to see the plain JavaScript version.
+
+Coming from the p5 web editor? Read [no build step](./no-build-step.md) first. It covers the global → instance mode conversion that every sample here assumes, and what you can do without a bundler at all.
 
 ## Layer 1 - just the wrapper
 

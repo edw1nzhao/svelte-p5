@@ -3,7 +3,7 @@
 	import DocToc from '$lib/docs/DocToc.svelte';
 	import DocCopyButtons from '$lib/docs/DocCopyButtons.svelte';
 	import CopyForAI from '$lib/docs/CopyForAI.svelte';
-	import PlainJsDemo from '$lib/demos/PlainJsDemo.svelte';
+	import NoBuildDemo from '$lib/demos/NoBuildDemo.svelte';
 	import { staggerFadeUp } from '$lib/animations';
 	import { onMount } from 'svelte';
 
@@ -48,10 +48,10 @@
 			{/if}
 		</header>
 
-		<!-- The plain-JS page argues that a no-build p5 page is a real option.
+		<!-- This page argues that a no-build p5 page is a real option.
 		     Showing one running is more convincing than describing it. -->
-		{#if data.doc.slug === 'plain-js'}
-			<PlainJsDemo />
+		{#if data.doc.slug === 'no-build-step'}
+			<NoBuildDemo />
 		{/if}
 
 		<DocCopyButtons html={data.html} />

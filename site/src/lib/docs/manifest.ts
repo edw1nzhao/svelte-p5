@@ -22,10 +22,10 @@ export const docs: readonly DocEntry[] = [
 		section: 'Start'
 	},
 	{
-		slug: 'plain-js',
-		title: 'Plain JS & no build step',
-		description: 'Using p5 without imports, modules, or TypeScript — and where svelte-p5 fits.',
-		file: 'docs/plain-js.md',
+		slug: 'no-build-step',
+		title: 'No build step',
+		description: 'Script tags, CDNs, and global vs instance mode — what works without a bundler.',
+		file: 'docs/no-build-step.md',
 		section: 'Start'
 	},
 	{

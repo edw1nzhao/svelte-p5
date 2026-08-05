@@ -1,12 +1,13 @@
-# Plain JavaScript and no build step
+# No build step
 
-A fair question if you came here from the p5 web editor: can you use this from a plain `<script>` tag, without imports, modules, or a bundler?
+A fair question if you came here from the p5 web editor: can you use this from a plain `<script>` tag, with no imports, no modules, and no bundler?
 
-Short answer: **not for `<P5Canvas>`, and that's inherent rather than an oversight.** But two thirds of that question have better answers than "no", and this page covers all three cases:
+Short answer: **not for `<P5Canvas>`, and that's inherent rather than an oversight.** But part of that question has a better answer than "no":
 
-- [No build step at all](#no-build-step-at-all) - plain p5 from a CDN, which is genuinely the right tool for a single sketch on a static page.
-- [TypeScript is optional](#typescript-is-optional) - every example in these docs works as plain JavaScript. The `lang="ts"` you see everywhere is a preference, not a requirement.
-- [Global mode to instance mode](#global-mode-to-instance-mode) - the one real code change between a p5-editor sketch and a Svelte one. It is smaller than it looks.
+- [No build step at all](#no-build-step-at-all) - plain p5 from a CDN, which is genuinely the right tool for a single sketch on a static page, plus the one part of this library that _does_ load straight from a CDN.
+- [Global mode to instance mode](#global-mode-to-instance-mode) - why a sketch copied out of the p5 editor doesn't drop straight into a component, and the mechanical change that fixes it.
+
+(This page is about modules and build steps, not about TypeScript. Writing plain JavaScript in Svelte has never required anything special - drop `lang="ts"` from the `<script>` tag and the annotations, and every sample in these docs works as-is. There's a JS/TS toggle on every code block if you want to see them that way.)
 
 ## Why the component needs a build step
 
@@ -121,59 +122,9 @@ On **p5 2.x** the mechanism changed: `IS_MINIFIED` is gone, and FES is controlle
 
 See [recipes/performance.md](./recipes/performance.md) for what FES actually costs and when it's worth turning off at all.
 
-## TypeScript is optional
-
-Every code sample in these docs is written in TypeScript, which can read as a requirement. It isn't - the library is published with type definitions, and using it without TypeScript costs you nothing but the annotations.
-
-Use the **JS / TS toggle** at the top of any code block in these docs to switch the samples to plain JavaScript. Concretely, three things change:
-
-```svelte
-<script lang="ts">
-	import { P5Canvas } from 'svelte-p5';
-	import type p5 from 'p5';
-
-	let instance = $state<p5 | null>(null);
-
-	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(400, 300);
-		p.draw = () => p.background(240);
-	};
-</script>
-
-<P5Canvas {sketch} bind:instance />
-```
-
-becomes:
-
-```svelte
-<script>
-	import { P5Canvas } from 'svelte-p5';
-
-	let instance = $state(null);
-
-	const sketch = (p) => {
-		p.setup = () => p.createCanvas(400, 300);
-		p.draw = () => p.background(240);
-	};
-</script>
-
-<P5Canvas {sketch} bind:instance />
-```
-
-Drop `lang="ts"`, drop the `import type` line, drop the annotations. Runes (`$state`, `$derived`, `$props`) are not TypeScript - they work identically in plain JavaScript files.
-
-Editors still give you p5 autocomplete in plain JS via the bundled types. If you want it explicitly, a JSDoc comment does the job with no build change:
-
-```js
-/** @param {import('p5')} p */
-const sketch = (p) => {
-	p.setup = () => p.createCanvas(400, 300);
-};
-```
-
 ## Global mode to instance mode
 
-This is the real difference between a p5-editor sketch and one that runs inside any component framework, and it isn't specific to Svelte - React, Vue, and vanilla multi-sketch pages all need the same change.
+The other half of "can I write this the way I write it in the editor" is `setup()` and `draw()` themselves. You can't declare them as globals and hand them to `<P5Canvas>`, and the reason is the same reason p5 exists in two modes at all.
 
 **Global mode** puts every p5 function on `window`. That's what makes `circle(200, 150, 40)` work with no prefix, and it's why only one sketch can exist per page - a second one would fight over the same globals.
 
@@ -216,7 +167,7 @@ const sketch = (p) => {
 
 Every line of your own logic is untouched. Only p5's own calls take a `p.` prefix, and your variables stay exactly where they were.
 
-That function is now portable: pass it to `new p5(sketch, container)` on a plain page, or hand it to `<P5Canvas {sketch} />` in Svelte. Both consume the identical function - see [`docs/examples/00-plain-js`](./examples/00-plain-js) for one HTML file that runs it both ways side by side.
+That function is now portable: pass it to `new p5(sketch, container)` on a plain page, or hand it to `<P5Canvas {sketch} />` in Svelte. Both consume the identical function - see [`docs/examples/00-no-build`](./examples/00-no-build), where `instance-mode.html` runs it twice on one page.
 
 ### Why you can't just destructure the prefix away
 
@@ -258,6 +209,6 @@ If none of those apply, the plain HTML file at the top of this page is not a les
 
 ## Next steps
 
-- [`docs/examples/00-plain-js`](./examples/00-plain-js) - one file, no install, both modes running side by side.
+- [`docs/examples/00-no-build`](./examples/00-no-build) - three HTML files, no install; two of them open by double-clicking.
 - [Getting started](./getting-started.md) - when you're ready for the Svelte side.
 - [p5's own guide to global and instance mode](https://github.com/processing/p5.js/wiki/Global-and-instance-mode) - the upstream reference.
