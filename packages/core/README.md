@@ -148,6 +148,8 @@ a minor.
 p5 itself is a peer dependency pinned to `>=1.11.0 <3`. p5 2.x changes `setup` to async
 and reworks the WEBGL renderer, so support for it will land as a major.
 
+See [Upgrading](https://svelte-p5.dev/docs/upgrading) for per-version notes and the compatibility matrix.
+
 ## License
 
 MIT
