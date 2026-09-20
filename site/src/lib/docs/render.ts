@@ -38,7 +38,7 @@ for (const [k, v] of Object.entries(sources)) {
  * only ever runs in the dev/SSR loader where Node's `fs` is available;
  * production builds always satisfy from the eager glob.
  */
-async function getSource(file: string): Promise<string | null> {
+export async function getSource(file: string): Promise<string | null> {
 	const cached = sourceByPath[file];
 	if (cached !== undefined) return cached;
 

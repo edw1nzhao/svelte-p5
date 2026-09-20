@@ -44,6 +44,13 @@ export const docs: readonly DocEntry[] = [
 		section: 'Concepts'
 	},
 	{
+		slug: 'upgrading',
+		title: 'Upgrading',
+		description: 'Per-version upgrade notes, the compatibility matrix, and known-bad releases.',
+		file: 'docs/upgrading.md',
+		section: 'Start'
+	},
+	{
 		slug: 'recipes/migration-from-p5-svelte',
 		title: 'Migrate from p5-svelte',
 		description: 'API mapping and ten-minute port.',

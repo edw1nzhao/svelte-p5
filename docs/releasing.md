@@ -15,7 +15,27 @@ No `next` branch, no `@alpha` dist-tag. For the contributor-facing quick view, s
 | `.github/workflows/release-please.yml` | push to `main`             | Opens/updates the release PR; on merge, calls `publish.yml` with `--tag latest` for each affected package.        |
 | `.github/workflows/publish.yml`        | `workflow_call` (reusable) | Holds the actual `npm publish` step. Registered as the **trusted publisher** on npmjs.com for all three packages. |
 
-`publish.yml` is what npm OIDC pins for trusted publishing. `job_workflow_ref` reflects the _called_ workflow, so the trust entry covers `release-please.yml` invocations automatically. **Do not rename `publish.yml`** without updating the trusted publisher on all three packages at npmjs.com.
+`publish.yml` is what npm OIDC pins for trusted publishing. **Do not rename `publish.yml`** without updating the trusted publisher on all three packages at npmjs.com.
+
+> **The `workflow_call` path does not currently authenticate.** Both releases that have gone through it, 2026-07-21 and 2026-09-20, failed every publish job with `npm error code ENEEDAUTH`. The theory that `job_workflow_ref` reflects the called workflow, and so covers `release-please.yml` invocations automatically, does not hold in practice.
+>
+> Until that is resolved, **a release needs a second, manual step**: after the release PR merges and the tags exist, dispatch `publish.yml` once per released package.
+>
+> ```sh
+> gh workflow run publish.yml -f package-dir=packages/components -f ref=components-v0.7.0 -f npm-tag=latest
+> ```
+>
+> Dispatched directly, the OIDC exchange succeeds and the publish is signed with provenance as expected.
+
+### Verifying a release actually published
+
+`npm publish` can print `+ package@version`, write a provenance statement to the sigstore transparency log, and exit 0 **without the version reaching the registry**. Never treat a green publish job as proof. Check the registry:
+
+```sh
+curl -s -o /dev/null -w '%{http_code}\n' https://registry.npmjs.org/svelte-p5-components/0.7.0
+```
+
+Expect `200`. Propagation is not instant and has taken up to several minutes, so a 404 immediately after a publish is not yet a failure; a 404 after ten minutes is.
 
 ## Conventional commits
 
