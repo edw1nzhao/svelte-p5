@@ -125,6 +125,20 @@ What it handles for you:
 
 Same `plugins` escape hatch as `<DraggableWindow>`.
 
+## Stability
+
+`svelte-p5-components` follows semantic versioning from 1.0.0. Within a major, minor and
+patch releases never break a documented API, so `^1.0.0` is safe to leave in place.
+
+The public API is everything exported from the package root. Component internals, class
+names and DOM structure are not API: style through the documented props and CSS custom
+properties rather than by reaching into the markup.
+
+`svelte-p5` is a peer dependency. Install it yourself and keep it inside the range this
+package declares.
+
+See [Upgrading](https://svelte-p5.dev/docs/upgrading) for per-version notes.
+
 ## License
 
 MIT

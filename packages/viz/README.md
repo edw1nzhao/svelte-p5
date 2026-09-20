@@ -138,3 +138,5 @@ Scene state is a Svelte 5 `$state` proxy — mutate it directly, Svelte handles 
 ## Versioning
 
 `0.x` is unstable. Breaking changes bump the minor and are called out with `BREAKING CHANGE:` in the commit. The `version` field on `SceneConfig` will bump when the format itself changes, with a documented migration path.
+
+**This package stays on 0.x while `svelte-p5` and `svelte-p5-components` move to 1.0.0.** That is deliberate. The panel contract, registry and scene format have never been exercised by a real consumer: the only thing any application has imported from here is the `Bounds` type. Declaring a stable API for a design nobody has built against would be a promise made on no evidence. Pin an exact version if you depend on this package.

@@ -18,6 +18,35 @@ This is correct npm behaviour, not a bug, and it is why an app can sit four rele
 
 **Every minor release of a 0.x package needs an explicit bump in your `package.json`.** Until a package reaches 1.0.0, check this page rather than relying on your package manager.
 
+`svelte-p5` and `svelte-p5-components` reach 1.0.0 in the next release, which ends this for both of them. `svelte-p5-viz` stays on 0.x, so the rule still applies there.
+
+## 1.0.0
+
+`svelte-p5` and `svelte-p5-components` move to 1.0.0 together. Nothing in their APIs changes; the version number is the change, and what it buys you is a promise:
+
+- Inside a major, minor and patch releases never break a documented API, so `^1.0.0` is safe to leave in place and `pnpm update` picks up fixes on its own.
+- Breaking changes need a major, announced here with a migration path.
+
+**Action: none beyond the version bump.**
+
+```sh
+pnpm add svelte-p5@^1.0.0 svelte-p5-components@^1.0.0
+```
+
+If you are coming from `svelte-p5-components` 0.5.0 or earlier, read the 0.5.0 and 0.6.0 notes below first. Those still apply; 1.0.0 does not absorb them.
+
+### Why `svelte-p5-viz` stays on 0.x
+
+Its panel contract, registry and scene format have never been exercised by a consumer. The only thing any application has ever imported from it is the `Bounds` type. Declaring a stable API for a design nobody has built against would be a promise made on no evidence, so it stays on 0.x and keeps the right to break in a minor. Pin an exact version if you depend on it.
+
+### What counts as public API
+
+Everything exported from a package root. Not: deep import paths, component internals, class names, or DOM structure. Style through documented props and CSS custom properties rather than by reaching into the markup, or a patch release can still break you without violating semver.
+
+### The next major
+
+p5 2.x makes `setup` async and reworks the WEBGL renderer, neither of which the current ready-time sizing survives. Support for it lands as 2.0.0 whenever it lands. The peer range stays `>=1.11.0 <3` until then, so you will not be moved onto p5 2.x by accident.
+
 ## Compatibility
 
 `svelte-p5-components` and `svelte-p5-viz` both declare `svelte-p5` as a **peer** dependency, so you install it yourself and your package manager will not pick it for you.
