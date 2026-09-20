@@ -135,7 +135,15 @@ names and DOM structure are not API: style through the documented props and CSS 
 properties rather than by reaching into the markup.
 
 `svelte-p5` is a peer dependency. Install it yourself and keep it inside the range this
-package declares.
+package declares:
+
+```sh
+pnpm add svelte-p5-components svelte-p5 p5
+```
+
+A peer is not installed for you. If `pnpm ls` reports an unmet peer for `svelte-p5`, that
+is this, and on versions before 0.6.0 it is the unresolvable `workspace:^` range those
+builds were published with.
 
 See [Upgrading](https://svelte-p5.dev/docs/upgrading) for per-version notes.
 
