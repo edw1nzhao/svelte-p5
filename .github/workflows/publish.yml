@@ -102,3 +102,26 @@ jobs:
       - name: Publish ${{ inputs.package-dir }} with tag ${{ inputs.npm-tag }}
         working-directory: ${{ inputs.package-dir }}
         run: npm publish --provenance --tag ${{ inputs.npm-tag }}
+
+      # `npm publish` has exited 0, printed `+ pkg@version` and written a
+      # sigstore provenance statement without the version reaching the
+      # registry. A green publish step is not proof; the registry is.
+      # Propagation is not instant and is not uniform across packages in one
+      # release, so poll rather than checking once.
+      - name: Verify the version reached the registry
+        working-directory: ${{ inputs.package-dir }}
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          URL="https://registry.npmjs.org/$NAME/$VERSION"
+          echo "Waiting for $NAME@$VERSION"
+          for i in $(seq 1 30); do
+            CODE=$(curl -fsS -o /dev/null -w '%{http_code}' "$URL" || true)
+            if [ "$CODE" = "200" ]; then
+              echo "Confirmed after $((i * 10))s."
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::$NAME@$VERSION is not on the registry after 5 minutes, but the publish step reported success."
+          exit 1
