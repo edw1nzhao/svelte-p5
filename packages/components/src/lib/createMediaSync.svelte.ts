@@ -22,6 +22,11 @@
  * Use `.seek(time)` to write the other direction (timeline→media) — the
  * helper clamps to the media's duration and guards against NaN.
  *
+ * `attach` takes a raw `HTMLMediaElement` or any `MediaSource` port, so a
+ * source that is not a media element (a YouTube iframe player, say) is wired
+ * by writing a small adapter rather than a second sync path. A port without
+ * `subscribe` is polled; see `media-port.ts`.
+ *
  * @example
  * ```ts
  * const sync = createMediaSync();
@@ -37,6 +42,19 @@
  * ```
  */
 
+import {
+	createPoller,
+	toMediaSource,
+	IDLE_POLL_MS,
+	type MediaSource,
+	type TickerScheduler
+} from './media-port.js';
+
+export interface MediaSyncOptions {
+	/** Injectable scheduling, for tests. */
+	scheduler?: TickerScheduler;
+}
+
 export interface MediaSync {
 	/** The media element's currentTime, when attached. */
 	readonly mediaTime: number;
@@ -44,44 +62,45 @@ export interface MediaSync {
 	readonly mediaDuration: number;
 	/** True when the media is playing — timeline should follow, not drive. */
 	readonly isLocked: boolean;
-	/** Attach the sync to an HTMLMediaElement. Re-attaching switches to the new one. */
-	attach(el: HTMLMediaElement | null): void;
+	/** Attach to a media element or a port. Re-attaching switches to the new one. */
+	attach(src: HTMLMediaElement | MediaSource | null): void;
 	/** Remove listeners; idempotent. Called automatically when `attach(null)`. */
 	detach(): void;
 	/** Seek the attached media to `time`, clamped into [0, duration]. */
 	seek(time: number): void;
 }
 
-export function createMediaSync(): MediaSync {
-	let el: HTMLMediaElement | null = null;
+export function createMediaSync(options: MediaSyncOptions = {}): MediaSync {
+	let port: MediaSource | null = null;
+	let unsubscribe: (() => void) | null = null;
+	let poller: ReturnType<typeof createPoller> | null = null;
 	let mediaTime = $state(0);
 	let mediaDuration = $state(0);
 	let isLocked = $state(false);
 
-	function onTimeUpdate() {
-		if (el) mediaTime = el.currentTime;
+	function read() {
+		if (!port) return;
+		mediaTime = port.currentTime;
+		mediaDuration = isFinite(port.duration) ? port.duration : 0;
+		isLocked = !port.paused && !port.ended;
 	}
-	function onDurationChange() {
-		if (el) mediaDuration = isFinite(el.duration) ? el.duration : 0;
-	}
-	function onPlay() {
-		isLocked = true;
-	}
-	function onPause() {
-		isLocked = false;
-	}
-	function onEnded() {
-		isLocked = false;
+
+	function isPlaying() {
+		return !!port && !port.paused && !port.ended;
 	}
 
 	function detachInner() {
-		if (!el) return;
-		el.removeEventListener('timeupdate', onTimeUpdate);
-		el.removeEventListener('durationchange', onDurationChange);
-		el.removeEventListener('play', onPlay);
-		el.removeEventListener('pause', onPause);
-		el.removeEventListener('ended', onEnded);
-		el = null;
+		poller?.stop();
+		poller = null;
+		unsubscribe?.();
+		unsubscribe = null;
+		port = null;
+	}
+
+	function clearState() {
+		mediaTime = 0;
+		mediaDuration = 0;
+		isLocked = false;
 	}
 
 	return {
@@ -96,34 +115,38 @@ export function createMediaSync(): MediaSync {
 		},
 		attach(next) {
 			detachInner();
-			el = next;
-			if (!el) {
-				mediaTime = 0;
-				mediaDuration = 0;
-				isLocked = false;
+			port = toMediaSource(next);
+			if (!port) {
+				clearState();
 				return;
 			}
-			mediaTime = el.currentTime;
-			mediaDuration = isFinite(el.duration) ? el.duration : 0;
-			isLocked = !el.paused && !el.ended;
-			el.addEventListener('timeupdate', onTimeUpdate);
-			el.addEventListener('durationchange', onDurationChange);
-			el.addEventListener('play', onPlay);
-			el.addEventListener('pause', onPause);
-			el.addEventListener('ended', onEnded);
+			read();
+			poller = createPoller(read, isPlaying, {
+				scheduler: options.scheduler,
+				// A subscribing port announces its own resume; one that cannot
+				// must be checked for it, or a paused source would never restart.
+				idleMs: port.subscribe ? 0 : IDLE_POLL_MS
+			});
+			if (port.subscribe) {
+				unsubscribe = port.subscribe(() => {
+					read();
+					poller?.sync();
+				});
+			}
+			poller.start();
 		},
 		detach() {
 			detachInner();
-			mediaTime = 0;
-			mediaDuration = 0;
-			isLocked = false;
+			clearState();
 		},
 		seek(time) {
-			if (!el) return;
-			const dur = isFinite(el.duration) ? el.duration : Number.MAX_SAFE_INTEGER;
+			if (!port) return;
+			const dur =
+				isFinite(port.duration) && port.duration > 0 ? port.duration : Number.MAX_SAFE_INTEGER;
 			const clamped = Math.max(0, Math.min(dur, time));
 			if (!isFinite(clamped)) return;
-			el.currentTime = clamped;
+			port.seek(clamped);
+			read();
 		}
 	};
 }

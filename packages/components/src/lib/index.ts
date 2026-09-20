@@ -17,5 +17,21 @@ export {
 	type TimelineSelection
 } from './TimelineTrack.svelte';
 export { default as TimelineScrubber } from './TimelineScrubber.svelte';
-export { createMediaSync, type MediaSync } from './createMediaSync.svelte.js';
-export { createMediaPlayback, type MediaPlayback } from './createMediaPlayback.svelte.js';
+export {
+	createMediaSync,
+	type MediaSync,
+	type MediaSyncOptions
+} from './createMediaSync.svelte.js';
+export {
+	createMediaPlayback,
+	type MediaPlayback,
+	type MediaPlaybackOptions
+} from './createMediaPlayback.svelte.js';
+export {
+	htmlMediaPort,
+	createPoller,
+	IDLE_POLL_MS,
+	type MediaSource,
+	type MediaPort,
+	type TickerScheduler
+} from './media-port.js';

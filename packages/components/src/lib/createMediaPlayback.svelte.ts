@@ -40,13 +40,26 @@
  * ```
  */
 
+import {
+	createPoller,
+	toMediaPort,
+	IDLE_POLL_MS,
+	type MediaPort,
+	type TickerScheduler
+} from './media-port.js';
+
+export interface MediaPlaybackOptions {
+	/** Injectable scheduling, for tests. */
+	scheduler?: TickerScheduler;
+}
+
 export interface MediaPlayback {
 	/** True while the attached media is playing. */
 	readonly isPlaying: boolean;
 	/** Index into the current snippet queue, or -1 when not in a snippet sequence. */
 	readonly activeSnippetIndex: number;
-	/** Attach to an HTMLMediaElement. Re-attaching switches to the new one. */
-	attach(el: HTMLMediaElement | null): void;
+	/** Attach to a media element or a port. Re-attaching switches to the new one. */
+	attach(src: HTMLMediaElement | MediaPort | null): void;
 	/** Remove listeners + clear the queue; idempotent. Called automatically when `attach(null)`. */
 	detach(): void;
 	/** Seek to `time` (clamped) and play. Cancels any active snippet sequence. */
@@ -59,8 +72,10 @@ export interface MediaPlayback {
 	stop(): void;
 }
 
-export function createMediaPlayback(): MediaPlayback {
-	let el: HTMLMediaElement | null = null;
+export function createMediaPlayback(options: MediaPlaybackOptions = {}): MediaPlayback {
+	let port: MediaPort | null = null;
+	let unsubscribe: (() => void) | null = null;
+	let poller: ReturnType<typeof createPoller> | null = null;
 	let isPlaying = $state(false);
 	let activeSnippetIndex = $state(-1);
 
@@ -69,8 +84,9 @@ export function createMediaPlayback(): MediaPlayback {
 	let snippetSeconds = 0;
 
 	function clampTime(time: number): number | null {
-		if (!el) return null;
-		const dur = isFinite(el.duration) ? el.duration : Number.MAX_SAFE_INTEGER;
+		if (!port) return null;
+		const dur =
+			isFinite(port.duration) && port.duration > 0 ? port.duration : Number.MAX_SAFE_INTEGER;
 		const clamped = Math.max(0, Math.min(dur, time));
 		if (!isFinite(clamped)) return null;
 		return clamped;
@@ -82,29 +98,22 @@ export function createMediaPlayback(): MediaPlayback {
 		activeSnippetIndex = -1;
 	}
 
-	function playEl() {
-		// play() can reject under autoplay policies — swallow it safely.
-		el?.play()?.catch(() => {});
+	function running() {
+		return !!port && !port.paused && !port.ended;
 	}
 
-	function onPlay() {
-		isPlaying = true;
-	}
-	function onPause() {
-		isPlaying = false;
-	}
-	function onEnded() {
-		isPlaying = false;
+	function sample() {
+		if (!port) return;
+		isPlaying = running();
+		advanceSnippet();
 	}
 
-	function onTimeUpdate() {
-		// Only meaningful while running a snippet sequence.
-		if (!el || activeSnippetIndex < 0) return;
+	function advanceSnippet() {
+		if (!port || activeSnippetIndex < 0) return;
 		const start = queue[activeSnippetIndex];
 		if (start === undefined) return;
-		if (el.currentTime - start < snippetSeconds) return;
+		if (port.currentTime - start < snippetSeconds) return;
 
-		// This snippet's time is up — advance to the next, or stop.
 		const nextIndex = activeSnippetIndex + 1;
 		if (nextIndex >= queue.length) {
 			stopInner();
@@ -112,21 +121,21 @@ export function createMediaPlayback(): MediaPlayback {
 		}
 		const nextStart = clampTime(queue[nextIndex] as number);
 		activeSnippetIndex = nextIndex;
-		if (nextStart !== null) el.currentTime = nextStart;
+		if (nextStart !== null) port.seek(nextStart);
 	}
 
 	function stopInner() {
 		clearQueue();
-		if (el) el.pause();
+		port?.pause();
+		isPlaying = false;
 	}
 
 	function detachInner() {
-		if (!el) return;
-		el.removeEventListener('timeupdate', onTimeUpdate);
-		el.removeEventListener('play', onPlay);
-		el.removeEventListener('pause', onPause);
-		el.removeEventListener('ended', onEnded);
-		el = null;
+		poller?.stop();
+		poller = null;
+		unsubscribe?.();
+		unsubscribe = null;
+		port = null;
 	}
 
 	return {
@@ -139,16 +148,23 @@ export function createMediaPlayback(): MediaPlayback {
 		attach(next) {
 			detachInner();
 			clearQueue();
-			el = next;
-			if (!el) {
+			port = toMediaPort(next);
+			if (!port) {
 				isPlaying = false;
 				return;
 			}
-			isPlaying = !el.paused && !el.ended;
-			el.addEventListener('timeupdate', onTimeUpdate);
-			el.addEventListener('play', onPlay);
-			el.addEventListener('pause', onPause);
-			el.addEventListener('ended', onEnded);
+			isPlaying = running();
+			poller = createPoller(sample, running, {
+				scheduler: options.scheduler,
+				idleMs: port.subscribe ? 0 : IDLE_POLL_MS
+			});
+			if (port.subscribe) {
+				unsubscribe = port.subscribe(() => {
+					sample();
+					poller?.sync();
+				});
+			}
+			poller.start();
 		},
 		detach() {
 			detachInner();
@@ -156,27 +172,31 @@ export function createMediaPlayback(): MediaPlayback {
 			isPlaying = false;
 		},
 		playFrom(time) {
-			if (!el) return;
+			if (!port) return;
 			clearQueue();
 			const clamped = clampTime(time);
 			if (clamped === null) return;
-			el.currentTime = clamped;
-			playEl();
+			port.seek(clamped);
+			port.play();
+			isPlaying = running();
+			poller?.sync();
 		},
 		playSnippets(times, secondsEach) {
-			if (!el) return;
+			if (!port) return;
 			const finite = times.filter((t) => isFinite(t));
 			if (finite.length === 0) return;
 			queue = finite;
 			snippetSeconds = secondsEach;
 			activeSnippetIndex = 0;
 			const start = clampTime(queue[0] as number);
-			if (start !== null) el.currentTime = start;
-			playEl();
+			if (start !== null) port.seek(start);
+			port.play();
+			isPlaying = running();
+			poller?.sync();
 		},
 		pause() {
-			if (!el) return;
-			el.pause();
+			port?.pause();
+			isPlaying = running();
 		},
 		stop() {
 			stopInner();
