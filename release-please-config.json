@@ -38,7 +38,7 @@
   "plugins": [
     {
       "type": "node-workspace",
-      "updatePeerDependencies": true
+      "updatePeerDependencies": false
     }
   ],
   "pull-request-title-pattern": "chore: release ${version}",
