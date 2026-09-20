@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v0.4.0...core-v1.0.0) (2026-09-20)
+
+
+### Features
+
+* declare a stable public API for core and components ([#81](https://github.com/edw1nzhao/svelte-p5/issues/81)) ([25052ff](https://github.com/edw1nzhao/svelte-p5/commit/25052ff16b97edfec41cc6fe55ab485f5551d15f))
+
 ## [0.4.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v0.3.0...core-v0.4.0) (2026-07-21)
 
 

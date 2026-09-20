@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.0.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.7.0...components-v1.0.0) (2026-09-20)
+
+
+### Features
+
+* declare a stable public API for core and components ([#81](https://github.com/edw1nzhao/svelte-p5/issues/81)) ([25052ff](https://github.com/edw1nzhao/svelte-p5/commit/25052ff16b97edfec41cc6fe55ab485f5551d15f))
+
+
+### Bug Fixes
+
+* widen the svelte-p5 peer so it admits the 1.0 core ([#83](https://github.com/edw1nzhao/svelte-p5/issues/83)) ([8df997e](https://github.com/edw1nzhao/svelte-p5/commit/8df997e27b67ce055eb8e89ce5860e5a55d265c0))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 1.0.0
+
 ## [0.7.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.6.0...components-v0.7.0) (2026-09-20)
 
 
