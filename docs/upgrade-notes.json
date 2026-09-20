@@ -16,6 +16,13 @@
       "action": "Update the range to `^1.0.0`. The public API is `P5Canvas`, `createP5Bridge`, the exported types, and everything under `utils`. Deep import paths are internal and may still change in a minor."
     },
     {
+      "package": "svelte-p5-viz",
+      "version": "0.2.3",
+      "breaking": false,
+      "summary": "Widens the `svelte-p5` peer to `>=0.4.0 <2` so it admits the 1.0 core. No API change.",
+      "action": "None. This package stays on 0.x deliberately; see its README for why."
+    },
+    {
       "package": "svelte-p5-components",
       "version": "0.7.0",
       "breaking": false,

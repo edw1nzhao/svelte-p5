@@ -46,6 +46,9 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Check peer ranges
+        run: pnpm check:peers
+
       # Reads the npm registry, so it reports rather than gates: a registry
       # blip must not fail an unrelated PR.
       - name: Check upgrade docs are current

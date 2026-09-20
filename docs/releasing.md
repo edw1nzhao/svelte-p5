@@ -27,6 +27,14 @@ No `next` branch, no `@alpha` dist-tag. For the contributor-facing quick view, s
 >
 > Dispatched directly, the OIDC exchange succeeds and the publish is signed with provenance as expected.
 
+### Before a major
+
+`updatePeerDependencies` is `false`, so peer ranges are maintained by hand. A package going to a new major means every sibling that peers on it needs its range widened first, **in a separate PR merged before the release PR**.
+
+This is checked: `pnpm check:peers` fails when a declared peer range does not admit the sibling version in the workspace, when it uses the `workspace:` protocol, or when it has no upper bound. CI gates on it. It nearly did not exist in time: `svelte-p5-components@1.0.0` was one merge away from publishing with a peer of `>=0.4.0 <1`, which excludes `svelte-p5@1.0.0`.
+
+Widening a sibling's range is only safe in a patch when it _adds_ versions. Narrowing it, or requiring a newer major, is a breaking change and needs a major of its own.
+
 ### Verifying a release actually published
 
 `npm publish` can print `+ package@version`, write a provenance statement to the sigstore transparency log, and exit 0 **without the version reaching the registry**. Never treat a green publish job as proof. Check the registry:

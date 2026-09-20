@@ -2,7 +2,6 @@
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "packages": {
     "packages/core": {
-      "release-as": "1.0.0",
       "release-type": "node",
       "component": "core",
       "package-name": "svelte-p5",
@@ -13,7 +12,6 @@
       "prerelease": false
     },
     "packages/components": {
-      "release-as": "1.0.0",
       "release-type": "node",
       "component": "components",
       "package-name": "svelte-p5-components",
