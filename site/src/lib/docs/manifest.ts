@@ -51,6 +51,13 @@ export const docs: readonly DocEntry[] = [
 		section: 'Recipes'
 	},
 	{
+		slug: 'recipes/media-sync',
+		title: 'Syncing a timeline to video',
+		description: 'createMediaSync, and writing a port for video that is not an element.',
+		file: 'docs/recipes/media-sync.md',
+		section: 'Recipes'
+	},
+	{
 		slug: 'recipes/shared-state',
 		title: 'Shared state across sketches',
 		description: 'A reactive class as the single source of truth for a dashboard.',
