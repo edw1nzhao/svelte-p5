@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/edw1nzhao/svelte-p5/compare/viz-v0.2.1...viz-v0.2.2) (2026-09-20)
+
+
+### Bug Fixes
+
+* **viz:** publish a resolvable semver range for the svelte-p5 peer ([#76](https://github.com/edw1nzhao/svelte-p5/issues/76)) ([a9405a6](https://github.com/edw1nzhao/svelte-p5/commit/a9405a680b673ca65c8354ff20ca6d278b7f6c18))
+
 ## [0.2.1](https://github.com/edw1nzhao/svelte-p5/compare/viz-v0.2.0...viz-v0.2.1) (2026-07-21)
 
 

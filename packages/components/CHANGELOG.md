@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.6.0...components-v0.7.0) (2026-09-20)
+
+
+### Features
+
+* **components:** drive the media helpers through a port ([#74](https://github.com/edw1nzhao/svelte-p5/issues/74)) ([37590b5](https://github.com/edw1nzhao/svelte-p5/commit/37590b5b2b20860e5272b79bf5f6ddb2b6840925))
+
+
+### Bug Fixes
+
+* **viz:** publish a resolvable semver range for the svelte-p5 peer ([#76](https://github.com/edw1nzhao/svelte-p5/issues/76)) ([a9405a6](https://github.com/edw1nzhao/svelte-p5/commit/a9405a680b673ca65c8354ff20ca6d278b7f6c18))
+
 ## [0.6.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.5.0...components-v0.6.0) (2026-07-21)
 
 
