@@ -135,6 +135,19 @@ let instance: AppP5 | null = $state(null);
 <!-- instance is inferred as AppP5 | null; instance?.resetView() type-checks -->
 ```
 
+## Stability
+
+`svelte-p5` follows semantic versioning from 1.0.0. Within a major, minor and patch
+releases never break a documented API, so `^1.0.0` is safe to leave in place and
+`pnpm update` will pick up fixes.
+
+The public API is `P5Canvas`, `createP5Bridge`, the exported types, and everything under
+`utils`. Anything reachable only through a deep import path is internal and may change in
+a minor.
+
+p5 itself is a peer dependency pinned to `>=1.11.0 <3`. p5 2.x changes `setup` to async
+and reworks the WEBGL renderer, so support for it will land as a major.
+
 ## License
 
 MIT
