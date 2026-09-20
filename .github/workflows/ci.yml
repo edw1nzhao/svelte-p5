@@ -46,6 +46,12 @@ jobs:
       - name: Test
         run: pnpm test
 
+      # Reads the npm registry, so it reports rather than gates: a registry
+      # blip must not fail an unrelated PR.
+      - name: Check upgrade docs are current
+        continue-on-error: true
+        run: pnpm docs:upgrade:check
+
       - name: Verify LICENSE in tarballs
         run: |
           for pkg in packages/core packages/components packages/viz; do

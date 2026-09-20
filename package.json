@@ -20,7 +20,9 @@
     "lint": "prettier --check . && eslint .",
     "lint:fix": "prettier --write . && eslint . --fix",
     "test": "pnpm -r test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "docs:upgrade": "node scripts/build-upgrade-doc.mjs",
+    "docs:upgrade:check": "node scripts/build-upgrade-doc.mjs --check"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",

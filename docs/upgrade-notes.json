@@ -1,0 +1,75 @@
+{
+  "$comment": "Hand-written upgrade guidance. Everything mechanical (versions, dates, peer ranges, the compatibility matrix, broken-peer detection) is derived from the npm registry by scripts/build-upgrade-doc.mjs. Only judgement lives here: what a release means for a consumer and what they have to do about it. Add an entry when a release needs more than 'no action'; omitted versions render as a one-line entry from their changelog.",
+  "notes": [
+    {
+      "package": "svelte-p5-components",
+      "version": "1.0.0",
+      "breaking": false,
+      "summary": "Declares a stable public API. No code change.",
+      "action": "Update the range to `^1.0.0`. From here a caret range behaves the way you expect: minor and patch releases never break a documented API, so you can leave it in place. If you are coming from 0.5.0 or earlier, the 0.5.0 and 0.6.0 notes below still apply."
+    },
+    {
+      "package": "svelte-p5",
+      "version": "1.0.0",
+      "breaking": false,
+      "summary": "Declares a stable public API. No code change.",
+      "action": "Update the range to `^1.0.0`. The public API is `P5Canvas`, `createP5Bridge`, the exported types, and everything under `utils`. Deep import paths are internal and may still change in a minor."
+    },
+    {
+      "package": "svelte-p5-components",
+      "version": "0.7.0",
+      "breaking": false,
+      "summary": "The media helpers take a port instead of binding to `HTMLMediaElement`. `createMediaSync` and `createMediaPlayback` now accept an element **or** a `MediaSource`/`MediaPort`. Adds `htmlMediaPort`, `createPoller`, `IDLE_POLL_MS` and the `MediaSource`, `MediaPort`, `TickerScheduler` types. Both helpers take an optional options argument carrying an injectable scheduler, for tests.",
+      "action": "None. Passing an element still works and is still the documented default. Adopt a port only when your video is not a media element, for example a YouTube iframe player. See [Syncing a timeline to video](recipes/media-sync.md)."
+    },
+    {
+      "package": "svelte-p5-viz",
+      "version": "0.2.2",
+      "breaking": false,
+      "summary": "Fixes the unresolvable `workspace:^` peer range. No API change.",
+      "action": "Upgrade if you are on 0.2.0 or 0.2.1."
+    },
+    {
+      "package": "svelte-p5-components",
+      "version": "0.6.0",
+      "breaking": false,
+      "summary": "`Sketch` gained an `onResize` callback and explicit pixel-density control via `hidpi`, which accepts a boolean or a number. `hidpi={false}` was a no-op before this release. `@neodrag/core` became a direct dependency rather than being relied on transitively.",
+      "action": "If you drive canvas resizing yourself, prefer `onResize` and delete your own `ResizeObserver` and any p5-native `windowResized`. Running both is the common failure: two resize drivers race and the canvas flickers or lands at the wrong size. If you previously passed `hidpi={false}` expecting it to do something, it does now."
+    },
+    {
+      "package": "svelte-p5",
+      "version": "0.4.0",
+      "breaking": false,
+      "summary": "Adds the generic `SketchFn<Ext>` and `ExtendedP5<Ext>` for typing your own additions to the p5 instance.",
+      "action": "None. `SketchFn` without a type argument behaves as before."
+    },
+    {
+      "package": "svelte-p5-components",
+      "version": "0.5.0",
+      "breaking": true,
+      "summary": "The timeline selection model changed, alongside a YouTube-style scrubber. Also adds `ActivityBar`, `SidePanel` and `ContextMenu` primitives, `createMediaPlayback`, a `playheadFollowsSelectionStart` option, and inline rename on `EntityToggleList`.",
+      "action": "If you use `TimelineTrack` or `TimelineScrubber`, re-read their props before upgrading. This is the only breaking change in the library's history to date."
+    },
+    {
+      "package": "svelte-p5-components",
+      "version": "0.4.1",
+      "breaking": false,
+      "summary": "`DraggableWindow` clamps to its parent on resize.",
+      "action": "None."
+    },
+    {
+      "package": "svelte-p5-components",
+      "version": "0.4.0",
+      "breaking": false,
+      "summary": "Adds `CanvasFrame`, `EntityToggleList`, `HoverTooltip`, `SplitPane`, `TimelineTrack`, `TimelineScrubber` and `createMediaSync`.",
+      "action": "None. All additive."
+    },
+    {
+      "package": "svelte-p5-viz",
+      "version": "0.2.0",
+      "breaking": false,
+      "summary": "First real release: the panel contract and scene format.",
+      "action": "None."
+    }
+  ]
+}
