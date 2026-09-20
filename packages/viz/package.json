@@ -54,7 +54,7 @@
   "peerDependencies": {
     "p5": ">=1.11.0 <3",
     "svelte": "^5.0.0",
-    "svelte-p5": ">=0.4.0 <1"
+    "svelte-p5": ">=0.4.0 <2"
   },
   "devDependencies": {
     "@sveltejs/package": "catalog:",
