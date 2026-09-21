@@ -1,13 +1,18 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/svelte';
+import { createRawSnippet } from 'svelte';
 import EntityToggleList, { type Entity } from './EntityToggleList.svelte';
 
 // NOTE: Several structural assertions (counting `.entity-toggle-list__item`
 // elements, clicking a label by its text) hit a happy-dom + Svelte 5
 // runes interaction where entities inside a keyed `{#each}` over a
 // $derived don't render under the test harness even though they render
-// correctly in real browsers. A Playwright smoke pass in
-// `tests/examples/` covers the render-and-interact path end-to-end.
+// correctly in real browsers.
+//
+// This block previously claimed a Playwright smoke pass in `tests/examples/`
+// covered that path end to end. No such suite exists; the only Playwright in
+// this repo is in `bench/`. Per-entity rendering is therefore UNCOVERED, and
+// saying so is more useful than a comment that makes the gap look handled.
 //
 // The tests below verify what happy-dom can reliably observe: the root
 // element, the heading, the data attribute that reflects group presence,
@@ -79,5 +84,16 @@ describe('<EntityToggleList>', () => {
 		];
 		const { container } = render(EntityToggleList, { props: { entities, maxVisible: 5 } });
 		expect(container.querySelector('.entity-toggle-list__expand')).toBeNull();
+	});
+
+	it('accepts a per-entity controls snippet without throwing', () => {
+		// Per-entity output is not observable here (see the note above), so this
+		// pins the contract: the prop is accepted and mounting stays clean.
+		const controls = createRawSnippet((entity: () => Entity) => ({
+			render: () => `<button data-testid="extra-${entity().id}">extra</button>`
+		}));
+		const entities: Entity[] = [{ id: 'a', label: 'A', color: '#f00' }];
+		const { container } = render(EntityToggleList, { props: { entities, controls } });
+		expect(container.querySelector('.entity-toggle-list')).not.toBeNull();
 	});
 });
