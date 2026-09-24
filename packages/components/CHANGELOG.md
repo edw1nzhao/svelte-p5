@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v1.0.0...components-v1.1.0) (2026-09-24)
+
+
+### Features
+
+* **components:** per-entity controls snippet on EntityToggleList ([#85](https://github.com/edw1nzhao/svelte-p5/issues/85)) ([528bd2b](https://github.com/edw1nzhao/svelte-p5/commit/528bd2bf8b3cb873ae939b71567b8fc01a1bc0d5))
+
 ## [1.0.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v0.7.0...components-v1.0.0) (2026-09-20)
 
 
