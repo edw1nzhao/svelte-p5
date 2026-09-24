@@ -19,6 +19,7 @@
 </script>
 
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	// Entity visibility/color toggle panel.
 	//
 	// Canvas apps that render N separately-colored series (speakers,
@@ -50,6 +51,15 @@
 		onRename?: (id: string, nextLabel: string) => void;
 		/** Max entities to show before collapsing the remainder behind a "+N more" expander. */
 		maxVisible?: number;
+		/**
+		 * Extra controls rendered inside each entity's row, after the label.
+		 *
+		 * `visible` is deliberately a single boolean: an entity that needs more
+		 * than one independent toggle is expressing something domain-specific,
+		 * and that belongs to the consumer rather than to this type. IGS uses
+		 * this for a second, conversation-visibility toggle alongside movement.
+		 */
+		controls?: Snippet<[Entity]>;
 		/** Optional heading above the list. */
 		heading?: string;
 		class?: string;
@@ -61,6 +71,7 @@
 		onColorChange,
 		onRename,
 		maxVisible,
+		controls,
 		heading,
 		class: className = ''
 	}: Props = $props();
@@ -212,6 +223,9 @@
 							</svg>
 						</button>
 					{/if}
+					{#if controls}
+						<span class="entity-toggle-list__controls">{@render controls(entity)}</span>
+					{/if}
 				</div>
 			{/each}
 		</div>
@@ -295,6 +309,12 @@
 		transition:
 			background-color 100ms ease,
 			border-color 100ms ease;
+	}
+
+	.entity-toggle-list__controls {
+		display: inline-flex;
+		align-items: center;
+		gap: 2px;
 	}
 
 	.entity-toggle-list__item:hover {
