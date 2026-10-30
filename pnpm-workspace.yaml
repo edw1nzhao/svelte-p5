@@ -14,7 +14,7 @@ catalog:
   '@testing-library/user-event': ^14.5.0
   '@tsconfig/svelte': ^5.0.0
   '@types/p5': ^1.7.6
-  '@vitest/coverage-v8': ^3.0.0
+  '@vitest/coverage-v8': ^5.0.5
   happy-dom: ^15.0.0
   p5: ^1.11.0
   publint: ^0.3.0
@@ -23,4 +23,4 @@ catalog:
   tslib: ^2.8.0
   typescript: ^6.0.3
   vite: ^8.3.5
-  vitest: ^3.0.0
+  vitest: ^5.0.5
