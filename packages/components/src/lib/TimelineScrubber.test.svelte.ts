@@ -73,4 +73,63 @@ describe('<TimelineScrubber>', () => {
 		expect(text).toContain('[42s]');
 		expect(text).toContain('[120s]');
 	});
+
+	describe('time display with a selection', () => {
+		const formatTime = (s: number) => `[${Math.round(s)}s]`;
+		const endLabel = (container: HTMLElement) =>
+			container.querySelector('.timeline-scrubber__time-total')?.textContent;
+		const remainingLabel = (container: HTMLElement) =>
+			container.querySelector('.timeline-scrubber__time-alt')?.textContent;
+
+		it('shows the selection end instead of the duration', () => {
+			const { container } = render(TimelineScrubber, {
+				props: { duration: 120, currentTime: 10, selectionStart: 5, selectionEnd: 90, formatTime }
+			});
+			expect(endLabel(container)).toBe('[90s]');
+		});
+
+		it('counts remaining time down to the selection end', async () => {
+			const { container } = render(TimelineScrubber, {
+				props: { duration: 120, currentTime: 30, selectionStart: 0, selectionEnd: 90, formatTime }
+			});
+			await fireEvent.click(container.querySelector('.timeline-scrubber__time-display')!);
+			expect(remainingLabel(container)).toBe('-[60s]');
+		});
+
+		it('shows the duration when no selection is set', () => {
+			const { container } = render(TimelineScrubber, {
+				props: { duration: 120, currentTime: 10, formatTime }
+			});
+			expect(endLabel(container)).toBe('[120s]');
+		});
+
+		it('shows the duration when the selection is hidden', () => {
+			const { container } = render(TimelineScrubber, {
+				props: {
+					duration: 120,
+					currentTime: 10,
+					selectionStart: 5,
+					selectionEnd: 90,
+					showSelection: false,
+					formatTime
+				}
+			});
+			expect(endLabel(container)).toBe('[120s]');
+		});
+
+		it('shows the duration when showSelection is forced on without a start', () => {
+			const { container } = render(TimelineScrubber, {
+				props: { duration: 120, selectionEnd: 90, showSelection: true, formatTime }
+			});
+			expect(endLabel(container)).toBe('[120s]');
+		});
+
+		it('follows selectionEnd as it changes', async () => {
+			const { container, rerender } = render(TimelineScrubber, {
+				props: { duration: 120, currentTime: 10, selectionStart: 5, selectionEnd: 90, formatTime }
+			});
+			await rerender({ selectionEnd: 45 });
+			expect(endLabel(container)).toBe('[45s]');
+		});
+	});
 });

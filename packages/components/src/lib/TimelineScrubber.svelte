@@ -13,8 +13,8 @@
 	//
 	// Track takes the full width of the component. Controls live on a row
 	// below it: play / skip / speed on the left, time display on the right.
-	// Clicking the time display toggles between total duration and
-	// remaining time (YouTube-style).
+	// The right-hand value is the selection end when a selection is shown,
+	// otherwise the duration. Clicking it toggles to remaining time.
 	//
 	// The track itself is mostly chrome-free at rest — only the playhead
 	// and a tinted selection band are visible. Hovering the track reveals
@@ -43,7 +43,7 @@
 		speedLockedReason?: string;
 		/** Selection range start. Bindable. */
 		selectionStart?: number;
-		/** Selection range end. Bindable. */
+		/** Selection range end. Bindable. While a selection is shown, the time display counts to this. */
 		selectionEnd?: number;
 		/** Hide the selection band + handles. Default: auto (show when both bounds set). */
 		showSelection?: boolean;
@@ -102,7 +102,13 @@
 
 	let timeMode = $state<'total' | 'remaining'>('total');
 
-	const remaining = $derived(Math.max(0, duration - currentTime));
+	const hasSelection = $derived(
+		(showSelection ?? true) && selectionStart !== undefined && selectionEnd !== undefined
+	);
+	const displayEnd = $derived(
+		hasSelection ? Math.min(Math.max(0, selectionEnd as number), duration) : duration
+	);
+	const remaining = $derived(Math.max(0, displayEnd - currentTime));
 
 	function defaultFormatTime(seconds: number): string {
 		if (!isFinite(seconds)) return '00:00';
@@ -211,7 +217,7 @@
 			type="button"
 			class="timeline-scrubber__time-display"
 			aria-label="Toggle time display"
-			title={timeMode === 'total' ? 'Click to show remaining time' : 'Click to show total time'}
+			title={timeMode === 'total' ? 'Click to show remaining time' : 'Click to show end time'}
 			onclick={toggleTimeMode}
 		>
 			<span class="timeline-scrubber__time-curr">{formatTime(currentTime)}</span>
@@ -219,7 +225,7 @@
 			{#if timeMode === 'remaining'}
 				<span class="timeline-scrubber__time-alt">-{formatTime(remaining)}</span>
 			{:else}
-				<span class="timeline-scrubber__time-total">{formatTime(duration)}</span>
+				<span class="timeline-scrubber__time-total">{formatTime(displayEnd)}</span>
 			{/if}
 		</button>
 	</div>
