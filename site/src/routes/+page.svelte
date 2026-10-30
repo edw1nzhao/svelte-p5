@@ -1,14 +1,14 @@
 <script lang="ts">
-	import Hero from '$lib/components/Hero.svelte';
-	import Features from '$lib/components/Features.svelte';
-	import CodeDemo from '$lib/components/CodeDemo.svelte';
-	import Footer from '$lib/components/Footer.svelte';
-	import BasicDemo from '$lib/demos/BasicDemo.svelte';
-	import BridgeDemo from '$lib/demos/BridgeDemo.svelte';
-	import ComponentsDemo from '$lib/demos/ComponentsDemo.svelte';
-	import SharedStateDemo from '$lib/demos/SharedStateDemo.svelte';
-	import InteractionDemo from '$lib/demos/InteractionDemo.svelte';
-	import DraggableSketchDemo from '$lib/demos/DraggableSketchDemo.svelte';
+	import Hero from '#lib/components/Hero.svelte';
+	import Features from '#lib/components/Features.svelte';
+	import CodeDemo from '#lib/components/CodeDemo.svelte';
+	import Footer from '#lib/components/Footer.svelte';
+	import BasicDemo from '#lib/demos/BasicDemo.svelte';
+	import BridgeDemo from '#lib/demos/BridgeDemo.svelte';
+	import ComponentsDemo from '#lib/demos/ComponentsDemo.svelte';
+	import SharedStateDemo from '#lib/demos/SharedStateDemo.svelte';
+	import InteractionDemo from '#lib/demos/InteractionDemo.svelte';
+	import DraggableSketchDemo from '#lib/demos/DraggableSketchDemo.svelte';
 
 	let { data } = $props();
 </script>

@@ -9,7 +9,7 @@
 		CODE_LANGS,
 		type PkgManager,
 		type CodeLang
-	} from '$lib/stores/preferences.svelte';
+	} from '#lib/stores/preferences.svelte.js';
 
 	let { html }: { html: string } = $props();
 

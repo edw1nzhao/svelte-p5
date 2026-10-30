@@ -4,11 +4,11 @@
  * route handles every other doc; this one needs the bench data too.
  */
 import { error } from '@sveltejs/kit';
-import { findBySlug, adjacentDocs } from '$lib/docs/manifest';
-import { renderDoc, editUrl, viewUrl } from '$lib/docs/render';
+import { findBySlug, adjacentDocs } from '#lib/docs/manifest.js';
+import { renderDoc, editUrl, viewUrl } from '#lib/docs/render.js';
 import results from '../../../../../bench/results.json';
 import type { PageServerLoad } from './$types';
-import type { PerfResults } from '$lib/charts/PerfCharts.svelte';
+import type { PerfResults } from '#lib/charts/PerfCharts.svelte';
 
 export const prerender = true;
 

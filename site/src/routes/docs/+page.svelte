@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { docs, sections } from '$lib/docs/manifest';
+	import { docs, sections } from '#lib/docs/manifest.js';
 	import { ArrowRight, BookOpen } from '@lucide/svelte';
 </script>
 

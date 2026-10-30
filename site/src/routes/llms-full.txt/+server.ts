@@ -1,5 +1,5 @@
-import { docs } from '$lib/docs/manifest';
-import { getSource } from '$lib/docs/render';
+import { docs } from '#lib/docs/manifest.js';
+import { getSource } from '#lib/docs/render.js';
 
 export const prerender = true;
 

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Edit, ExternalLink, ArrowLeft, ArrowRight } from '@lucide/svelte';
-	import DocToc from '$lib/docs/DocToc.svelte';
-	import DocCopyButtons from '$lib/docs/DocCopyButtons.svelte';
-	import CopyForAI from '$lib/docs/CopyForAI.svelte';
-	import NoBuildDemo from '$lib/demos/NoBuildDemo.svelte';
-	import { staggerFadeUp } from '$lib/animations';
+	import DocToc from '#lib/docs/DocToc.svelte';
+	import DocCopyButtons from '#lib/docs/DocCopyButtons.svelte';
+	import CopyForAI from '#lib/docs/CopyForAI.svelte';
+	import NoBuildDemo from '#lib/demos/NoBuildDemo.svelte';
+	import { staggerFadeUp } from '#lib/animations.js';
 	import { onMount } from 'svelte';
 
 	let { data } = $props();

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { whenVisible } from '$lib/whenVisible.svelte';
+	import { whenVisible } from '#lib/whenVisible.svelte.js';
 
 	// The example file itself, verbatim — one source of truth, so the demo
 	// can't drift from the file readers are told to download.

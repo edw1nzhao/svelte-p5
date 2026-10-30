@@ -2,9 +2,9 @@
 	import CopyButton from './CopyButton.svelte';
 	import type { Snippet } from 'svelte';
 	import { onMount } from 'svelte';
-	import { staggerFadeUp } from '$lib/animations';
-	import { whenVisible } from '$lib/whenVisible.svelte';
-	import { preferences, type CodeLang } from '$lib/stores/preferences.svelte';
+	import { staggerFadeUp } from '#lib/animations.js';
+	import { whenVisible } from '#lib/whenVisible.svelte.js';
+	import { preferences, type CodeLang } from '#lib/stores/preferences.svelte.js';
 
 	type RenderedCode = { raw: string; html: string };
 

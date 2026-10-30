@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
-import { docs, findBySlug, adjacentDocs } from '$lib/docs/manifest';
-import { renderDoc, editUrl, viewUrl } from '$lib/docs/render';
+import { docs, findBySlug, adjacentDocs } from '#lib/docs/manifest.js';
+import { renderDoc, editUrl, viewUrl } from '#lib/docs/render.js';
 import type { PageServerLoad, EntryGenerator } from './$types';
 
 export const prerender = true;

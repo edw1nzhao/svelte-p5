@@ -10,7 +10,7 @@ import {
 	installNpmSnippet,
 	installBunSnippet,
 	type CodeSnippet
-} from '$lib/snippets';
+} from '#lib/snippets.js';
 
 const THEME = 'slack-dark';
 

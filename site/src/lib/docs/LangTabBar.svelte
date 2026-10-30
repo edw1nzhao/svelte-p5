@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Copy, Check } from '@lucide/svelte';
-	import { preferences, CODE_LANGS, type CodeLang } from '$lib/stores/preferences.svelte';
+	import { preferences, CODE_LANGS, type CodeLang } from '#lib/stores/preferences.svelte.js';
 
 	let {
 		figure,

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Menu, X, BookOpen } from '@lucide/svelte';
-	import DocSidebar from '$lib/docs/DocSidebar.svelte';
+	import DocSidebar from '#lib/docs/DocSidebar.svelte';
 	import type { Snippet } from 'svelte';
 
 	let { children }: { children: Snippet } = $props();
