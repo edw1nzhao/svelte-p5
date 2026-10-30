@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 
 export type PkgManager = 'bun' | 'pnpm' | 'npm';
 export type CodeLang = 'ts' | 'js';

@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 
 // Preload CSS/JS (SvelteKit default) plus the Latin woff2 variants only.
 // fontsource ships a dozen subsets per family (Cyrillic, Greek, Vietnamese…),
