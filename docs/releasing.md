@@ -9,23 +9,25 @@ No `next` branch, no `@alpha` dist-tag. For the contributor-facing quick view, s
 
 ## Workflows that drive releases
 
-| File                                   | Trigger                    | Responsibility                                                                                                    |
-| -------------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `.github/workflows/ci.yml`             | push / PR                  | Lint, typecheck, test, build — and the `pkg-pr-new publish` step that drops preview-URL sticky comments on PRs.   |
-| `.github/workflows/release-please.yml` | push to `main`             | Opens/updates the release PR; on merge, calls `publish.yml` with `--tag latest` for each affected package.        |
-| `.github/workflows/publish.yml`        | `workflow_call` (reusable) | Holds the actual `npm publish` step. Registered as the **trusted publisher** on npmjs.com for all three packages. |
+| File                                   | Trigger             | Responsibility                                                                                                    |
+| -------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `.github/workflows/ci.yml`             | push / PR           | Lint, typecheck, test, build — and the `pkg-pr-new publish` step that drops preview-URL sticky comments on PRs.   |
+| `.github/workflows/release-please.yml` | push to `main`      | Opens/updates the release PR; on merge, dispatches `publish.yml` with `--tag latest` for each released package.   |
+| `.github/workflows/publish.yml`        | `workflow_dispatch` | Holds the actual `npm publish` step. Registered as the **trusted publisher** on npmjs.com for all three packages. |
 
 `publish.yml` is what npm OIDC pins for trusted publishing. **Do not rename `publish.yml`** without updating the trusted publisher on all three packages at npmjs.com.
 
-> **The `workflow_call` path does not currently authenticate.** Both releases that have gone through it, 2026-07-21 and 2026-09-20, failed every publish job with `npm error code ENEEDAUTH`. The theory that `job_workflow_ref` reflects the called workflow, and so covers `release-please.yml` invocations automatically, does not hold in practice.
->
-> Until that is resolved, **a release needs a second, manual step**: after the release PR merges and the tags exist, dispatch `publish.yml` once per released package.
->
-> ```sh
-> gh workflow run publish.yml -f package-dir=packages/components -f ref=components-v0.7.0 -f npm-tag=latest
-> ```
->
-> Dispatched directly, the OIDC exchange succeeds and the publish is signed with provenance as expected.
+### Why `publish.yml` is dispatched, not called
+
+npm trusted publishing validates the **top-level** workflow that is running, not the workflow containing `npm publish`. When `release-please.yml` called `publish.yml` as a reusable workflow, npm saw `release-please.yml`, which is not the registered publisher. Every automated publish (0.7.0, 1.0.0, 1.1.0) failed with `npm error code ENEEDAUTH` and had to be dispatched by hand.
+
+`release-please.yml` now runs `gh workflow run publish.yml` once per released package, so each publish is its own top-level run of the registered file. Publish results appear as separate `publish` runs, not inside the `release-please` run; check those (and the registry) after a release.
+
+To republish an existing tag by hand:
+
+```sh
+gh workflow run publish.yml -R edw1nzhao/svelte-p5 -f package-dir=packages/components -f ref=components-v1.1.0 -f npm-tag=latest
+```
 
 ### Before a major
 
@@ -71,7 +73,7 @@ Types that don't bump versions: `docs`, `chore`, `ci`, `build`, `refactor`, `tes
 
 1. Land a `feat`/`fix`/etc. commit on `main` via a PR.
 2. `release-please` opens/updates a release PR titled like `chore: release 0.3.0`. It aggregates all unreleased commits into the changelog, bumps versions in affected packages, and updates `.release-please-manifest.json`.
-3. Review and merge the release PR. The `publish-core` / `publish-components` / `publish-viz` jobs fire; each publishes its package with the `latest` dist-tag via OIDC trusted publishing.
+3. Review and merge the release PR. The `dispatch-publish` job starts one `publish` run per released package; each publishes with the `latest` dist-tag via OIDC trusted publishing.
 4. Users get the new version via `pnpm add svelte-p5`.
 
 Per-package independence: if a commit only touches `packages/viz/**`, only `svelte-p5-viz` bumps. The other packages stay on their existing versions.
