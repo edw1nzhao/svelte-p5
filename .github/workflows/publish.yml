@@ -1,51 +1,20 @@
 name: publish
 
-# Reusable workflow that builds and publishes a single package to npm using
-# OIDC trusted publishing (https://docs.npmjs.com/trusted-publishers).
+# Builds and publishes one package to npm via OIDC trusted publishing. This
+# file is the trusted publisher on npmjs.com for all three packages, and npm
+# checks the top-level workflow name, so it only authenticates when run as its
+# own workflow_dispatch: release-please.yml dispatches it per released package,
+# and a maintainer can dispatch it by hand to republish an existing tag.
 #
-# This file is the one registered as the trusted publisher on npmjs.com for
-# each of svelte-p5, svelte-p5-components, and svelte-p5-viz. It's called by
-# release-please.yml when a stable release PR merges. npm's OIDC validates
-# the `job_workflow_ref` claim, which points at this file regardless of
-# which top-level workflow triggered the call.
+# `--provenance` makes the OIDC exchange explicit, so a failure surfaces as a
+# clear auth error rather than a misleading 404 on the PUT.
 #
-# The `--provenance` flag on `npm publish` is load-bearing: it forces npm to
-# exchange the GitHub Actions OIDC token for a publish credential and emit a
-# signed provenance statement. Without it, npm's auto-detection of "I'm
-# running in Actions, use OIDC" is unreliable under workflow_call — it
-# silently falls through to unauthenticated publishing and the registry
-# returns 404 on the PUT. The explicit flag makes the OIDC exchange
-# deterministic and, when it does fail, surfaces a clear error instead of a
-# misleading "package not found".
-#
-# The workflow_dispatch trigger exists so a maintainer can retroactively
-# publish an existing git tag without cutting a new release-please PR. Use
-# when a tag was created but the publish step failed (e.g. historical
-# releases before this workflow was hardened).
-#
-# Preview / canary builds do NOT go through here — they use pkg-pr-new in
-# ci.yml, which publishes to pkg.pr.new's CDN (not the npm registry) and
-# doesn't need trusted-publisher OIDC.
+# Preview builds do NOT go through here; they use pkg-pr-new in ci.yml.
 #
 # Do NOT rename this file without updating the trusted publisher entry for
 # all three packages on npmjs.com.
 
 on:
-  workflow_call:
-    inputs:
-      package-dir:
-        description: 'Path to the package to publish (e.g. packages/core)'
-        required: true
-        type: string
-      npm-tag:
-        description: 'npm dist-tag (latest, next, etc.)'
-        required: false
-        type: string
-        default: latest
-      ref:
-        description: 'Git ref to check out (defaults to the triggering ref)'
-        required: false
-        type: string
   workflow_dispatch:
     inputs:
       package-dir:

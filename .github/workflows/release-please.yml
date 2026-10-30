@@ -2,8 +2,7 @@ name: release-please
 
 # Stable release pipeline. A conventional-commit push to main opens/updates
 # a release-please PR; merging it cuts tags + GitHub releases, and the
-# publish-* jobs below call the reusable publish.yml to ship each affected
-# package to npm with the `latest` dist-tag.
+# dispatch-publish job below starts publish.yml once per released package.
 #
 # Preview / canary builds are handled separately in ci.yml via pkg-pr-new —
 # no dedicated workflow, no dist-tag, no manifest. See
@@ -17,7 +16,6 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
-  id-token: write
 
 jobs:
   release-please:
@@ -25,6 +23,9 @@ jobs:
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
       paths_released: ${{ steps.release.outputs.paths_released }}
+      core_tag: ${{ steps.release.outputs['packages/core--tag_name'] }}
+      components_tag: ${{ steps.release.outputs['packages/components--tag_name'] }}
+      viz_tag: ${{ steps.release.outputs['packages/viz--tag_name'] }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -33,26 +34,24 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  publish-core:
+  # npm trusted publishing checks the top-level workflow, so publish.yml must
+  # run as its own dispatch; under workflow_call it fails with ENEEDAUTH.
+  dispatch-publish:
     needs: release-please
-    if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/core') }}
-    uses: ./.github/workflows/publish.yml
-    with:
-      package-dir: packages/core
-      npm-tag: latest
-
-  publish-components:
-    needs: release-please
-    if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/components') }}
-    uses: ./.github/workflows/publish.yml
-    with:
-      package-dir: packages/components
-      npm-tag: latest
-
-  publish-viz:
-    needs: release-please
-    if: ${{ needs.release-please.outputs.releases_created == 'true' && contains(fromJson(needs.release-please.outputs.paths_released), 'packages/viz') }}
-    uses: ./.github/workflows/publish.yml
-    with:
-      package-dir: packages/viz
-      npm-tag: latest
+    if: ${{ needs.release-please.outputs.releases_created == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      RELEASED: ${{ needs.release-please.outputs.paths_released }}
+      OUTPUTS: ${{ toJson(needs.release-please.outputs) }}
+    steps:
+      - name: Dispatch publish.yml for each released package
+        run: |
+          for dir in $(echo "$RELEASED" | jq -r '.[]'); do
+            tag=$(echo "$OUTPUTS" | jq -r --arg k "${dir#packages/}_tag" '.[$k]')
+            echo "Dispatching publish.yml for $dir at $tag"
+            gh workflow run publish.yml -f package-dir="$dir" -f ref="$tag" -f npm-tag=latest
+          done

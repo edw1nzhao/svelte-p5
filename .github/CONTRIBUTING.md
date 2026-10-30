@@ -88,8 +88,8 @@ pnpm add https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5@main
 
 Two GitHub Actions workflows drive stable releases. You shouldn't need to touch them for normal contributions:
 
-- **`.github/workflows/release-please.yml`** — triggers on push to `main`. Opens/updates a release PR; merging it tags, releases, and publishes with `latest`.
-- **`.github/workflows/publish.yml`** — reusable workflow called by `release-please.yml`. Holds the actual build + `npm publish` steps. Registered as the **trusted publisher** on npmjs.com for all three packages. **Do not rename this file** without updating the trust config on npmjs.com.
+- **`.github/workflows/release-please.yml`** — triggers on push to `main`. Opens/updates a release PR; merging it tags, releases, and dispatches the publish with `latest`.
+- **`.github/workflows/publish.yml`** — dispatched by `release-please.yml` once per released package (npm trusted publishing only accepts it as a top-level run). Holds the actual build + `npm publish` steps. Registered as the **trusted publisher** on npmjs.com for all three packages. **Do not rename this file** without updating the trust config on npmjs.com.
 
 Preview publishing is a step inside `.github/workflows/ci.yml` — no dedicated workflow.
 
