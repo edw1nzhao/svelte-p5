@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/edw1nzhao/svelte-p5/compare/components-v1.1.0...components-v1.1.1) (2026-10-30)
+
+
+### Bug Fixes
+
+* **components:** end the scrubber time display at the selection end ([#89](https://github.com/edw1nzhao/svelte-p5/issues/89)) ([a25acdf](https://github.com/edw1nzhao/svelte-p5/commit/a25acdfe32fcce7cb4ea776fdb072e312f6a7c27))
+
 ## [1.1.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v1.0.0...components-v1.1.0) (2026-09-24)
 
 
