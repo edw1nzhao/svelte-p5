@@ -10,13 +10,13 @@
     "bench": "vite build && node ./run-bench.mjs"
   },
   "dependencies": {
-    "svelte-p5": "workspace:*",
-    "p5": "catalog:"
+    "p5": "catalog:",
+    "svelte-p5": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "catalog:",
     "@types/p5": "catalog:",
-    "playwright": "^1.50.0",
+    "playwright": "^1.64.1",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
     "typescript": "catalog:",
