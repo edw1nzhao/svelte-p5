@@ -6,7 +6,7 @@
 
 What changed in each release, what you have to do about it, and how to get from any published version to the current one.
 
-Current releases: **`svelte-p5` 1.0.0**, **`svelte-p5-components` 1.1.0**, **`svelte-p5-viz` 0.2.3**.
+Current releases: **`svelte-p5` 1.0.0**, **`svelte-p5-components` 1.1.1**, **`svelte-p5-viz` 0.2.3**.
 
 ## The rule that catches everyone
 
@@ -29,6 +29,7 @@ This is correct npm behaviour, not a bug, and it is why an app can sit several r
 
 | package                | version | requires `svelte-p5` | p5            | svelte   |
 | ---------------------- | ------- | -------------------- | ------------- | -------- |
+| `svelte-p5-components` | 1.1.1   | `^1.0.0`             | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-components` | 1.1.0   | `^1.0.0`             | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-components` | 1.0.0   | `^1.0.0`             | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-components` | 0.7.0   | `>=0.4.0 <1`         | `>=1.11.0 <3` | `^5.0.0` |
@@ -63,6 +64,12 @@ These declare a `svelte-p5` peer with no ceiling, so they claim compatibility wi
 ## Upgrade notes by version
 
 Newest first. **Action** is what you have to do; anything marked **Breaking** needs a code change.
+
+### `svelte-p5-components` 1.1.1 — 2026-10-30
+
+`TimelineScrubber`'s time display now ends at the selection end, not the full duration, whenever a selection is shown; remaining time counts down to it too.
+
+**Action:** None. With no selection, or with `showSelection={false}`, the display is unchanged.
 
 ### `svelte-p5-components` 1.1.0 — 2026-09-24
 
@@ -169,7 +176,7 @@ No consumer-facing change. Carries the unresolvable peer range described above.
 There are no required intermediate versions. Unlike a stateful server, a library has no migrations to step through, so you can jump straight to the current release from any earlier one. What you do need is to read every **Breaking** and **Action** note between your version and the target, because they compound.
 
 ```sh
-pnpm add svelte-p5@^1.0.0 svelte-p5-components@^1.1.0 svelte-p5-viz@^0.2.3
+pnpm add svelte-p5@^1.0.0 svelte-p5-components@^1.1.1 svelte-p5-viz@^0.2.3
 ```
 
 ## Checking what you are on
