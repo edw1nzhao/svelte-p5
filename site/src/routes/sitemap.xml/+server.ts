@@ -1,4 +1,4 @@
-import { docs } from '$lib/docs/manifest';
+import { docs } from '#lib/docs/manifest.js';
 
 export const prerender = true;
 

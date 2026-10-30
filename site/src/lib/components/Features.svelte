@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { staggerFadeUp } from '$lib/animations';
-	import { whenVisible } from '$lib/whenVisible.svelte';
-	import { tilt } from '$lib/actions/tilt';
+	import { staggerFadeUp } from '#lib/animations.js';
+	import { whenVisible } from '#lib/whenVisible.svelte.js';
+	import { tilt } from '#lib/actions/tilt.js';
 
 	let grid: HTMLDivElement | null = $state(null);
 	onMount(() => {

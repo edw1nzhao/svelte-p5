@@ -17,7 +17,7 @@ import { createHighlighter, type Highlighter } from 'shiki';
 import { docs, type DocEntry } from './manifest';
 import { p5Refs, P5_REFERENCE_BASE } from './p5-refs';
 import { toJavaScript } from './ts-to-js';
-import { CODE_LANGS, type CodeLang } from '$lib/stores/preferences.svelte';
+import { CODE_LANGS, type CodeLang } from '#lib/stores/preferences.svelte.js';
 
 // Eagerly load every markdown file under /docs at build time. Vite's glob is
 // statically analyzed, so it picks up files that exist at server-start. New

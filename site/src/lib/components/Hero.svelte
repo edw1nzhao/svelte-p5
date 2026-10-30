@@ -1,5 +1,5 @@
 <script lang="ts">
-	import HeroSketch from '$lib/demos/HeroSketch.svelte';
+	import HeroSketch from '#lib/demos/HeroSketch.svelte';
 	import CopyButton from './CopyButton.svelte';
 	import Badges from './Badges.svelte';
 	import BunIcon from './icons/BunIcon.svelte';
@@ -7,8 +7,8 @@
 	import NpmIcon from './icons/NpmIcon.svelte';
 	import type { Component } from 'svelte';
 	import { onMount } from 'svelte';
-	import { staggerFadeUp } from '$lib/animations';
-	import { preferences, type PkgManager } from '$lib/stores/preferences.svelte';
+	import { staggerFadeUp } from '#lib/animations.js';
+	import { preferences, type PkgManager } from '#lib/stores/preferences.svelte.js';
 
 	type InstallSnippet = { raw: string; html: string };
 

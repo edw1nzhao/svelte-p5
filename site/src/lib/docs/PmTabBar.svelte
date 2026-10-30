@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Copy, Check } from '@lucide/svelte';
-	import BunIcon from '$lib/components/icons/BunIcon.svelte';
-	import PnpmIcon from '$lib/components/icons/PnpmIcon.svelte';
-	import NpmIcon from '$lib/components/icons/NpmIcon.svelte';
-	import { preferences, type PkgManager } from '$lib/stores/preferences.svelte';
+	import BunIcon from '#lib/components/icons/BunIcon.svelte';
+	import PnpmIcon from '#lib/components/icons/PnpmIcon.svelte';
+	import NpmIcon from '#lib/components/icons/NpmIcon.svelte';
+	import { preferences, type PkgManager } from '#lib/stores/preferences.svelte.js';
 	import type { Component } from 'svelte';
 
 	let {

@@ -2,8 +2,8 @@
 	import '../app.css';
 	import type { Snippet } from 'svelte';
 	import { afterNavigate, beforeNavigate, onNavigate } from '$app/navigation';
-	import Nav from '$lib/components/Nav.svelte';
-	import FeedbackButton from '$lib/components/FeedbackButton.svelte';
+	import Nav from '#lib/components/Nav.svelte';
+	import FeedbackButton from '#lib/components/FeedbackButton.svelte';
 
 	let { children }: { children: Snippet } = $props();
 
