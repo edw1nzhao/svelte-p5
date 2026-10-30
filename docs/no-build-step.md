@@ -76,7 +76,7 @@ The part of this library that _isn't_ Svelte does work in a plain page. `svelte-
 <script src="https://cdn.jsdelivr.net/npm/p5@2/lib/p5.min.js"></script>
 <div id="sketch"></div>
 <script type="module">
-	import { hitTest, createColorCache } from 'https://esm.sh/svelte-p5/utils';
+	import { hitTest, createColorCache } from 'https://esm.sh/svelte-p5@1/utils';
 
 	const colors = createColorCache();
 
