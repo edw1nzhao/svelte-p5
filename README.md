@@ -109,10 +109,12 @@ Two channels off `main`:
 
 ## Roadmap
 
-- 0.2 - dockable panel variant (via dockview), broader test coverage
-- 0.3 - CSS Grid layout helper for multi-viz dashboards
-- 0.4 - neodrag 3 stable, bun workspace evaluation
-- 1.0 - p5.js 2.0 support, API freeze
+1.0 froze the public API on p5 1.x. Next:
+
+- **p5.js 2.x support**, as a major: p5 2 makes `setup` async and reworks the WEBGL renderer.
+- **neodrag 3 stable**, once upstream leaves `next`.
+
+Candidates with no release attached: a dockable panel variant (via dockview) and a CSS Grid layout helper for multi-viz dashboards. Nothing enters the library until real duplication across consumers calls for it; see [`docs/proposals/igs-port-roadmap.md`](./docs/proposals/igs-port-roadmap.md).
 
 ## License
 
