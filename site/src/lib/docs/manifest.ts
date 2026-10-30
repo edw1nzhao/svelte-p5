@@ -22,6 +22,13 @@ export const docs: readonly DocEntry[] = [
 		section: 'Start'
 	},
 	{
+		slug: 'no-build-step',
+		title: 'No build step',
+		description: 'Script tags, CDNs, and global vs instance mode — what works without a bundler.',
+		file: 'docs/no-build-step.md',
+		section: 'Start'
+	},
+	{
 		slug: 'architecture',
 		title: 'Three layers',
 		description: 'Primitives, components, composition.',
