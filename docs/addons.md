@@ -4,19 +4,19 @@ p5 2 add-ons are functions passed to `p5.registerAddon(function (p5, fn, lifecyc
 
 ```svelte
 <script lang="ts">
-	import type p5 from 'p5';
 	import { P5Canvas, type P5Addon, type SketchFn } from 'svelte-p5';
 
 	interface Grain {
-		grain(amount: number): void;
+		grainAmount?: number;
 	}
 
 	// Module level, so the function keeps one identity across remounts.
-	const grain: P5Addon = (_p5, fn) => {
-		fn.grain = function (this: p5, amount: number) {
+	const grain: P5Addon = (_p5, _fn, lifecycles) => {
+		lifecycles.postdraw = function () {
+			if (!this.grainAmount) return; // only sketches that opt in
 			this.loadPixels();
 			for (let i = 0; i < this.pixels.length; i += 4) {
-				const n = (Math.random() - 0.5) * amount;
+				const n = (Math.random() - 0.5) * this.grainAmount;
 				this.pixels[i] += n;
 				this.pixels[i + 1] += n;
 				this.pixels[i + 2] += n;
@@ -26,13 +26,13 @@ p5 2 add-ons are functions passed to `p5.registerAddon(function (p5, fn, lifecyc
 	};
 
 	const sketch: SketchFn<Grain> = (p) => {
+		p.grainAmount = 40;
 		p.setup = () => {
 			p.createCanvas(300, 200);
 			p.pixelDensity(1);
 		};
 		p.draw = () => {
 			p.background(230, 200, 160);
-			p.grain(40);
 		};
 	};
 </script>
@@ -52,7 +52,7 @@ Needs `svelte-p5` 1.2 and p5 2.x. For loading published add-ons that register th
 
 p5 keeps add-on hooks on the class, not on the instance, and has no way to unregister them. So:
 
-- An add-on stays registered for the rest of the page's life, and its hooks run for **every** sketch on the page, including sketches that did not list it. In the spike for this page, a second, unrelated sketch on the page ran the add-on's `predraw` and `postdraw` hooks on every frame. Guard hooks that should only apply to some sketches, for example by checking a flag your sketch sets on the instance.
+- An add-on stays registered for the rest of the page's life, and its hooks run for **every** sketch on the page, including sketches that did not list it. In the spike for this page, a second, unrelated sketch on the page ran the add-on's `predraw` and `postdraw` hooks on every frame. Guard hooks that should only apply to some sketches by checking a flag your sketch sets on the instance, as `grainAmount` does above.
 - Editing the add-on's own module under HMR creates a new function, which registers alongside the old one until a full reload.
 
 ## Lifecycle hooks, verified on p5 2.3.4
