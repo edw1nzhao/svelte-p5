@@ -192,8 +192,8 @@
 	.hero-glass {
 		background: radial-gradient(
 			ellipse 38% 72% at 50% 50%,
-			rgb(255 255 255 / 0.52),
-			rgb(255 255 255 / 0) 90%
+			color-mix(in srgb, var(--color-page) 52%, transparent),
+			color-mix(in srgb, var(--color-page) 0%, transparent) 90%
 		);
 		backdrop-filter: blur(6px) saturate(1.15);
 		-webkit-backdrop-filter: blur(6px) saturate(1.15);

@@ -94,7 +94,7 @@
 				prevH = p.height;
 			}
 
-			p.background(0, 0, 100);
+			p.clear();
 			p.strokeWeight(1);
 			for (let i = 0; i < dots.length; i++) {
 				for (let j = i + 1; j < dots.length; j++) {
@@ -192,7 +192,7 @@
 		background:
 			radial-gradient(60% 80% at 20% 30%, rgb(99 102 241 / 0.1), transparent 60%),
 			radial-gradient(50% 70% at 85% 60%, rgb(139 92 246 / 0.08), transparent 55%),
-			linear-gradient(to bottom, rgb(248 250 252), rgb(241 245 249));
+			linear-gradient(to bottom, var(--color-panel), var(--color-panel-2));
 		/* Give the hero its own named view-transition so the canvas snapshot
 		   gets a dedicated fade instead of participating in the root fade,
 		   which can look jank mid-animation over a live canvas. This does NOT

@@ -4,7 +4,17 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 		<meta name="theme-color" content="#6366f1" />
-		<meta name="color-scheme" content="light" />
+		<meta name="color-scheme" content="light dark" />
+		<script>
+			try {
+				const saved = localStorage.getItem('theme');
+				const dark =
+					saved === 'dark' ||
+					(saved !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+				document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+				document.documentElement.dataset.pfTheme = dark ? 'dark' : 'light';
+			} catch {}
+		</script>
 
 		<!-- Additional search signals for the p5 + creative-coding audience
 		     and educators. Keywords meta isn't weighted by Google directly,

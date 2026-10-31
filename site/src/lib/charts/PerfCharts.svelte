@@ -220,7 +220,7 @@
 				x2={scalingChartW - scalingPad.right}
 				y1={scalingY(tick)}
 				y2={scalingY(tick)}
-				stroke="#e2e8f0"
+				style="stroke: var(--color-line)"
 				stroke-width="1"
 			/>
 			<text
@@ -284,8 +284,8 @@
 		flex-direction: column;
 		gap: 1rem;
 		padding: 1.25rem;
-		background: rgb(248 250 252);
-		border: 1px solid rgb(226 232 240);
+		background: var(--color-panel);
+		border: 1px solid var(--color-line);
 		border-radius: 0.75rem;
 		margin: 1.5rem 0 2rem;
 	}
@@ -294,7 +294,7 @@
 		gap: 1.25rem;
 		font-size: 0.75rem;
 		font-family: var(--font-mono);
-		color: rgb(71 85 105);
+		color: var(--color-fg-muted);
 		align-items: center;
 	}
 	.dot {
@@ -314,12 +314,12 @@
 	.chart-title {
 		font-size: 0.9375rem;
 		font-weight: 600;
-		color: rgb(15 23 42);
+		color: var(--color-fg);
 		margin: 0.75rem 0 0.125rem;
 	}
 	.chart-caption {
 		font-size: 0.8125rem;
-		color: rgb(71 85 105);
+		color: var(--color-fg-muted);
 		margin: 0 0 0.5rem;
 		max-width: 56ch;
 		line-height: 1.5;
@@ -327,28 +327,28 @@
 	.label {
 		font-size: 12px;
 		font-family: var(--font-mono);
-		fill: rgb(71 85 105);
+		fill: var(--color-fg-muted);
 	}
 	.value {
 		font-size: 11px;
 		font-family: var(--font-mono);
-		fill: rgb(30 41 59);
+		fill: var(--color-fg);
 		font-weight: 600;
 	}
 	.axis {
 		font-size: 11px;
 		font-family: var(--font-mono);
-		fill: rgb(100 116 139);
+		fill: var(--color-fg-subtle);
 	}
 	.axis-title {
 		font-size: 11px;
 		font-family: var(--font-sans);
-		fill: rgb(100 116 139);
+		fill: var(--color-fg-subtle);
 		font-weight: 500;
 	}
 	.caption {
 		font-size: 11px;
 		font-family: var(--font-mono);
-		fill: rgb(100 116 139);
+		fill: var(--color-fg-subtle);
 	}
 </style>

@@ -200,7 +200,7 @@
 	const buttonBase =
 		'press inline-flex items-center gap-2 h-10 px-4 rounded-md text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong';
 	const secondary = `${buttonBase} border border-line-strong bg-page text-fg-secondary hover:bg-panel`;
-	const primary = `${buttonBase} bg-brand-strong text-white hover:bg-brand-ink`;
+	const primary = `${buttonBase} bg-indigo-600 text-white hover:bg-indigo-700`;
 </script>
 
 <Seo
@@ -246,7 +246,7 @@
 			>
 				<Play class="size-4" aria-hidden="true" />
 				Run
-				<kbd class="hidden sm:inline font-mono text-xs text-brand-ring">{modKey}+Enter</kbd>
+				<kbd class="hidden sm:inline font-mono text-xs text-indigo-100">{modKey}+Enter</kbd>
 			</button>
 
 			<label class="inline-flex items-center gap-2 h-10 text-sm text-fg-secondary">
