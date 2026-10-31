@@ -120,23 +120,32 @@ function collectCuts(sf: ts.SourceFile, text: string): Cut[] {
 			return;
 		}
 
-		// `import { P5Canvas, type SketchFn }` — drop the type specifier and
-		// the comma that separated it.
-		if (ts.isImportSpecifier(node) && node.isTypeOnly) {
-			const start = node.getStart(sf);
-			let end = node.end;
-			// Prefer eating a trailing comma; fall back to a leading one for
-			// the last specifier in the list.
-			let i = end;
-			while (i < text.length && /\s/.test(text[i]!)) i++;
-			if (text[i] === ',') {
-				end = i + 1;
-			} else {
-				const before = scanBack(text, start, ',');
-				cuts.push({ start: before, end });
+		// Cut each run of type specifiers as one range, so neighbouring runs
+		// never claim the same comma.
+		if (ts.isNamedImports(node)) {
+			const specs = node.elements;
+			const clause = node.parent;
+			if (specs.length > 0 && specs.every((s) => s.isTypeOnly)) {
+				const decl = clause.parent;
+				cuts.push(
+					clause.name
+						? { start: clause.name.end, end: node.end }
+						: { start: decl.getStart(sf), end: decl.end }
+				);
 				return;
 			}
-			cuts.push({ start, end });
+			for (let i = 0; i < specs.length; i++) {
+				if (!specs[i]!.isTypeOnly) continue;
+				let j = i;
+				while (specs[j + 1]?.isTypeOnly) j++;
+				const next = specs[j + 1];
+				cuts.push(
+					next
+						? { start: specs[i]!.getStart(sf), end: next.getStart(sf) }
+						: { start: specs[i - 1]!.end, end: specs[j]!.end }
+				);
+				i = j;
+			}
 			return;
 		}
 
@@ -283,6 +292,23 @@ export function stripTypes(source: string): string | null {
 	return out;
 }
 
+function hasTypeSyntax(source: string): boolean {
+	if (!parsesCleanly(source, ts.ScriptKind.TS)) return true;
+	const sf = ts.createSourceFile(
+		'snippet.ts',
+		source,
+		ts.ScriptTarget.Latest,
+		true,
+		ts.ScriptKind.TS
+	);
+	try {
+		return collectCuts(sf, source).length > 0;
+	} catch (err) {
+		if (err instanceof Unsupported) return true;
+		throw err;
+	}
+}
+
 /** Matches a Svelte `<script>` block, capturing its attributes and body. */
 const SCRIPT_BLOCK = /<script([^>]*)>([\s\S]*?)<\/script>/g;
 
@@ -298,13 +324,12 @@ export function svelteToJs(source: string): string | null {
 		if (!/lang\s*=\s*["']ts["']/.test(attrs)) return match;
 
 		const js = stripTypes(body);
-		// A `lang="ts"` block with no actual types still needs the attribute
-		// dropped, so fall back to the original body rather than failing.
-		const nextBody = js ?? body;
-		if (js === null && !parsesCleanly(body, ts.ScriptKind.TS)) {
+		// null also means "could not strip"; only a body with no type syntax may pass through.
+		if (js === null && hasTypeSyntax(body)) {
 			failed = true;
 			return match;
 		}
+		const nextBody = js ?? body;
 
 		const nextAttrs = attrs.replace(/\s*lang\s*=\s*["']ts["']/, '');
 		changed = true;

@@ -46,6 +46,22 @@ describe('stripTypes', () => {
 		);
 	});
 
+	it('drops several inline type specifiers wherever they sit in the list', () => {
+		const cases: [string, string][] = [
+			['{ A, type B, type C }', '{ A }'],
+			['{ type B, type C, A }', '{ A }'],
+			['{ type B, A, type C, D }', '{ A, D }'],
+			['{ A, type B, C, type D, type E }', '{ A, C }']
+		];
+		for (const [from, to] of cases) {
+			expect(stripTypes(`import ${from} from 'm';\nA();`)).toBe(`import ${to} from 'm';\nA();`);
+		}
+	});
+
+	it('drops an import whose specifiers are all inline types', () => {
+		expect(stripTypes("import { type A, type B } from 'm';\nf();")).toBe('f();');
+	});
+
 	it('removes interface and type-alias declarations', () => {
 		const src = ['interface Point {\n\tx: number;\n}', '', 'const a = 1;'].join('\n');
 		expect(stripTypes(src)).toBe('\nconst a = 1;');
@@ -136,6 +152,31 @@ describe('svelteToJs', () => {
 			].join('\n')
 		);
 		expect(out).toContain("import { P5Canvas } from 'svelte-p5';");
+	});
+
+	it('strips several inline type imports in a Svelte script', () => {
+		const out = svelteToJs(
+			[
+				'<script lang="ts">',
+				"\timport { P5Canvas, type Sketch, type SketchContext } from 'svelte-p5';",
+				'\tconst sketch: Sketch = (p) => {};',
+				'</script>',
+				'',
+				'<P5Canvas {sketch} />'
+			].join('\n')
+		);
+		expect(out).toContain("\timport { P5Canvas } from 'svelte-p5';\n\tconst sketch = (p) => {};");
+	});
+
+	it('returns null rather than a JS tab that still contains types', () => {
+		const src = '<script lang="ts">\n\tenum E { A }\n\tlet e: E = E.A;\n</script>';
+		expect(svelteToJs(src)).toBeNull();
+	});
+
+	it('drops lang="ts" from a block that has no types to strip', () => {
+		expect(svelteToJs('<script lang="ts">\n\tlet a = 1;\n</script>')).toBe(
+			'<script>\n\tlet a = 1;\n</script>'
+		);
 	});
 
 	it('returns null when there is no lang="ts" block', () => {
