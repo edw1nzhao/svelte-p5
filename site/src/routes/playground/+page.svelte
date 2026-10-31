@@ -119,7 +119,9 @@
 	onMount(() => {
 		if (/Mac|iPhone|iPad/.test(navigator.userAgent)) modKey = '⌘';
 		const token = readShareToken(location.hash);
+		const wanted = new URLSearchParams(location.search).get('example');
 		if (token) void loadShared(token).then(() => linkError && run());
+		else if (wanted && EXAMPLES.some((e) => e.id === wanted)) loadExample(wanted);
 		else run();
 
 		const onError = (e: ErrorEvent) => onUncaught(e.error);

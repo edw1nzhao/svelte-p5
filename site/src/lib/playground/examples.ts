@@ -116,11 +116,108 @@ p.draw = () => {
 };
 `;
 
+const sizeCache = `// Click the canvas to switch between reading p.width and p.height inside the
+// hot loop and caching them in locals once per frame. The Speed slider sets
+// the work per frame (3 generations per unit), so raise it on a fast machine.
+const SCALE = 2;
+let cols = 0;
+let rows = 0;
+let grid = new Uint8Array(0);
+let next = new Uint8Array(0);
+let cached = false;
+let fps = 0;
+let stepMs = 0;
+
+function reseed() {
+  cols = Math.floor(p.width / SCALE);
+  rows = Math.floor(p.height / SCALE);
+  grid = new Uint8Array(cols * rows);
+  next = new Uint8Array(cols * rows);
+  for (let i = 0; i < grid.length; i++) grid[i] = p.random() < 0.25 ? 1 : 0;
+}
+
+// Reads p.width and p.height for every neighbour lookup.
+function stepNaive() {
+  for (let y = 0; y < Math.floor(p.height / SCALE); y++) {
+    for (let x = 0; x < Math.floor(p.width / SCALE); x++) {
+      let n = 0;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          if (dx === 0 && dy === 0) continue;
+          const nx = (x + dx + Math.floor(p.width / SCALE)) % Math.floor(p.width / SCALE);
+          const ny = (y + dy + Math.floor(p.height / SCALE)) % Math.floor(p.height / SCALE);
+          n += grid[ny * Math.floor(p.width / SCALE) + nx];
+        }
+      }
+      const i = y * Math.floor(p.width / SCALE) + x;
+      next[i] = n === 3 || (n === 2 && grid[i]) ? 1 : 0;
+    }
+  }
+}
+
+// Same work, with the size read once per frame.
+function stepCached() {
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      let n = 0;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          if (dx === 0 && dy === 0) continue;
+          n += grid[((y + dy + rows) % rows) * cols + ((x + dx + cols) % cols)];
+        }
+      }
+      const i = y * cols + x;
+      next[i] = n === 3 || (n === 2 && grid[i]) ? 1 : 0;
+    }
+  }
+}
+
+p.setup = () => {
+  p.createCanvas(400, 300);
+  p.noStroke();
+  reseed();
+};
+
+p.mousePressed = () => {
+  if (p.mouseX < 0 || p.mouseY < 0 || p.mouseX > p.width || p.mouseY > p.height) return;
+  cached = !cached;
+};
+
+p.draw = () => {
+  // <Sketch> resizes the canvas to its container after setup.
+  if (cols !== Math.floor(p.width / SCALE) || rows !== Math.floor(p.height / SCALE)) reseed();
+
+  const t0 = performance.now();
+  for (let g = 0; g < Math.max(1, Math.round(bridge.state.speed * 3)); g++) {
+    if (cached) stepCached();
+    else stepNaive();
+    [grid, next] = [next, grid];
+  }
+  stepMs = p.lerp(stepMs, performance.now() - t0, 0.1);
+
+  p.background(248, 250, 252);
+  p.fill(79, 70, 229);
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (grid[y * cols + x]) p.rect(x * SCALE, y * SCALE, SCALE, SCALE);
+    }
+  }
+
+  fps = p.lerp(fps, p.frameRate(), 0.1);
+  p.fill(15, 23, 42);
+  p.rect(0, 0, 250, 22);
+  p.fill(255);
+  p.textSize(13);
+  p.text((cached ? 'cached' : 'p.width/p.height') + ': ' + fps.toFixed(0) + ' fps, step ' + stepMs.toFixed(1) + ' ms', 8, 16);
+};
+`;
+
 export const EXAMPLES: PlaygroundExample[] = [
 	{ id: 'orbit', label: 'Bridge orbit (Svelte controls)', code: orbit },
 	{ id: 'flow-field', label: 'Flow field', code: flowField },
 	{ id: 'tree', label: 'Recursive tree', code: tree },
-	{ id: 'bounce', label: 'Bouncing balls', code: bounce }
+	{ id: 'bounce', label: 'Bouncing balls', code: bounce },
+	{ id: 'size-cache', label: 'p5 2: caching width and height', code: sizeCache }
 ];
 
 export const DEFAULT_EXAMPLE = EXAMPLES[0]!;
