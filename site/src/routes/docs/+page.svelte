@@ -1,15 +1,13 @@
 <script lang="ts">
 	import { docs, sections } from '#lib/docs/manifest.js';
 	import { ArrowRight, BookOpen } from '@lucide/svelte';
+	import Seo from '#lib/components/Seo.svelte';
 </script>
 
-<svelte:head>
-	<title>Documentation - svelte-p5</title>
-	<meta
-		name="description"
-		content="Documentation for svelte-p5: Svelte 5 + p5.js integration toolkit."
-	/>
-</svelte:head>
+<Seo
+	title="Documentation - svelte-p5"
+	description="Documentation for svelte-p5: Svelte 5 + p5.js integration toolkit."
+/>
 
 <div class="max-w-3xl">
 	<header class="mb-10">
