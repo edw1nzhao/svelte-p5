@@ -3,9 +3,16 @@
 - **[Getting started](./getting-started.md)** - install, first sketch, the three layers
 - **[No build step](./no-build-step.md)** - script tags and CDNs, what works without a bundler, and the global → instance conversion
 - **[Architecture](./architecture.md)** - the layering philosophy, when to use what
+- **[State bridges](./bridges.md)** - `$state`, `createP5Bridge`, or a reactive class
+- **[Wrapper behavior comparison](./perf-comparison.md)** - measured differences from `p5-svelte`
+- **[Upgrading](./upgrading.md)** - per-version notes and the compatibility matrix
 - **Recipes** - focused how-tos
   - [Migration from `p5-svelte`](./recipes/migration-from-p5-svelte.md) - the 10-minute port
-  - [Performance](./recipes/performance.md) - the `loadFont()` trap, FES, color caching, font atlas, `drawingContext`
+  - [Performance](./recipes/performance.md) - the `loadFont()` trap on p5 1.x, FES, color caching, font atlas, `drawingContext`
+  - [Interaction](./recipes/interaction.md) - mouse, touch, hit-testing, syncing hover with UI
+  - [Shared state](./recipes/shared-state.md) - one reactive class across several sketches
+  - [Data-driven viz](./recipes/data-driven-viz.md) - loading data, master clocks, on-demand redraws
+  - [Syncing to video](./recipes/media-sync.md) - `createMediaSync` and media ports
   - [Cleanup & lifecycle](./recipes/cleanup.md) - why `p5-svelte` leaks and how `<P5Canvas>` doesn't
   - [HiDPI / retina](./recipes/hidpi.md) - `pixelDensity`, `<Sketch>`, and when to pin it
   - [WEBGL sketches](./recipes/webgl.md) - origin recentering, resize semantics, `smooth()`/`setAttributes` context rebuilds, `{#key}` canvas recreation
@@ -19,3 +26,4 @@ API docs live in each package's README:
 
 - [`svelte-p5`](../packages/core/README.md)
 - [`svelte-p5-components`](../packages/components/README.md)
+- [`svelte-p5-viz`](../packages/viz/README.md)

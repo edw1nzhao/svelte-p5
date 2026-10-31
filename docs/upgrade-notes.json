@@ -97,7 +97,7 @@
       "version": "0.5.0",
       "breaking": true,
       "summary": "The timeline selection model changed, alongside a YouTube-style scrubber. Also adds `ActivityBar`, `SidePanel` and `ContextMenu` primitives, `createMediaPlayback`, a `playheadFollowsSelectionStart` option, and inline rename on `EntityToggleList`.",
-      "action": "If you use `TimelineTrack` or `TimelineScrubber`, re-read their props before upgrading. This is the only breaking change in the library's history to date."
+      "action": "If you use `TimelineTrack` or `TimelineScrubber`, re-read their props before upgrading. Until 2.0.0 (see above) this was the only breaking change in the library's history."
     },
     {
       "package": "svelte-p5-components",

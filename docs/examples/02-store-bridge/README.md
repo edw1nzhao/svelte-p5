@@ -1,6 +1,6 @@
 # 02 - State bridge
 
-Svelte sliders drive a p5 particle field. All state lives in a single `createP5Bridge` object. Adds three things on top of example 01:
+Svelte sliders drive a p5 particle field. All state lives in a single `createP5Bridge` object. Adds four things on top of example 01:
 
 - `createP5Bridge` - a `$state` proxy both sides read and write.
 - `disableFES()` - called once at startup for production performance.

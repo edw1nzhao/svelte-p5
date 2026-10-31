@@ -72,7 +72,7 @@ Types that don't bump versions: `docs`, `chore`, `ci`, `build`, `refactor`, `tes
 ## Stable releases
 
 1. Land a `feat`/`fix`/etc. commit on `main` via a PR.
-2. `release-please` opens/updates a release PR titled like `chore: release 0.3.0`. It aggregates all unreleased commits into the changelog, bumps versions in affected packages, and updates `.release-please-manifest.json`.
+2. `release-please` opens/updates a release PR titled like `chore: release main`. It aggregates all unreleased commits into the changelog, bumps versions in affected packages, and updates `.release-please-manifest.json`.
 3. Review and merge the release PR. The `dispatch-publish` job starts one `publish` run per released package; each publishes with the `latest` dist-tag via OIDC trusted publishing.
 4. Users get the new version via `pnpm add svelte-p5`.
 
@@ -82,7 +82,7 @@ Per-package independence: if a commit only touches `packages/viz/**`, only `svel
 
 Automatic. No manual steps.
 
-Every time CI runs (PR open, PR update, push to `main`), the `Publish preview packages` step at the end of `lint-and-build` runs:
+Every time CI runs (PR open, PR update, push to `main`), the `Publish preview packages` step at the end of the p5 2.x `build-and-test` leg runs:
 
 ```bash
 pnpm dlx pkg-pr-new publish './packages/core' './packages/components' './packages/viz'
@@ -128,7 +128,7 @@ Use stable (`pnpm add svelte-p5`) for production dependencies. Preview URLs are 
 
 ### Why not use `@alpha` / `@next` dist-tags on npm?
 
-Preview-per-commit is strictly better than periodic `-alpha.N` publishes for a pre-1.0 library at this scale:
+Preview-per-commit is strictly better than periodic `-alpha.N` publishes for a library at this scale:
 
 - Every commit is installable; you don't wait for a maintainer to "cut" an alpha.
 - No npm registry pollution — the stable package's version history stays clean.
@@ -139,7 +139,7 @@ The trade-off is that preview installs go through a third-party CDN (pkg.pr.new)
 
 ## Pre-1.0 semantics
 
-`0.x` is unstable by design. Minor bumps can break the public API — see the `versioning` note in `architecture.md`. Breaking changes are always called out with `BREAKING CHANGE:` in the commit body; release-please bumps the minor (not major) while pre-1.0. When the API stabilises enough to warrant 1.0, we flip `bump-minor-pre-major: false` on each package in the config.
+`svelte-p5` and `svelte-p5-components` are past 1.0 and follow semver. `svelte-p5-viz` is still `0.x`, which is unstable by design: minor bumps can break its public API, and release-please bumps the minor (not major) for a `BREAKING CHANGE:` while `bump-minor-pre-major` is `true`. See the versioning note in [`architecture.md`](./architecture.md#versioning). When viz stabilises enough to warrant 1.0, flip `bump-minor-pre-major` to `false` for it in the config.
 
 ## Emergency / manual publish
 

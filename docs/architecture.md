@@ -1,6 +1,6 @@
 # Architecture
 
-The library has four layers. You should be able to drop in at any of them and have the ones below behave sanely.
+The library is built in layers, and you should be able to drop in at any of them and have the ones below behave sanely.
 
 ## 1. Primitives - `svelte-p5`
 
@@ -21,13 +21,14 @@ Chrome and overlays for canvas apps. Nothing in here knows what's being visualis
 - `<EntityToggleList>` is the speaker/actor/series toggle panel with colored swatches and optional grouping.
 - `<TimelineTrack>` / `<TimelineScrubber>` / `createMediaSync` cover scrubbable timelines, with segments, view windows, hover previews, and honest disclosure when video playback overrides the speed multiplier.
 - `<FPSMonitor>` and `<SketchDebug>` are rAF-driven debug overlays.
-- `<DraggableWindow>` and `<DraggableSketch>` are floating-panel primitives (neodrag-powered).
+- `<DraggableWindow>` and `<DraggableSketch>` are floating-panel primitives (neodrag-powered, with `axis`, `grid` and `threshold` props).
+- `<ActivityBar>`, `<SidePanel>` and `<ContextMenu>` are the remaining app-shell pieces, and `createMediaPlayback` drives a video from a timeline.
 
 Use this layer when you're building a real UI around sketches and don't want to rewrite ResizeObservers, drag logic, resize coordination, scrub plumbing, or FPS overlays.
 
 ## 3. Viz contract - `svelte-p5-viz`
 
-The interface between chrome and the visualizations it hosts. Added in 0.3 once a handful of consumer apps all grew the same informal shape for their viz panels — this package formalises it.
+The interface between chrome and the visualizations it hosts. Added once a handful of consumer apps all grew the same informal shape for their viz panels — this package formalises it.
 
 - `VizPanel<TData, TConfig>` is the renderer contract: a `type` string, a `defaultConfig`, and a `render(ctx, data, config)` method that returns a `PanelResult`.
 - `createPanelRegistry()` is the type→impl lookup a scene runner uses to resolve a `PanelInstance` to a live panel.
@@ -64,10 +65,10 @@ Apps that cross this boundary - drawing buttons in the canvas, simulating text i
 ## What's deliberately missing
 
 - No store API. Svelte 5's runes replace `writable()`.
-- No data-viz primitives (scales, axes, tooltips). `d3-scale` is one `pnpm add` away and does the job better than anything this library could ship. A dedicated `svelte-p5-viz` package may land if demand shows up.
+- No data-viz primitives (scales, axes, tooltips). `d3-scale` is one `pnpm add` away and does the job better than anything this library could ship. `svelte-p5-viz` is only the panel contract, not a chart library.
 - No dock manager. `<DraggableWindow>` handles floating panels; if you want VSCode-style splits and tabs, use [dockview](https://dockview.dev/).
 - No canvas-based UI. If it needs accessibility, focus, or input, it's HTML.
 
 ## Versioning
 
-0.x is unstable. Minor bumps can break public API. Anything that does will have `BREAKING CHANGE:` in its commit so release-please bumps the major line when we eventually reach 1.0. New features are additive; deprecations get a minor bump with a warning before they disappear.
+`svelte-p5` and `svelte-p5-components` follow semantic versioning: within a major, minor and patch releases never break a documented API, and anything that does carries `BREAKING CHANGE:` in its commit so release-please bumps the major. `svelte-p5-viz` is still `0.x` and unstable by design; pin an exact version. See [Upgrading](./upgrading.md) for what each release means for you.
