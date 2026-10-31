@@ -63,8 +63,8 @@
 >
 	<!-- Row 1, col 1: title + description -->
 	<div data-anim class="min-w-0 md:col-start-1 md:row-start-1">
-		<h3 class="text-xl font-semibold text-slate-900 mb-1">{title}</h3>
-		<p class="text-sm text-slate-500 leading-relaxed">{description}</p>
+		<h3 class="text-xl font-semibold text-fg mb-1">{title}</h3>
+		<p class="text-sm text-fg-subtle leading-relaxed">{description}</p>
 	</div>
 
 	<!-- Row 2, col 1: code card -->
@@ -117,7 +117,7 @@
 	<div data-anim class="flex md:col-start-2 md:row-start-2">
 		<div
 			bind:this={demoSlot}
-			class="w-full h-full border border-slate-200 rounded-xl overflow-hidden demo-container bg-slate-100"
+			class="w-full h-full border border-line rounded-xl overflow-hidden demo-container bg-panel-2"
 		>
 			{#if demoVisible}
 				{@render demo()}

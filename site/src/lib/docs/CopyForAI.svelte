@@ -95,14 +95,14 @@
 	onclick={copy}
 	title="Copy this entire page as markdown for pasting into an LLM"
 	aria-label={copied ? 'Copied for AI' : 'Copy for AI'}
-	class="press inline-flex items-center gap-1.5 sm:gap-2 h-10 px-2.5 sm:px-3 rounded-md text-xs sm:text-sm font-medium border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 text-slate-700 hover:text-slate-900 transition-colors whitespace-nowrap"
+	class="press inline-flex items-center gap-1.5 sm:gap-2 h-10 px-2.5 sm:px-3 rounded-md text-xs sm:text-sm font-medium border border-line hover:border-brand-line hover:bg-brand-soft/50 text-fg-secondary hover:text-fg transition-colors whitespace-nowrap"
 >
 	{#if copied}
 		<Check class="size-4 text-emerald-500" />
 		<span class="hidden sm:inline">Copied for AI</span>
 		<span class="sm:hidden">Copied</span>
 	{:else}
-		<Sparkles class="size-4 text-indigo-500" />
+		<Sparkles class="size-4 text-brand" />
 		<span class="hidden sm:inline">Copy for AI</span>
 		<span class="sm:hidden">AI</span>
 	{/if}

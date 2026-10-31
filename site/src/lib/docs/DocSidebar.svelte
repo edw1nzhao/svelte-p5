@@ -10,7 +10,7 @@
 <nav aria-label="Documentation">
 	{#each sections as section (section)}
 		<div class="mb-6 last:mb-0">
-			<h3 class="px-3 text-xs font-semibold text-slate-900 uppercase tracking-wider mb-1.5">
+			<h3 class="px-3 text-xs font-semibold text-fg uppercase tracking-wider mb-1.5">
 				{section}
 			</h3>
 			<ul class="flex flex-col">
@@ -20,11 +20,11 @@
 							href={`/docs/${doc.slug}`}
 							onclick={onLinkClick}
 							class="sidebar-link block px-3 min-h-9 leading-9 text-sm rounded-md no-underline"
-							class:text-indigo-700={currentSlug === doc.slug}
-							class:bg-indigo-500={false}
-							class:bg-indigo-50={currentSlug === doc.slug}
+							class:text-brand-ink={currentSlug === doc.slug}
+							class:bg-brand={false}
+							class:bg-brand-soft={currentSlug === doc.slug}
 							class:font-medium={currentSlug === doc.slug}
-							class:text-slate-600={currentSlug !== doc.slug}
+							class:text-fg-muted={currentSlug !== doc.slug}
 							aria-current={currentSlug === doc.slug ? 'page' : undefined}
 						>
 							{doc.title}

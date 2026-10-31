@@ -12,11 +12,11 @@
 	});
 </script>
 
-<section class="py-20 px-6 bg-slate-50 border-y border-slate-200">
+<section class="py-20 px-6 bg-panel border-y border-line">
 	<div bind:this={grid} class="max-w-6xl mx-auto grid grid-cols-1 gap-12 md:grid-cols-3">
 		<div use:tilt data-anim>
 			<div
-				class="size-10 flex items-center justify-center bg-indigo-500/8 text-indigo-500 rounded-[0.625rem] mb-4"
+				class="size-10 flex items-center justify-center bg-brand/8 text-brand rounded-[0.625rem] mb-4"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -33,14 +33,13 @@
 					<path d="m9 12 2 2 4-4" />
 				</svg>
 			</div>
-			<h3 class="text-lg font-semibold text-slate-900 mb-2">Correct lifecycle</h3>
-			<p class="text-[0.9375rem] leading-relaxed text-slate-500">
+			<h3 class="text-lg font-semibold text-fg mb-2">Correct lifecycle</h3>
+			<p class="text-[0.9375rem] leading-relaxed text-fg-subtle">
 				Mounts p5 in instance mode and calls <code
-					class="font-mono text-[0.8125rem] bg-indigo-500/8 px-1.5 rounded text-indigo-700"
-					>remove()</code
+					class="font-mono text-[0.8125rem] bg-brand/8 px-1.5 rounded text-brand-ink">remove()</code
 				>
 				on unmount, so toggling
-				<code class="font-mono text-[0.8125rem] bg-indigo-500/8 px-1.5 rounded text-indigo-700"
+				<code class="font-mono text-[0.8125rem] bg-brand/8 px-1.5 rounded text-brand-ink"
 					>{`{#if}`}</code
 				>
 				blocks, switching routes, or HMR all release cleanly.
@@ -49,7 +48,7 @@
 
 		<div use:tilt data-anim>
 			<div
-				class="size-10 flex items-center justify-center bg-indigo-500/8 text-indigo-500 rounded-[0.625rem] mb-4"
+				class="size-10 flex items-center justify-center bg-brand/8 text-brand rounded-[0.625rem] mb-4"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -70,13 +69,13 @@
 					<line x1="8" y1="12" x2="16" y2="12" />
 				</svg>
 			</div>
-			<h3 class="text-lg font-semibold text-slate-900 mb-2">Reactive bridge</h3>
-			<p class="text-[0.9375rem] leading-relaxed text-slate-500">
-				<code class="font-mono text-[0.8125rem] bg-indigo-500/8 px-1.5 rounded text-indigo-700"
+			<h3 class="text-lg font-semibold text-fg mb-2">Reactive bridge</h3>
+			<p class="text-[0.9375rem] leading-relaxed text-fg-subtle">
+				<code class="font-mono text-[0.8125rem] bg-brand/8 px-1.5 rounded text-brand-ink"
 					>createP5Bridge</code
 				>
 				returns a
-				<code class="font-mono text-[0.8125rem] bg-indigo-500/8 px-1.5 rounded text-indigo-700"
+				<code class="font-mono text-[0.8125rem] bg-brand/8 px-1.5 rounded text-brand-ink"
 					>$state</code
 				>
 				proxy. UI writes flow into the draw loop. Sketch writes flow back to Svelte. No stores, no subscriptions
@@ -86,7 +85,7 @@
 
 		<div use:tilt data-anim>
 			<div
-				class="size-10 flex items-center justify-center bg-indigo-500/8 text-indigo-500 rounded-[0.625rem] mb-4"
+				class="size-10 flex items-center justify-center bg-brand/8 text-brand rounded-[0.625rem] mb-4"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -104,21 +103,21 @@
 					<line x1="9" y1="21" x2="9" y2="9" />
 				</svg>
 			</div>
-			<h3 class="text-lg font-semibold text-slate-900 mb-2">Pre-built components</h3>
-			<p class="text-[0.9375rem] leading-relaxed text-slate-500">
-				<code class="font-mono text-[0.8125rem] bg-indigo-500/8 px-1.5 rounded text-indigo-700"
+			<h3 class="text-lg font-semibold text-fg mb-2">Pre-built components</h3>
+			<p class="text-[0.9375rem] leading-relaxed text-fg-subtle">
+				<code class="font-mono text-[0.8125rem] bg-brand/8 px-1.5 rounded text-brand-ink"
 					>&lt;Sketch&gt;</code
 				>
 				with ResizeObserver and HiDPI.
-				<code class="font-mono text-[0.8125rem] bg-indigo-500/8 px-1.5 rounded text-indigo-700"
+				<code class="font-mono text-[0.8125rem] bg-brand/8 px-1.5 rounded text-brand-ink"
 					>&lt;FPSMonitor&gt;</code
 				>
 				and
-				<code class="font-mono text-[0.8125rem] bg-indigo-500/8 px-1.5 rounded text-indigo-700"
+				<code class="font-mono text-[0.8125rem] bg-brand/8 px-1.5 rounded text-brand-ink"
 					>&lt;SketchDebug&gt;</code
 				>
 				overlays.
-				<code class="font-mono text-[0.8125rem] bg-indigo-500/8 px-1.5 rounded text-indigo-700"
+				<code class="font-mono text-[0.8125rem] bg-brand/8 px-1.5 rounded text-brand-ink"
 					>&lt;DraggableSketch&gt;</code
 				>
 				for floating panels. All composable, all optional.

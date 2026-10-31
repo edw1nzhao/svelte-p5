@@ -198,9 +198,9 @@
 	);
 
 	const buttonBase =
-		'press inline-flex items-center gap-2 h-10 px-4 rounded-md text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
-	const secondary = `${buttonBase} border border-slate-300 bg-white text-slate-700 hover:bg-slate-50`;
-	const primary = `${buttonBase} bg-indigo-600 text-white hover:bg-indigo-700`;
+		'press inline-flex items-center gap-2 h-10 px-4 rounded-md text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong';
+	const secondary = `${buttonBase} border border-line-strong bg-page text-fg-secondary hover:bg-panel`;
+	const primary = `${buttonBase} bg-brand-strong text-white hover:bg-brand-ink`;
 </script>
 
 <Seo
@@ -210,11 +210,11 @@
 
 <svelte:window onhashchange={onHashChange} onkeydown={onWindowKeydown} />
 
-<main id="main" class="bg-white min-h-dvh" style="padding-top: var(--header-h);">
+<main id="main" class="bg-page min-h-dvh" style="padding-top: var(--header-h);">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 		<header class="mb-6">
-			<h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Playground</h1>
-			<p class="mt-2 max-w-2xl text-base text-slate-600" style="text-wrap: pretty;">
+			<h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">Playground</h1>
+			<p class="mt-2 max-w-2xl text-base text-fg-muted" style="text-wrap: pretty;">
 				Edit an instance-mode p5 sketch and run it through svelte-p5's
 				<code class="inline">&lt;Sketch&gt;</code>. The controls under the canvas are Svelte state
 				shared with the sketch by <code class="inline">createP5Bridge</code>.
@@ -222,12 +222,12 @@
 		</header>
 
 		<div class="flex flex-wrap items-end gap-3 mb-4" role="toolbar" aria-label="Playground actions">
-			<label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+			<label class="flex flex-col gap-1 text-sm font-medium text-fg-secondary">
 				Example
 				<select
 					value={exampleId}
 					onchange={(e) => loadExample(e.currentTarget.value)}
-					class="h-10 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+					class="h-10 rounded-md border border-line-strong bg-page px-3 text-sm text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
 				>
 					{#if !exampleId}
 						<option value="" disabled>Shared sketch</option>
@@ -246,11 +246,11 @@
 			>
 				<Play class="size-4" aria-hidden="true" />
 				Run
-				<kbd class="hidden sm:inline font-mono text-xs text-indigo-100">{modKey}+Enter</kbd>
+				<kbd class="hidden sm:inline font-mono text-xs text-brand-ring">{modKey}+Enter</kbd>
 			</button>
 
-			<label class="inline-flex items-center gap-2 h-10 text-sm text-slate-700">
-				<input type="checkbox" bind:checked={autoRun} class="size-4 accent-indigo-600" />
+			<label class="inline-flex items-center gap-2 h-10 text-sm text-fg-secondary">
+				<input type="checkbox" bind:checked={autoRun} class="size-4 accent-brand-strong" />
 				Auto-run on edit
 			</label>
 
@@ -268,7 +268,7 @@
 
 		<p class="sr-only" role="status" aria-live="polite">{announcement}</p>
 		{#if announcement}
-			<p class="mb-4 text-sm text-slate-600" aria-hidden="true">{announcement}</p>
+			<p class="mb-4 text-sm text-fg-muted" aria-hidden="true">{announcement}</p>
 		{/if}
 
 		{#if linkError}
@@ -282,7 +282,7 @@
 
 		{#if sharedPending}
 			<div
-				class="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm text-indigo-900"
+				class="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-brand-line-soft bg-brand-soft px-4 py-3 text-sm text-brand-deep"
 				role="status"
 			>
 				<p class="m-0 flex-1 min-w-48">
@@ -298,13 +298,13 @@
 		<div class="grid gap-6 lg:grid-cols-2">
 			<section aria-labelledby="pg-code" class="flex min-w-0 flex-col gap-2">
 				<div class="flex items-baseline justify-between gap-3">
-					<h2 id="pg-code" class="text-sm font-semibold text-slate-900">Code</h2>
-					<span class="font-mono text-xs text-slate-500 truncate"
+					<h2 id="pg-code" class="text-sm font-semibold text-fg">Code</h2>
+					<span class="font-mono text-xs text-fg-subtle truncate"
 						>(p, bridge) =&gt; &#123; … &#125;</span
 					>
 				</div>
 				<div
-					class="h-[45svh] min-h-64 lg:h-auto lg:min-h-[28rem] lg:flex-1 overflow-hidden rounded-lg border border-slate-300 bg-white focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/30"
+					class="h-[45svh] min-h-64 lg:h-auto lg:min-h-[28rem] lg:flex-1 overflow-hidden rounded-lg border border-line-strong bg-page focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/30"
 				>
 					<CodeEditor
 						bind:value={code}
@@ -313,24 +313,24 @@
 						onRun={run}
 					/>
 				</div>
-				<p id="pg-editor-help" class="text-xs text-slate-600">
+				<p id="pg-editor-help" class="text-xs text-fg-muted">
 					{modKey}+Enter runs the sketch. Press Esc, then Tab, to move focus out of the editor.
 				</p>
 			</section>
 
 			<section aria-labelledby="pg-preview" class="flex min-w-0 flex-col gap-2">
 				<div class="flex items-baseline justify-between gap-3">
-					<h2 id="pg-preview" class="text-sm font-semibold text-slate-900">Preview</h2>
+					<h2 id="pg-preview" class="text-sm font-semibold text-fg">Preview</h2>
 					<span
 						class="text-xs font-medium"
 						class:text-red-700={status === 'Error'}
 						class:text-emerald-700={status === 'Running'}
-						class:text-slate-600={status !== 'Error' && status !== 'Running'}
+						class:text-fg-muted={status !== 'Error' && status !== 'Running'}
 						data-testid="pg-status">{status}</span
 					>
 				</div>
 				<div
-					class="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
+					class="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-line bg-panel"
 					data-testid="pg-stage"
 				>
 					{#if sketch}
@@ -345,7 +345,7 @@
 						{/key}
 					{:else}
 						<p
-							class="absolute inset-0 m-0 grid place-items-center p-4 text-center text-sm text-slate-600"
+							class="absolute inset-0 m-0 grid place-items-center p-4 text-center text-sm text-fg-muted"
 						>
 							{sharedPending
 								? 'Press Run to start the shared sketch.'
@@ -355,7 +355,7 @@
 				</div>
 
 				<div class="flex flex-wrap items-center justify-between gap-3">
-					<p class="m-0 text-xs text-slate-600">
+					<p class="m-0 text-xs text-fg-muted">
 						Frames drawn: <output class="tabular-nums" data-testid="pg-frames">{framesDrawn}</output
 						>
 						{#if loop === 'demand'}<span>(loop="demand")</span>{/if}
@@ -404,26 +404,26 @@
 					</div>
 				{/if}
 
-				<fieldset class="mt-2 rounded-lg border border-slate-200 bg-slate-50 px-4 pt-2 pb-4">
-					<legend class="px-1 text-sm font-semibold text-slate-900">
-						Bridge state <span class="font-normal text-slate-600">(Svelte → sketch)</span>
+				<fieldset class="mt-2 rounded-lg border border-line bg-panel px-4 pt-2 pb-4">
+					<legend class="px-1 text-sm font-semibold text-fg">
+						Bridge state <span class="font-normal text-fg-muted">(Svelte → sketch)</span>
 					</legend>
-					<p class="m-0 mb-3 text-xs text-slate-600">
+					<p class="m-0 mb-3 text-xs text-fg-muted">
 						Read these in the sketch as <code class="inline">bridge.state.color</code>,
 						<code class="inline">.size</code> and <code class="inline">.speed</code>.
 					</p>
 					<div class="grid gap-4 sm:grid-cols-3">
-						<label class="flex flex-col gap-1 text-sm text-slate-700">
+						<label class="flex flex-col gap-1 text-sm text-fg-secondary">
 							<span class="font-mono text-xs">color</span>
 							<input
 								type="color"
 								bind:value={bridge.state.color}
-								class="h-10 w-full cursor-pointer rounded-md border border-slate-300 bg-white p-1"
+								class="h-10 w-full cursor-pointer rounded-md border border-line-strong bg-page p-1"
 							/>
 						</label>
-						<label class="flex flex-col gap-1 text-sm text-slate-700">
+						<label class="flex flex-col gap-1 text-sm text-fg-secondary">
 							<span class="flex justify-between font-mono text-xs">
-								size <output class="tabular-nums text-slate-600">{bridge.state.size}</output>
+								size <output class="tabular-nums text-fg-muted">{bridge.state.size}</output>
 							</span>
 							<input
 								type="range"
@@ -431,12 +431,12 @@
 								max={BRIDGE_RANGES.size.max}
 								step={BRIDGE_RANGES.size.step}
 								bind:value={bridge.state.size}
-								class="h-10 w-full accent-indigo-600"
+								class="h-10 w-full accent-brand-strong"
 							/>
 						</label>
-						<label class="flex flex-col gap-1 text-sm text-slate-700">
+						<label class="flex flex-col gap-1 text-sm text-fg-secondary">
 							<span class="flex justify-between font-mono text-xs">
-								speed <output class="tabular-nums text-slate-600"
+								speed <output class="tabular-nums text-fg-muted"
 									>{bridge.state.speed.toFixed(1)}</output
 								>
 							</span>
@@ -446,7 +446,7 @@
 								max={BRIDGE_RANGES.speed.max}
 								step={BRIDGE_RANGES.speed.step}
 								bind:value={bridge.state.speed}
-								class="h-10 w-full accent-indigo-600"
+								class="h-10 w-full accent-brand-strong"
 							/>
 						</label>
 					</div>

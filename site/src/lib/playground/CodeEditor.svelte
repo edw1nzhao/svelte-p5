@@ -43,7 +43,7 @@
 <div bind:this={host} class="h-full min-h-0">
 	{#if !view}
 		<pre
-			class="m-0 h-full overflow-auto p-4 pl-12 font-mono text-sm leading-relaxed text-slate-500"
+			class="m-0 h-full overflow-auto p-4 pl-12 font-mono text-sm leading-relaxed text-fg-subtle"
 			aria-busy="true"
 			aria-label="Loading editor">{value}</pre>
 	{/if}

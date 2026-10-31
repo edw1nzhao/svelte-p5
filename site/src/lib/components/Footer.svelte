@@ -74,7 +74,7 @@
 </script>
 
 <footer
-	class="border-t border-slate-200 bg-slate-50"
+	class="border-t border-line bg-panel"
 	style="padding-bottom: max(2rem, env(safe-area-inset-bottom));"
 >
 	<div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
@@ -83,16 +83,16 @@
 			<div class="col-span-2 sm:col-span-1">
 				<a href="/" class="inline-flex items-center gap-2 no-underline mb-3">
 					<Logo class="size-7" />
-					<span class="font-mono font-semibold text-base text-slate-900">svelte-p5</span>
+					<span class="font-mono font-semibold text-base text-fg">svelte-p5</span>
 				</a>
-				<p class="text-sm text-slate-500 leading-relaxed max-w-xs">
+				<p class="text-sm text-fg-subtle leading-relaxed max-w-xs">
 					Svelte 5 + p5.js. Correct lifecycle, reactive bridge, components.
 				</p>
 			</div>
 
 			{#each sections as section (section.title)}
 				<div>
-					<h3 class="text-xs font-semibold text-slate-900 uppercase tracking-wider mb-3">
+					<h3 class="text-xs font-semibold text-fg uppercase tracking-wider mb-3">
 						{section.title}
 					</h3>
 					<ul class="flex flex-col gap-1">
@@ -103,9 +103,9 @@
 									href={link.href}
 									target={link.ext ? '_blank' : undefined}
 									rel={link.ext ? 'noopener noreferrer' : undefined}
-									class="inline-flex items-center gap-2 min-h-9 text-sm text-slate-600 hover:text-slate-900 no-underline transition-colors"
+									class="inline-flex items-center gap-2 min-h-9 text-sm text-fg-muted hover:text-fg no-underline transition-colors"
 								>
-									<Icon class="size-4 text-slate-400" />
+									<Icon class="size-4 text-fg-faint" />
 									{link.label}
 								</a>
 							</li>
@@ -116,7 +116,7 @@
 		</div>
 
 		<div
-			class="pt-6 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-slate-500"
+			class="pt-6 border-t border-line flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-fg-subtle"
 		>
 			<div>
 				&copy; {year} Edwin Zhao &middot; MIT License
@@ -126,14 +126,14 @@
 					href="https://svelte.dev"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-slate-600 underline underline-offset-2 hover:text-slate-900">Svelte</a
+					class="text-fg-muted underline underline-offset-2 hover:text-fg">Svelte</a
 				>
 				&middot;
 				<a
 					href="https://p5js.org"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-slate-600 underline underline-offset-2 hover:text-slate-900">p5.js</a
+					class="text-fg-muted underline underline-offset-2 hover:text-fg">p5.js</a
 				>
 			</div>
 		</div>

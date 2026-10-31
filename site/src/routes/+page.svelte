@@ -30,17 +30,17 @@
 
 	<section
 		id="examples"
-		class="py-16 sm:py-24 px-4 sm:px-6 bg-slate-50 border-y border-slate-200 scroll-mt-20"
+		class="py-16 sm:py-24 px-4 sm:px-6 bg-panel border-y border-line scroll-mt-20"
 	>
 		<div class="max-w-6xl mx-auto">
 			<div class="text-center mb-10 sm:mb-14">
 				<h2
-					class="font-bold text-slate-900 tracking-tight mb-3"
+					class="font-bold text-fg tracking-tight mb-3"
 					style="font-size: clamp(1.5rem, 1.25rem + 1.5vw, 2rem); text-wrap: balance;"
 				>
 					See it in action
 				</h2>
-				<p class="text-base text-slate-500 max-w-xl mx-auto" style="text-wrap: pretty;">
+				<p class="text-base text-fg-subtle max-w-xl mx-auto" style="text-wrap: pretty;">
 					Every example below is running live. The code on the right is all you need - copy, paste,
 					done.
 				</p>
@@ -112,21 +112,18 @@
 
 	<section class="py-16 sm:py-20 px-4 sm:px-6 text-center">
 		<div class="max-w-lg mx-auto">
-			<h2
-				class="font-bold text-slate-900 mb-3"
-				style="font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);"
-			>
+			<h2 class="font-bold text-fg mb-3" style="font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);">
 				Ready to build?
 			</h2>
-			<p class="text-base text-slate-500 leading-relaxed">
+			<p class="text-base text-fg-subtle leading-relaxed">
 				Check the
-				<a href="/docs" class="text-indigo-500 font-medium hover:underline">documentation</a>
+				<a href="/docs" class="text-brand font-medium hover:underline">documentation</a>
 				or dive into the
 				<a
 					href="https://github.com/edw1nzhao/svelte-p5/tree/main/docs/examples"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-indigo-500 font-medium hover:underline">runnable examples</a
+					class="text-brand font-medium hover:underline">runnable examples</a
 				>.
 			</p>
 		</div>

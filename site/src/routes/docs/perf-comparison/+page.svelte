@@ -24,7 +24,7 @@
 		<header bind:this={header} class="mb-6 sm:mb-8">
 			<div data-anim class="flex items-start justify-between gap-4 mb-2">
 				<h1
-					class="font-bold text-slate-900 tracking-tight min-w-0 flex-1"
+					class="font-bold text-fg tracking-tight min-w-0 flex-1"
 					style="font-size: clamp(1.75rem, 1.5rem + 1.5vw, 2.5rem); text-wrap: balance;"
 				>
 					{data.doc.title}
@@ -39,7 +39,7 @@
 				</div>
 			</div>
 			{#if data.doc.description}
-				<p data-anim class="text-base text-slate-500" style="text-wrap: pretty;">
+				<p data-anim class="text-base text-fg-subtle" style="text-wrap: pretty;">
 					{data.doc.description}
 				</p>
 			{/if}
@@ -51,12 +51,12 @@
 		<DocCopyButtons html={data.html} />
 
 		<!-- Edit & view links -->
-		<div class="mt-12 pt-6 border-t border-slate-200 flex flex-wrap gap-3">
+		<div class="mt-12 pt-6 border-t border-line flex flex-wrap gap-3">
 			<a
 				href={data.editUrl}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="inline-flex items-center gap-2 h-10 px-3 rounded-md text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 no-underline"
+				class="inline-flex items-center gap-2 h-10 px-3 rounded-md text-sm text-fg-muted hover:text-fg hover:bg-panel-2 no-underline"
 			>
 				<Edit class="size-4" />
 				Edit this page on GitHub
@@ -65,7 +65,7 @@
 				href={data.viewUrl}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="inline-flex items-center gap-2 h-10 px-3 rounded-md text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 no-underline"
+				class="inline-flex items-center gap-2 h-10 px-3 rounded-md text-sm text-fg-muted hover:text-fg hover:bg-panel-2 no-underline"
 			>
 				<ExternalLink class="size-4" />
 				View source ({data.doc.file})
@@ -77,13 +77,13 @@
 				{#if data.prev}
 					<a
 						href={`/docs/${data.prev.slug}`}
-						class="group p-4 rounded-lg border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors no-underline"
+						class="group p-4 rounded-lg border border-line hover:border-brand-line hover:bg-brand-soft/30 transition-colors no-underline"
 					>
-						<div class="flex items-center gap-2 text-xs font-medium text-slate-500 mb-1">
+						<div class="flex items-center gap-2 text-xs font-medium text-fg-subtle mb-1">
 							<ArrowLeft class="size-3" />
 							Previous
 						</div>
-						<div class="text-sm font-medium text-slate-900">{data.prev.title}</div>
+						<div class="text-sm font-medium text-fg">{data.prev.title}</div>
 					</a>
 				{:else}
 					<div></div>
@@ -91,15 +91,15 @@
 				{#if data.next}
 					<a
 						href={`/docs/${data.next.slug}`}
-						class="group p-4 rounded-lg border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors no-underline text-right"
+						class="group p-4 rounded-lg border border-line hover:border-brand-line hover:bg-brand-soft/30 transition-colors no-underline text-right"
 					>
 						<div
-							class="flex items-center justify-end gap-2 text-xs font-medium text-slate-500 mb-1"
+							class="flex items-center justify-end gap-2 text-xs font-medium text-fg-subtle mb-1"
 						>
 							Next
 							<ArrowRight class="size-3" />
 						</div>
-						<div class="text-sm font-medium text-slate-900">{data.next.title}</div>
+						<div class="text-sm font-medium text-fg">{data.next.title}</div>
 					</a>
 				{/if}
 			</nav>

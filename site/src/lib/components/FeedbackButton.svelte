@@ -92,18 +92,18 @@
 
 <dialog bind:this={dialogEl} onclick={onBackdropClick} class="sheet" aria-labelledby="fb-title">
 	<div
-		class="bg-white text-slate-900 sm:max-w-md sm:w-[28rem] sm:rounded-2xl sm:m-4 overflow-hidden shadow-2xl"
+		class="bg-page text-fg sm:max-w-md sm:w-[28rem] sm:rounded-2xl sm:m-4 overflow-hidden shadow-2xl"
 		style="padding-bottom: max(1rem, env(safe-area-inset-bottom));"
 	>
 		<div
-			class="flex items-center justify-between px-5 py-4 border-b border-slate-100"
+			class="flex items-center justify-between px-5 py-4 border-b border-line-soft"
 			style="padding-top: max(1rem, env(safe-area-inset-top));"
 		>
-			<h2 id="fb-title" class="text-base font-semibold text-slate-900">Send feedback</h2>
+			<h2 id="fb-title" class="text-base font-semibold text-fg">Send feedback</h2>
 			<button
 				type="button"
 				onclick={close}
-				class="inline-flex items-center justify-center size-10 rounded-md text-slate-500 hover:bg-slate-100"
+				class="inline-flex items-center justify-center size-10 rounded-md text-fg-subtle hover:bg-panel-2"
 				aria-label="Close"
 			>
 				<X class="size-5" />
@@ -112,17 +112,17 @@
 
 		<div class="p-5 flex flex-col gap-4">
 			<!-- Kind toggle -->
-			<div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-lg" role="radiogroup">
+			<div class="grid grid-cols-2 gap-2 p-1 bg-panel-2 rounded-lg" role="radiogroup">
 				<button
 					type="button"
 					role="radio"
 					aria-checked={kind === 'bug'}
 					onclick={() => (kind = 'bug')}
 					class="flex items-center justify-center gap-2 h-10 rounded-md text-sm font-medium transition-colors"
-					class:bg-white={kind === 'bug'}
-					class:text-slate-900={kind === 'bug'}
+					class:bg-page={kind === 'bug'}
+					class:text-fg={kind === 'bug'}
 					class:shadow-sm={kind === 'bug'}
-					class:text-slate-500={kind !== 'bug'}
+					class:text-fg-subtle={kind !== 'bug'}
 				>
 					<Bug class="size-4" />
 					Bug
@@ -133,10 +133,10 @@
 					aria-checked={kind === 'feature'}
 					onclick={() => (kind = 'feature')}
 					class="flex items-center justify-center gap-2 h-10 rounded-md text-sm font-medium transition-colors"
-					class:bg-white={kind === 'feature'}
-					class:text-slate-900={kind === 'feature'}
+					class:bg-page={kind === 'feature'}
+					class:text-fg={kind === 'feature'}
 					class:shadow-sm={kind === 'feature'}
-					class:text-slate-500={kind !== 'feature'}
+					class:text-fg-subtle={kind !== 'feature'}
 				>
 					<Lightbulb class="size-4" />
 					Feature
@@ -144,29 +144,29 @@
 			</div>
 
 			<label class="flex flex-col gap-1.5">
-				<span class="text-xs font-medium text-slate-700">Summary</span>
+				<span class="text-xs font-medium text-fg-secondary">Summary</span>
 				<input
 					type="text"
 					bind:value={summary}
 					placeholder={kind === 'bug' ? 'What broke?' : 'What should we add?'}
-					class="h-11 px-3 rounded-md border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none bg-white"
+					class="h-11 px-3 rounded-md border border-line focus:border-brand-line-strong focus:ring-2 focus:ring-brand-ring outline-none bg-page"
 				/>
 			</label>
 
 			<label class="flex flex-col gap-1.5">
-				<span class="text-xs font-medium text-slate-700">Details</span>
+				<span class="text-xs font-medium text-fg-secondary">Details</span>
 				<textarea
 					bind:value={details}
 					rows="4"
 					placeholder={kind === 'bug'
 						? 'Steps to reproduce, expected vs actual…'
 						: 'Describe the use case…'}
-					class="px-3 py-2 rounded-md border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none bg-white resize-y"
+					class="px-3 py-2 rounded-md border border-line focus:border-brand-line-strong focus:ring-2 focus:ring-brand-ring outline-none bg-page resize-y"
 				></textarea>
 			</label>
 
-			<div class="flex items-start gap-2 text-xs text-slate-500 bg-slate-50 rounded-md p-3">
-				<Check class="size-4 text-slate-400 shrink-0 mt-0.5" />
+			<div class="flex items-start gap-2 text-xs text-fg-subtle bg-panel rounded-md p-3">
+				<Check class="size-4 text-fg-faint shrink-0 mt-0.5" />
 				<span>
 					Opens a pre-filled GitHub issue with the page URL and your browser. You'll review before
 					submitting.

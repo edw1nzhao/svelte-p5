@@ -33,46 +33,46 @@
 		<div>
 			<h2
 				id="compat-heading"
-				class="font-bold text-slate-900 tracking-tight mb-3"
+				class="font-bold text-fg tracking-tight mb-3"
 				style="font-size: clamp(1.5rem, 1.25rem + 1.5vw, 2rem); text-wrap: balance;"
 			>
 				Compatibility
 			</h2>
-			<dl class="border-t border-slate-200 mb-6">
+			<dl class="border-t border-line mb-6">
 				{#each facts as fact (fact.label)}
-					<div class="grid grid-cols-[6rem_1fr] gap-4 py-3 border-b border-slate-200">
-						<dt class="text-sm font-semibold text-slate-900">{fact.label}</dt>
-						<dd class="text-base text-slate-600">{fact.value}</dd>
+					<div class="grid grid-cols-[6rem_1fr] gap-4 py-3 border-b border-line">
+						<dt class="text-sm font-semibold text-fg">{fact.label}</dt>
+						<dd class="text-base text-fg-muted">{fact.value}</dd>
 					</div>
 				{/each}
 			</dl>
 			<a
 				href="/docs/recipes/migration-from-p5-svelte"
-				class="group flex items-center justify-between gap-4 rounded-xl border border-indigo-500/15 bg-indigo-500/8 px-5 py-4 no-underline"
+				class="group flex items-center justify-between gap-4 rounded-xl border border-brand/15 bg-brand/8 px-5 py-4 no-underline"
 			>
 				<span>
-					<span class="block text-base font-semibold text-slate-900">Coming from p5-svelte?</span>
-					<span class="block text-sm text-slate-600"
+					<span class="block text-base font-semibold text-fg">Coming from p5-svelte?</span>
+					<span class="block text-sm text-fg-muted"
 						>It was last published in 2022 and supports p5 1 only. The migration guide takes about
 						ten minutes per component.</span
 					>
 				</span>
 				<ArrowRight
-					class="size-5 shrink-0 text-indigo-500 transition-transform group-hover:translate-x-0.5"
+					class="size-5 shrink-0 text-brand transition-transform group-hover:translate-x-0.5"
 				/>
 			</a>
 		</div>
 
 		<div>
 			<h2
-				class="font-bold text-slate-900 tracking-tight mb-3"
+				class="font-bold text-fg tracking-tight mb-3"
 				style="font-size: clamp(1.5rem, 1.25rem + 1.5vw, 2rem); text-wrap: balance;"
 			>
 				Used by
 			</h2>
-			<ul class="border-t border-slate-200 mb-6">
+			<ul class="border-t border-line mb-6">
 				{#each apps as app (app.href)}
-					<li class="border-b border-slate-200">
+					<li class="border-b border-line">
 						<a
 							href={app.href}
 							target="_blank"
@@ -80,24 +80,23 @@
 							class="group flex items-start justify-between gap-4 py-4 no-underline"
 						>
 							<span>
-								<span
-									class="block text-base font-semibold text-slate-900 group-hover:text-indigo-500"
+								<span class="block text-base font-semibold text-fg group-hover:text-brand"
 									>{app.name}</span
 								>
-								<span class="block text-sm text-slate-500">{app.note}</span>
+								<span class="block text-sm text-fg-subtle">{app.note}</span>
 							</span>
-							<ExternalLink class="size-4 shrink-0 mt-1.5 text-slate-400" />
+							<ExternalLink class="size-4 shrink-0 mt-1.5 text-fg-faint" />
 						</a>
 					</li>
 				{/each}
 			</ul>
-			<p class="text-sm text-slate-500">
+			<p class="text-sm text-fg-subtle">
 				IGS: Shapiro, Hall, Mathur and Zhao,
 				<a
 					href="https://doi.org/10.1145/3706598.3713490"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-indigo-500 font-medium hover:underline">CHI 2025</a
+					class="text-brand font-medium hover:underline">CHI 2025</a
 				>.
 			</p>
 		</div>

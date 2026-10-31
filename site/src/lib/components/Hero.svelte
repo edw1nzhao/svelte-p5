@@ -75,7 +75,7 @@
 	<div bind:this={inner} class="relative z-10 text-center w-full max-w-2xl min-w-0">
 		<h1
 			data-anim
-			class="font-bold leading-tight text-slate-900 tracking-tight mb-5"
+			class="font-bold leading-tight text-fg tracking-tight mb-5"
 			style="font-size: clamp(2rem, 1.5rem + 3vw, 3.25rem); text-wrap: balance;"
 		>
 			<span class="bg-gradient-to-br from-indigo-500 to-purple-500 bg-clip-text text-transparent"
@@ -86,11 +86,11 @@
 		</h1>
 		<p
 			data-anim
-			class="leading-relaxed text-slate-600 mb-7 max-w-xl mx-auto"
+			class="leading-relaxed text-fg-muted mb-7 max-w-xl mx-auto"
 			style="font-size: clamp(1rem, 0.95rem + 0.4vw, 1.125rem); text-wrap: pretty;"
 		>
 			A Svelte 5 toolkit for p5.js: clean lifecycles, a reactive <code
-				class="font-mono text-[0.92em] text-indigo-600 bg-indigo-50/60 px-1.5 py-0.5 rounded"
+				class="font-mono text-[0.92em] text-brand-strong bg-brand-soft/60 px-1.5 py-0.5 rounded"
 				>$state</code
 			> bridge between sketch and UI, and pre-built components. Works with p5.js 1.11 and 2.x.
 		</p>
@@ -151,17 +151,17 @@
 		<div data-anim class="flex flex-wrap justify-center gap-2 mt-6">
 			{#each ['Reactive $state bridge', 'HiDPI + auto-resize', 'Clean unmount', 'Svelte 5 runes'] as badge (badge)}
 				<span
-					class="text-xs font-medium px-3 py-1.5 rounded-full bg-indigo-500/8 text-indigo-500 border border-indigo-500/15"
+					class="text-xs font-medium px-3 py-1.5 rounded-full bg-brand/8 text-brand border border-brand/15"
 					>{badge}</span
 				>
 			{/each}
 		</div>
 
-		<p data-anim class="text-sm text-slate-600 mt-5">
+		<p data-anim class="text-sm text-fg-muted mt-5">
 			Coming from p5-svelte?
 			<a
 				href="/docs/recipes/migration-from-p5-svelte"
-				class="text-indigo-600 font-medium hover:underline">Read the migration guide</a
+				class="text-brand-strong font-medium hover:underline">Read the migration guide</a
 			>.
 		</p>
 	</div>

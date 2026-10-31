@@ -124,16 +124,16 @@
 
 <nav
 	class="site-header fixed top-0 inset-x-0 z-40 transition-all duration-200 border-b"
-	class:bg-white={scrolled || solidHeader}
+	class:bg-page={scrolled || solidHeader}
 	class:backdrop-blur-xl={scrolled || solidHeader}
-	class:border-slate-200={scrolled || solidHeader}
+	class:border-line={scrolled || solidHeader}
 	class:border-transparent={!scrolled && !solidHeader}
 	style="padding-top: env(safe-area-inset-top); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);"
 >
 	<div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3">
 		<a href="/" class="flex items-center gap-2.5 no-underline min-h-11">
 			<Logo class="size-8" wink={!isDocs} />
-			<span class="font-mono font-semibold text-lg text-slate-900">svelte-p5</span>
+			<span class="font-mono font-semibold text-lg text-fg">svelte-p5</span>
 		</a>
 
 		<!-- Desktop nav -->
@@ -141,13 +141,13 @@
 			{#each internalLinks as link (link.href)}
 				<a
 					href={link.href}
-					class="px-3 h-10 inline-flex items-center text-sm font-medium text-slate-600 no-underline transition-colors hover:text-slate-900 rounded-md hover:bg-slate-100"
+					class="px-3 h-10 inline-flex items-center text-sm font-medium text-fg-muted no-underline transition-colors hover:text-fg rounded-md hover:bg-panel-2"
 				>
 					{link.label}
 				</a>
 			{/each}
 
-			<div class="w-px h-6 bg-slate-200 mx-2"></div>
+			<div class="w-px h-6 bg-panel-3 mx-2"></div>
 
 			<!-- Packages dropdown: one button replaces three inline pills so the
 			     nav scales as we add packages without burning horizontal space.
@@ -171,7 +171,7 @@
 					onfocus={openPackages}
 					aria-expanded={packagesOpen}
 					aria-haspopup="menu"
-					class="px-3 h-10 inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 rounded-md hover:bg-slate-100"
+					class="px-3 h-10 inline-flex items-center gap-1.5 text-sm font-medium text-fg-muted transition-colors hover:text-fg rounded-md hover:bg-panel-2"
 				>
 					<Package class="size-4" />
 					Packages
@@ -188,7 +188,7 @@
 						<!-- menu-popover class wires up the CSS `@starting-style` fade +
 						     translate-up entry so the dropdown eases in instead of
 						     popping. Zero JS, zero library cost. -->
-						<div class="menu-popover rounded-md border border-slate-200 bg-white shadow-lg py-1">
+						<div class="menu-popover rounded-md border border-line bg-page shadow-lg py-1">
 							{#each packages as pkg (pkg.href)}
 								<a
 									role="menuitem"
@@ -196,12 +196,12 @@
 									target="_blank"
 									rel="noopener noreferrer"
 									onclick={() => (packagesOpen = false)}
-									class="flex items-start gap-3 px-3 py-2.5 no-underline transition-colors duration-150 hover:bg-slate-50"
+									class="flex items-start gap-3 px-3 py-2.5 no-underline transition-colors duration-150 hover:bg-panel"
 								>
-									<Package class="size-4 text-slate-400 mt-0.5 shrink-0" />
+									<Package class="size-4 text-fg-faint mt-0.5 shrink-0" />
 									<div class="flex flex-col leading-tight">
-										<span class="font-mono text-sm font-medium text-slate-900">{pkg.name}</span>
-										<span class="text-xs text-slate-500 mt-0.5">{pkg.description}</span>
+										<span class="font-mono text-sm font-medium text-fg">{pkg.name}</span>
+										<span class="text-xs text-fg-subtle mt-0.5">{pkg.description}</span>
 									</div>
 								</a>
 							{/each}
@@ -214,7 +214,7 @@
 				href="https://github.com/edw1nzhao/svelte-p5"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="size-10 inline-flex items-center justify-center text-slate-600 no-underline transition-colors hover:text-slate-900 rounded-md hover:bg-slate-100"
+				class="size-10 inline-flex items-center justify-center text-fg-muted no-underline transition-colors hover:text-fg rounded-md hover:bg-panel-2"
 				aria-label="GitHub repository"
 			>
 				<GithubIcon class="size-5" />
@@ -229,7 +229,7 @@
 		<button
 			type="button"
 			onclick={openDrawer}
-			class="md:hidden inline-flex items-center justify-center size-11 rounded-md text-slate-700 hover:bg-slate-100 transition-colors"
+			class="md:hidden inline-flex items-center justify-center size-11 rounded-md text-fg-secondary hover:bg-panel-2 transition-colors"
 			aria-label="Open menu"
 		>
 			<Menu class="size-6" />
@@ -245,21 +245,21 @@
 	aria-label="Mobile navigation"
 >
 	<div
-		class="bg-white text-slate-900 w-full sm:w-80 sm:rounded-2xl sm:m-4 overflow-hidden"
+		class="bg-page text-fg w-full sm:w-80 sm:rounded-2xl sm:m-4 overflow-hidden"
 		style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom));"
 	>
 		<div
-			class="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-slate-100"
+			class="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-line-soft"
 			style="padding-top: max(0.75rem, env(safe-area-inset-top));"
 		>
 			<div class="flex items-center gap-2">
 				<Logo class="size-7" />
-				<span class="font-mono font-semibold text-base text-slate-900">svelte-p5</span>
+				<span class="font-mono font-semibold text-base text-fg">svelte-p5</span>
 			</div>
 			<button
 				type="button"
 				onclick={closeDrawer}
-				class="inline-flex items-center justify-center size-11 rounded-md text-slate-700 hover:bg-slate-100"
+				class="inline-flex items-center justify-center size-11 rounded-md text-fg-secondary hover:bg-panel-2"
 				aria-label="Close menu"
 			>
 				<X class="size-5" />
@@ -272,14 +272,14 @@
 				<a
 					href={link.href}
 					onclick={closeDrawer}
-					class="flex items-center gap-3 px-4 min-h-12 rounded-lg text-slate-700 hover:bg-slate-100 no-underline text-base font-medium"
+					class="flex items-center gap-3 px-4 min-h-12 rounded-lg text-fg-secondary hover:bg-panel-2 no-underline text-base font-medium"
 				>
-					<Icon class="size-5 text-slate-400" />
+					<Icon class="size-5 text-fg-faint" />
 					{link.label}
 				</a>
 			{/each}
 
-			<div class="my-2 border-t border-slate-100"></div>
+			<div class="my-2 border-t border-line-soft"></div>
 
 			{#each externalLinks as link (link.href)}
 				{@const Icon = link.icon}
@@ -288,12 +288,12 @@
 					target="_blank"
 					rel="noopener noreferrer"
 					onclick={closeDrawer}
-					class="flex items-center gap-3 px-4 min-h-12 rounded-lg text-slate-700 hover:bg-slate-100 no-underline"
+					class="flex items-center gap-3 px-4 min-h-12 rounded-lg text-fg-secondary hover:bg-panel-2 no-underline"
 				>
-					<Icon class="size-5 text-slate-400" />
+					<Icon class="size-5 text-fg-faint" />
 					<div class="flex flex-col leading-tight">
 						<span class="text-base font-medium">{link.label}</span>
-						<span class="text-xs text-slate-400 font-mono">{link.sub}</span>
+						<span class="text-xs text-fg-faint font-mono">{link.sub}</span>
 					</div>
 				</a>
 			{/each}
