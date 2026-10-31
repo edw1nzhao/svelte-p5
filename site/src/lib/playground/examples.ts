@@ -2,6 +2,8 @@ export interface PlaygroundExample {
 	id: string;
 	label: string;
 	code: string;
+	/** The `<Sketch loop>` mode the example runs with; default 'always'. */
+	loop?: 'always' | 'demand';
 }
 
 const orbit = `// The sliders and colour picker write to bridge.state;
@@ -212,12 +214,34 @@ p.draw = () => {
 };
 `;
 
+const demand = `// Runs with loop="demand": draw() only runs when the bridge state changes
+// or the canvas resizes. Watch "Frames drawn" stay still while you are idle.
+p.setup = () => {
+  p.noStroke();
+};
+
+p.draw = () => {
+  p.background(248, 250, 252);
+  const c = p.color(bridge.state.color);
+  const step = bridge.state.size + 8;
+  for (let y = step / 2; y < p.height; y += step) {
+    for (let x = step / 2; x < p.width; x += step) {
+      const d = p.dist(x, y, p.width / 2, p.height / 2);
+      c.setAlpha(255 - (d * 255) / (p.width * 0.75));
+      p.fill(c);
+      p.circle(x, y, bridge.state.size * (0.4 + 0.15 * bridge.state.speed));
+    }
+  }
+};
+`;
+
 export const EXAMPLES: PlaygroundExample[] = [
 	{ id: 'orbit', label: 'Bridge orbit (Svelte controls)', code: orbit },
 	{ id: 'flow-field', label: 'Flow field', code: flowField },
 	{ id: 'tree', label: 'Recursive tree', code: tree },
 	{ id: 'bounce', label: 'Bouncing balls', code: bounce },
-	{ id: 'size-cache', label: 'p5 2: caching width and height', code: sizeCache }
+	{ id: 'size-cache', label: 'p5 2: caching width and height', code: sizeCache },
+	{ id: 'demand', label: 'On-demand rendering', code: demand, loop: 'demand' }
 ];
 
 export const DEFAULT_EXAMPLE = EXAMPLES[0]!;

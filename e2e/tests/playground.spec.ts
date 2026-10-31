@@ -86,3 +86,23 @@ test('?example= opens that example and runs it', async ({ page }) => {
 	await expect(stage(page).locator('canvas')).toBeVisible();
 	await expect(page.getByTestId('pg-status')).toHaveText('Running');
 });
+
+test('the on-demand example draws only when a control changes, and exports a PNG', async ({
+	page
+}) => {
+	await page.goto('/playground?example=demand');
+	await expect(stage(page).locator('canvas')).toBeVisible();
+	const frames = page.getByTestId('pg-frames');
+	await expect(frames).not.toHaveText('0');
+	await page.waitForTimeout(600);
+	const idle = await frames.textContent();
+	await page.waitForTimeout(1000);
+	await expect(frames).toHaveText(idle!);
+
+	await page.getByRole('slider').first().fill('60');
+	await expect(frames).toHaveText(String(Number(idle) + 1));
+
+	const download = page.waitForEvent('download');
+	await page.getByRole('button', { name: 'Export PNG' }).click();
+	expect((await download).suggestedFilename()).toBe('playground-sketch.png');
+});
