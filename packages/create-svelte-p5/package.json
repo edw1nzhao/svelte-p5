@@ -1,6 +1,6 @@
 {
   "name": "create-svelte-p5",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Scaffold a SvelteKit + svelte-p5 project: npm create svelte-p5@latest",
   "keywords": [
     "svelte",

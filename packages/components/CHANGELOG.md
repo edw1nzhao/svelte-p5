@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.1.0...components-v2.1.1) (2026-10-31)
+
+
+### Documentation
+
+* **components:** list the timeline, media and layout components ([#122](https://github.com/edw1nzhao/svelte-p5/issues/122)) ([e22eef2](https://github.com/edw1nzhao/svelte-p5/commit/e22eef2fd0de599377200d61c2ad2b4aca964d1c))
+
 ## [2.1.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.0.0...components-v2.1.0) (2026-10-31)
 
 
