@@ -16,7 +16,6 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "catalog:",
     "@tsconfig/svelte": "catalog:",
-    "@types/p5": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
     "tslib": "catalog:",
