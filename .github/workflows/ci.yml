@@ -61,6 +61,10 @@ jobs:
       - name: Build packages
         run: pnpm build
 
+      - name: Scaffold integration test
+        if: matrix.primary
+        run: pnpm --filter create-svelte-p5 test:integration
+
       - name: Lint
         if: matrix.primary
         run: pnpm lint
@@ -115,7 +119,7 @@ jobs:
       - name: Verify LICENSE in tarballs
         if: matrix.primary
         run: |
-          for pkg in packages/core packages/components packages/viz; do
+          for pkg in packages/core packages/components packages/viz packages/create-svelte-p5; do
             (cd "$pkg" && npm pack --dry-run --json | jq -e '.[0].files | map(.path) | any(. == "LICENSE")')
           done
 

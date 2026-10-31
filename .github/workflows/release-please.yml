@@ -26,6 +26,7 @@ jobs:
       paths_released: ${{ steps.release.outputs.paths_released }}
       core_tag: ${{ steps.release.outputs['packages/core--tag_name'] }}
       components_tag: ${{ steps.release.outputs['packages/components--tag_name'] }}
+      create-svelte-p5_tag: ${{ steps.release.outputs['packages/create-svelte-p5--tag_name'] }}
       viz_tag: ${{ steps.release.outputs['packages/viz--tag_name'] }}
     steps:
       - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
