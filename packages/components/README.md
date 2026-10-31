@@ -135,6 +135,14 @@ What it handles for you:
 
 Takes the same `axis`, `grid` and `threshold` props as `<DraggableWindow>`.
 
+## More components
+
+Documented on [svelte-p5.dev](https://svelte-p5.dev/docs):
+
+- **Timeline:** `<TimelineTrack>` and `<TimelineScrubber>`, with segments, selection, hover previews and an optional zoomable view window. See [Timeline zoom](https://svelte-p5.dev/docs/recipes/timeline-zoom).
+- **Media:** `createMediaSync` and `createMediaPlayback` keep a sketch's clock in step with a `<video>` or any `MediaPort`. See [Media sync](https://svelte-p5.dev/docs/recipes/media-sync). A YouTube adapter lives at `svelte-p5-components/youtube`; see [YouTube](https://svelte-p5.dev/docs/recipes/youtube).
+- **Layout and UI:** `<SplitPane>`, `<CanvasFrame>`, `<ActivityBar>`, `<SidePanel>`, `<ContextMenu>`, `<EntityToggleList>` and `<HoverTooltip>`.
+
 ## Stability
 
 `svelte-p5-components` follows semantic versioning from 1.0.0. Within a major, minor and
