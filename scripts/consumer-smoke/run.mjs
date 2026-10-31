@@ -86,10 +86,20 @@ function assertSurface(html, where) {
 	if (!m) throw new Error(`${where}: SSR output has no surface JSON`);
 	const surface = JSON.parse(m[1].replaceAll('&quot;', '"').replaceAll('&#34;', '"'));
 	const must = {
-		'svelte-p5': ['P5Canvas', 'createP5Bridge', 'disableFES'],
+		'svelte-p5': [
+			'P5Canvas',
+			'createP5Bridge',
+			'disableFES',
+			'getSketchContext',
+			'invalidate',
+			'exportCanvas',
+			'downloadCanvas',
+			'stepFrames'
+		],
 		'svelte-p5/utils': ['disableFES', 'createColorCache'],
 		'svelte-p5-components': ['Sketch', 'FPSMonitor', 'DraggableWindow'],
 		'svelte-p5-components/youtube': ['youTubePort'],
+		'svelte-p5-components/export': ['ExportButton'],
 		'svelte-p5-viz': ['createPanelRegistry', 'createSceneState']
 	};
 	for (const [entry, names] of Object.entries(must))
@@ -137,7 +147,18 @@ const gz = (s) => zlib.gzipSync(s).length;
 
 function sizeReport(dir) {
 	const rows = {};
-	const entries = ['disable-fes', 'disable-fes-utils', 'p5canvas', 'fps-monitor', 'all'];
+	const entries = [
+		'disable-fes',
+		'disable-fes-utils',
+		'p5canvas',
+		'fps-monitor',
+		'sketch-context',
+		'invalidate',
+		'export-canvas',
+		'step-frames',
+		'export-button',
+		'all'
+	];
 	for (const entry of entries) {
 		run('npx', ['vite', 'build', '--logLevel', 'error'], dir, { SMOKE_SIZE_ENTRY: entry });
 		const out = path.join(dir, 'dist-size', entry);
@@ -166,8 +187,10 @@ function assertTreeShaking(rows) {
 		if (extra.length) fail(`${entry} pulled in ${extra.join(', ')}`);
 		if (rows[entry].p5Chunk) fail(`${entry} bundled p5`);
 	}
-	if (has('p5canvas', /fontAtlas|colorCache|hitTest|createP5Bridge/))
+	if (has('p5canvas', /fontAtlas|colorCache|hitTest|createP5Bridge|dist\/export\.js/))
 		fail('P5Canvas pulled in unrelated utils');
+	if (has('export-canvas', /P5Canvas|render\.js/))
+		fail('exportCanvas pulled in the canvas component');
 	if (has('fps-monitor', /DraggableWindow|neodrag|Timeline/)) fail('FPSMonitor pulled in windows');
 	if (has('fps-monitor', /neodrag/) || rows['fps-monitor'].p5Chunk)
 		fail('FPSMonitor pulled in p5/neodrag');
