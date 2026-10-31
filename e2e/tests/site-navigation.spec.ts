@@ -13,6 +13,23 @@ test('Examples link from a docs page lands on the examples section', async ({ pa
 	await expect.poll(() => examplesInView(page)).toBe(true);
 });
 
+test('buttons show the pointer cursor', async ({ page }) => {
+	for (const path of ['/', '/docs/getting-started', '/playground']) {
+		await page.goto(path);
+		const cursors = await page.locator('button:not(:disabled):visible').evaluateAll((buttons) =>
+			buttons.map((b) => ({
+				label: b.getAttribute('aria-label') ?? b.textContent?.trim().slice(0, 30),
+				cursor: getComputedStyle(b).cursor
+			}))
+		);
+		expect(cursors.length, path).toBeGreaterThan(0);
+		expect(
+			cursors.filter((c) => c.cursor !== 'pointer'),
+			path
+		).toEqual([]);
+	}
+});
+
 test('a new page starts at the top and Back restores the previous position', async ({ page }) => {
 	await page.goto('/');
 	await page.evaluate(() => window.scrollTo(0, 1200));

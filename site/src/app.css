@@ -5,6 +5,14 @@
 @import '@fontsource-variable/inter/wght.css';
 @import '@fontsource-variable/jetbrains-mono/wght.css';
 
+/* Tailwind 4 preflight resets buttons to the default cursor; restore the pointer. */
+@layer base {
+	button:not(:disabled),
+	[role='button']:not(:disabled) {
+		cursor: pointer;
+	}
+}
+
 @theme {
 	--font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
 	--font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
