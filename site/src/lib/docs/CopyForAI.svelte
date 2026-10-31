@@ -90,6 +90,7 @@
 
 <button
 	bind:this={btn}
+	data-pagefind-ignore
 	type="button"
 	onclick={copy}
 	title="Copy this entire page as markdown for pasting into an LLM"

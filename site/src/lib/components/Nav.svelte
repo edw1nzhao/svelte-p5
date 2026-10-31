@@ -2,6 +2,7 @@
 	import { Menu, X, Package, BookOpen, FlaskConical, ChevronDown, Play } from '@lucide/svelte';
 	import GithubIcon from './icons/GithubIcon.svelte';
 	import Logo from './Logo.svelte';
+	import SiteSearch from './SiteSearch.svelte';
 	import { page } from '$app/state';
 
 	let scrolled = $state(false);
@@ -218,6 +219,10 @@
 			>
 				<GithubIcon class="size-5" />
 			</a>
+		</div>
+
+		<div class="ml-auto md:ml-0">
+			<SiteSearch />
 		</div>
 
 		<!-- Mobile trigger -->

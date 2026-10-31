@@ -382,7 +382,7 @@ export async function renderDoc(doc: DocEntry): Promise<RenderedDoc> {
 
 		// Anchor positioned absolutely so it doesn't shift heading text.
 		// `aria-label` is plain text, so it can use the decoded form too.
-		return `<${tag} id="${id}" class="heading-anchor"><a href="#${id}" class="anchor" aria-label="Link to ${escapeHtml(plain)}">#</a>${inner}</${tag}>`;
+		return `<${tag} id="${id}" class="heading-anchor"><a href="#${id}" class="anchor" data-pagefind-ignore aria-label="Link to ${escapeHtml(plain)}">#</a>${inner}</${tag}>`;
 	});
 
 	// --- Post-process links ---
