@@ -1,6 +1,6 @@
 {
   "name": "svelte-p5-components",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Svelte 5 components for p5.js sketches: responsive HiDPI canvas, FPS monitor, debug overlay, draggable windows, timeline and media controls. Supports p5.js 1.11+ and 2.x.",
   "keywords": [
     "svelte",

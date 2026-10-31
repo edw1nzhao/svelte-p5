@@ -1,6 +1,6 @@
 {
-  "packages/core": "1.2.0",
-  "packages/components": "2.2.0",
-  "packages/viz": "0.3.2",
+  "packages/core": "1.3.0",
+  "packages/components": "2.3.0",
+  "packages/viz": "0.3.3",
   "packages/create-svelte-p5": "0.2.0"
 }
