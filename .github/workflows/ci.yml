@@ -61,6 +61,25 @@ jobs:
       - name: Build packages
         run: pnpm build
 
+      - name: Check packed types (attw)
+        if: matrix.primary
+        run: pnpm check:package
+
+      - name: Consumer smoke (npm, p5 2.x)
+        if: matrix.primary
+        timeout-minutes: 5
+        run: pnpm smoke:consumer
+
+      - name: Consumer smoke (npm, p5 1.11 + @types/p5)
+        if: matrix.primary
+        timeout-minutes: 5
+        run: pnpm smoke:consumer --p5 1.11 --no-size
+
+      - name: Consumer smoke (Bun, p5 2.x)
+        if: matrix.primary
+        timeout-minutes: 5
+        run: pnpm smoke:consumer --pm bun --no-size
+
       - name: Scaffold integration test
         if: matrix.primary
         run: pnpm --filter create-svelte-p5 test:integration
