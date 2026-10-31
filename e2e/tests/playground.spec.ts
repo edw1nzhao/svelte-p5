@@ -106,3 +106,26 @@ test('the on-demand example draws only when a control changes, and exports a PNG
 	await page.getByRole('button', { name: 'Export PNG' }).click();
 	expect((await download).suggestedFilename()).toBe('playground-sketch.png');
 });
+
+test('a shared on-demand sketch keeps its loop mode and control values', async ({
+	page,
+	context
+}) => {
+	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+	await page.goto('/playground?example=demand');
+	await page.getByRole('slider').first().fill('60');
+	await page.getByRole('button', { name: 'Copy link' }).click();
+	await expect(page).toHaveURL(/&size=60/);
+
+	const fresh = await context.newPage();
+	await openPlayground(fresh, new URL(page.url()).hash);
+	await expect(fresh.getByRole('slider').first()).toHaveValue('60');
+	await fresh.getByRole('button', { name: 'Run shared sketch' }).click();
+	await expect(fresh.getByText('(loop="demand")')).toBeVisible();
+	const frames = fresh.getByTestId('pg-frames');
+	await expect(frames).not.toHaveText('0');
+	await fresh.waitForTimeout(600);
+	const idle = await frames.textContent();
+	await fresh.waitForTimeout(800);
+	await expect(frames).toHaveText(idle!);
+});

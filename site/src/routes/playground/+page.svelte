@@ -6,7 +6,7 @@
 	import type p5 from 'p5';
 	import { Play, Link, FileCode, Download } from '@lucide/svelte';
 	import CodeEditor from '#lib/playground/CodeEditor.svelte';
-	import { BRIDGE_DEFAULTS, BRIDGE_RANGES } from '#lib/playground/bridge.js';
+	import { BRIDGE_DEFAULTS, BRIDGE_RANGES, type LoopMode } from '#lib/playground/bridge.js';
 	import { DEFAULT_EXAMPLE, EXAMPLES } from '#lib/playground/examples.js';
 	import {
 		compileSketch,
@@ -15,7 +15,13 @@
 		toSketchError,
 		type SketchError
 	} from '#lib/playground/runner.js';
-	import { decodeSketch, encodeSketch, readShareToken, shareHash } from '#lib/playground/share.js';
+	import {
+		decodeSketch,
+		encodeSketch,
+		readShareSettings,
+		readShareToken,
+		shareHash
+	} from '#lib/playground/share.js';
 	import { toSvelteComponent } from '#lib/playground/svelte-export.js';
 	import Seo from '#lib/components/Seo.svelte';
 
@@ -25,6 +31,7 @@
 
 	let code = $state(DEFAULT_EXAMPLE.code);
 	let exampleId = $state(DEFAULT_EXAMPLE.id);
+	let sharedLoop = $state<LoopMode>('always');
 	let sketch: ((p: p5) => void) | null = $state(null);
 	let runId = $state(0);
 	let error: SketchError | null = $state(null);
@@ -70,6 +77,9 @@
 	async function loadShared(token: string) {
 		try {
 			code = await decodeSketch(token);
+			const settings = readShareSettings(location.hash);
+			sharedLoop = settings.loop;
+			Object.assign(bridge.state, settings.bridge);
 			exampleId = '';
 			sketch = null;
 			error = null;
@@ -91,14 +101,15 @@
 	async function copyLink() {
 		const token = await encodeSketch(code);
 		writtenToken = token;
-		const url = `${location.origin}${location.pathname}${shareHash(token)}`;
+		const settings = { loop, bridge: $state.snapshot(bridge.state) };
+		const url = `${location.origin}${location.pathname}${shareHash(token, settings)}`;
 		await replaceState(url, {});
 		await copyText(url, 'Link copied. Opening it shows this sketch, ready to run.');
 	}
 
 	function copyComponent() {
 		void copyText(
-			toSvelteComponent(code, $state.snapshot(bridge.state)),
+			toSvelteComponent(code, $state.snapshot(bridge.state), loop),
 			'Svelte component copied.'
 		);
 	}
@@ -150,7 +161,9 @@
 		return () => clearTimeout(timer);
 	});
 
-	const loop = $derived(EXAMPLES.find((e) => e.id === exampleId)?.loop ?? 'always');
+	const loop = $derived(
+		exampleId ? (EXAMPLES.find((e) => e.id === exampleId)?.loop ?? 'always') : sharedLoop
+	);
 
 	$effect(() => {
 		const p = instance;

@@ -1,4 +1,4 @@
-import { BRIDGE_RANGES, usesBridge, type BridgeValues } from './bridge.js';
+import { BRIDGE_RANGES, usesBridge, type BridgeValues, type LoopMode } from './bridge.js';
 
 function indent(code: string, prefix: string): string {
 	return code
@@ -9,8 +9,18 @@ function indent(code: string, prefix: string): string {
 }
 
 /** Builds a complete `.svelte` file that runs `body` through svelte-p5. */
-export function toSvelteComponent(body: string, bridge: BridgeValues): string {
+export function toSvelteComponent(
+	body: string,
+	bridge: BridgeValues,
+	loop: LoopMode = 'always'
+): string {
 	const withBridge = usesBridge(body);
+	const sketchProps =
+		loop === 'demand'
+			? withBridge
+				? '{sketch} {bridge} loop="demand"'
+				: '{sketch} loop="demand"'
+			: '{sketch}';
 	const sketchBody = indent(body.replace(/<\/script/gi, '<\\/script'), '\t\t');
 	const { size, speed } = BRIDGE_RANGES;
 
@@ -46,7 +56,7 @@ ${sketchBody}
 </script>
 
 <div class="sketch">
-	<Sketch {sketch} />
+	<Sketch ${sketchProps} />
 </div>
 ${controls}
 <style>
