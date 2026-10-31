@@ -31,8 +31,8 @@ export default defineConfig({
 			reuseExistingServer: !process.env.CI
 		},
 		{
-			command: `pnpm exec vite preview --host 127.0.0.1 --port ${sitePort} --strictPort`,
-			cwd: '../site',
+			// The deployed bundle, including the search index pagefind adds after vite build.
+			command: `sirv ../site/build --dev --quiet --host 127.0.0.1 --port ${sitePort}`,
 			url: `http://127.0.0.1:${sitePort}/playground`,
 			reuseExistingServer: !process.env.CI
 		}

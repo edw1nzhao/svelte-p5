@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Edit, ExternalLink, ArrowLeft, ArrowRight } from '@lucide/svelte';
+	import { page } from '$app/state';
 	import DocToc from '#lib/docs/DocToc.svelte';
 	import DocCopyButtons from '#lib/docs/DocCopyButtons.svelte';
 	import CopyForAI from '#lib/docs/CopyForAI.svelte';
@@ -19,7 +20,7 @@
 <Seo title="{data.doc.title} - svelte-p5 docs" description={data.doc.description} />
 
 <div class="lg:grid lg:grid-cols-[1fr_14rem] lg:gap-10">
-	<article class="min-w-0">
+	<article class="min-w-0" data-pagefind-body data-pagefind-meta="url:{page.url.pathname}">
 		<header bind:this={header} class="mb-6 sm:mb-8">
 			<div data-anim class="flex items-start justify-between gap-4 mb-2">
 				<h1
