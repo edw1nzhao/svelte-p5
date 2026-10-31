@@ -1,0 +1,25 @@
+{
+  "name": "@svelte-p5/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json",
+    "test:browser": "vite build && playwright test"
+  },
+  "dependencies": {
+    "p5": "catalog:",
+    "svelte-p5": "workspace:*",
+    "svelte-p5-components": "workspace:*"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@types/p5": "catalog:",
+    "svelte": "catalog:",
+    "svelte-check": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

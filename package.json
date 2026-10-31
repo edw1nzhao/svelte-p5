@@ -2,7 +2,7 @@
   "name": "svelte-p5-monorepo",
   "version": "0.0.0",
   "private": true,
-  "description": "Svelte 5 + p5.js integration toolkit — layered primitives, components, and patterns",
+  "description": "Svelte 5 + p5.js integration toolkit \u2014 layered primitives, components, and patterns",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/edw1nzhao/svelte-p5.git"
@@ -20,6 +20,7 @@
     "lint": "prettier --check . && eslint .",
     "lint:fix": "prettier --write . && eslint . --fix",
     "test": "pnpm -r test",
+    "test:browser": "pnpm --filter @svelte-p5/e2e test:browser",
     "prepare": "husky",
     "docs:upgrade": "node scripts/build-upgrade-doc.mjs",
     "docs:upgrade:check": "node scripts/build-upgrade-doc.mjs --check",
