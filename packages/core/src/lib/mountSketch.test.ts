@@ -10,6 +10,7 @@ const node = {} as HTMLElement;
 
 // p5 1.x: setup runs synchronously inside the constructor, its return value ignored.
 class FakeP5v1 implements Host {
+	static VERSION = '1.11.0';
 	static disableFriendlyErrors = false;
 	setup?: () => unknown;
 	constructor(sketch: Sketch) {
@@ -25,6 +26,7 @@ class FakeP5v1 implements Host {
 
 // p5 2.x: the constructor starts an un-awaited async start that awaits presetup, then setup.
 class FakeP5v2 implements Host {
+	static VERSION = '2.3.4';
 	static disableFriendlyErrors = false;
 	setup?: () => unknown;
 	started: Promise<void>;
@@ -159,9 +161,19 @@ describe('mountSketch on p5 2 semantics', () => {
 		expect(log.at(-1)).toBe('setupDone');
 	});
 
-	it('fires onReady straight after construction when the sketch has no setup', () => {
+	it('fires onReady after p5 has started when the sketch has no setup', async () => {
 		const { onReady } = mount(FakeP5v2, () => {});
+		expect(onReady).not.toHaveBeenCalled();
+		await flush();
 		expect(onReady).toHaveBeenCalledOnce();
+		expect(log).toEqual([
+			'ctor:fes=false',
+			'ctor:end',
+			'created',
+			'presetup',
+			'ready:true',
+			'setupDone'
+		]);
 	});
 
 	it('does not fire onReady when an async setup rejects', async () => {
