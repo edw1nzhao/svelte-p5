@@ -331,7 +331,7 @@ export async function renderDoc(doc: DocEntry): Promise<RenderedDoc> {
 						const dataAttrs = PMS.map(
 							(pm) => `data-source-${pm}="${escapeAttr(variants[pm]!.source)}"`
 						).join(' ');
-						return `<figure class="code-block pm-tabs" data-cbid="${id}" data-pm-tabs ${dataAttrs}><div class="pm-tabs-mount" aria-hidden="true"></div>${blocks}</figure>`;
+						return `<figure class="code-block pm-tabs" data-cbid="${id}" data-pm-tabs ${dataAttrs}><div class="pm-tabs-mount"></div>${blocks}</figure>`;
 					}
 				}
 
@@ -353,7 +353,7 @@ export async function renderDoc(doc: DocEntry): Promise<RenderedDoc> {
 					const dataAttrs = CODE_LANGS.map(
 						(l) => `data-source-${l}="${escapeAttr(variants[l].source)}"`
 					).join(' ');
-					return `<figure class="code-block lang-tabs" data-cbid="${id}" data-lang-tabs ${dataAttrs}><div class="lang-tabs-mount" aria-hidden="true"></div>${blocks}</figure>`;
+					return `<figure class="code-block lang-tabs" data-cbid="${id}" data-lang-tabs ${dataAttrs}><div class="lang-tabs-mount"></div>${blocks}</figure>`;
 				}
 
 				// Wrap in a figure so the copy button is anchored relative to the block,

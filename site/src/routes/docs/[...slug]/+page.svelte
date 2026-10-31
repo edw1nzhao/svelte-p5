@@ -82,7 +82,7 @@
 						href={`/docs/${data.prev.slug}`}
 						class="group p-4 rounded-lg border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors no-underline"
 					>
-						<div class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-1">
+						<div class="flex items-center gap-2 text-xs font-medium text-slate-500 mb-1">
 							<ArrowLeft class="size-3" />
 							Previous
 						</div>
@@ -97,7 +97,7 @@
 						class="group p-4 rounded-lg border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors no-underline text-right"
 					>
 						<div
-							class="flex items-center justify-end gap-2 text-xs font-medium text-slate-400 mb-1"
+							class="flex items-center justify-end gap-2 text-xs font-medium text-slate-500 mb-1"
 						>
 							Next
 							<ArrowRight class="size-3" />
@@ -169,7 +169,7 @@
 		font-family: var(--font-mono);
 		font-size: 0.6875rem;
 		font-weight: 500;
-		color: rgb(100 116 139);
+		color: rgb(148 163 184);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		pointer-events: none;
@@ -241,14 +241,14 @@
 		margin-bottom: 0.375rem;
 	}
 	:global(.prose-doc a) {
-		color: rgb(99 102 241);
+		color: rgb(79 70 229);
 		text-decoration: underline;
 		text-underline-offset: 2px;
 		text-decoration-thickness: 1px;
 		text-decoration-color: rgb(199 210 254);
 	}
 	:global(.prose-doc a:hover) {
-		text-decoration-color: rgb(99 102 241);
+		text-decoration-color: rgb(79 70 229);
 	}
 	:global(.prose-doc :not(pre) > code) {
 		font-family: var(--font-mono);

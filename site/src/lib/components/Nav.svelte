@@ -130,7 +130,7 @@
 	style="padding-top: env(safe-area-inset-top); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);"
 >
 	<div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3">
-		<a href="/" class="flex items-center gap-2.5 no-underline min-h-11" aria-label="svelte-p5 home">
+		<a href="/" class="flex items-center gap-2.5 no-underline min-h-11">
 			<Logo class="size-8" wink={!isDocs} />
 			<span class="font-mono font-semibold text-lg text-slate-900">svelte-p5</span>
 		</a>

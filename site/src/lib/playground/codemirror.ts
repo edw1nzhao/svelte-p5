@@ -42,7 +42,7 @@ export function createEditor(options: EditorOptions): EditorView {
 		options.onRun();
 		return true;
 	};
-	const attrs: Record<string, string> = { 'aria-label': options.label };
+	const attrs: Record<string, string> = { 'aria-label': options.label, tabindex: '0' };
 	if (options.describedBy) attrs['aria-describedby'] = options.describedBy;
 
 	return new EditorView({
