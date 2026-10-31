@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Menu, X, Package, BookOpen, FlaskConical, ChevronDown } from '@lucide/svelte';
+	import { Menu, X, Package, BookOpen, FlaskConical, ChevronDown, Play } from '@lucide/svelte';
 	import GithubIcon from './icons/GithubIcon.svelte';
 	import Logo from './Logo.svelte';
 	import { page } from '$app/state';
@@ -27,6 +27,7 @@
 
 	const internalLinks = [
 		{ href: '/docs', label: 'Docs', icon: BookOpen },
+		{ href: '/playground', label: 'Playground', icon: Play },
 		{ href: '/#examples', label: 'Examples', icon: FlaskConical }
 	];
 
@@ -70,6 +71,7 @@
 	];
 
 	let isDocs = $derived(page.url.pathname.startsWith('/docs'));
+	let solidHeader = $derived(isDocs || page.url.pathname.startsWith('/playground'));
 
 	// Click-outside + Escape dismiss for the Packages dropdown. Only attached
 	// while the menu is open so we don't burn listeners in the common state.
@@ -121,10 +123,10 @@
 
 <nav
 	class="site-header fixed top-0 inset-x-0 z-40 transition-all duration-200 border-b"
-	class:bg-white={scrolled || isDocs}
-	class:backdrop-blur-xl={scrolled || isDocs}
-	class:border-slate-200={scrolled || isDocs}
-	class:border-transparent={!scrolled && !isDocs}
+	class:bg-white={scrolled || solidHeader}
+	class:backdrop-blur-xl={scrolled || solidHeader}
+	class:border-slate-200={scrolled || solidHeader}
+	class:border-transparent={!scrolled && !solidHeader}
 	style="padding-top: env(safe-area-inset-top); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);"
 >
 	<div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3">

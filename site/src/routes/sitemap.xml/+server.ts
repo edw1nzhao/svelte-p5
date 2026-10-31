@@ -10,6 +10,7 @@ export function GET() {
 	const urls = [
 		{ loc: `${SITE}/`, priority: '1.0', changefreq: 'weekly' },
 		{ loc: `${SITE}/docs`, priority: '0.9', changefreq: 'weekly' },
+		{ loc: `${SITE}/playground`, priority: '0.7', changefreq: 'monthly' },
 		...docs.map((d) => ({
 			loc: `${SITE}/docs/${d.slug}`,
 			priority: '0.8',
