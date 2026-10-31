@@ -2,7 +2,7 @@
   "name": "svelte-p5-monorepo",
   "version": "0.0.0",
   "private": true,
-  "description": "Svelte 5 + p5.js integration toolkit \u2014 layered primitives, components, and patterns",
+  "description": "Svelte 5 + p5.js integration toolkit — layered primitives, components, and patterns",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/edw1nzhao/svelte-p5.git"
@@ -25,10 +25,13 @@
     "docs:upgrade": "node scripts/build-upgrade-doc.mjs",
     "docs:upgrade:check": "node scripts/build-upgrade-doc.mjs --check",
     "check:peers": "node scripts/check-peer-ranges.mjs",
+    "check:package": "node scripts/check-package-types.mjs",
+    "smoke:consumer": "node scripts/consumer-smoke/run.mjs",
     "docs:snippets": "node scripts/check-doc-snippets.mjs",
     "docs:links": "node scripts/check-doc-links.mjs"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@eslint/js": "^10.0.1",
