@@ -25,7 +25,8 @@
     "docs:upgrade": "node scripts/build-upgrade-doc.mjs",
     "docs:upgrade:check": "node scripts/build-upgrade-doc.mjs --check",
     "check:peers": "node scripts/check-peer-ranges.mjs",
-    "docs:snippets": "node scripts/check-doc-snippets.mjs"
+    "docs:snippets": "node scripts/check-doc-snippets.mjs",
+    "docs:links": "node scripts/check-doc-links.mjs"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
