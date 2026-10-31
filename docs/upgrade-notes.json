@@ -10,6 +10,13 @@
     },
     {
       "package": "svelte-p5",
+      "version": "1.1.0",
+      "breaking": false,
+      "summary": "p5.js 2.x is officially supported and tested alongside 1.11+. CI runs the unit tests and a real-browser test of `<P5Canvas>` and `<Sketch>` against both. Also fixes `onReady` on p5 2.x for a sketch with no `setup()`: it fired before p5 had created its default canvas, so `<Sketch>` never sized the canvas and never called your `onReady`.",
+      "action": "None. p5 2 users should upgrade to get the `onReady` timing fix from 1.0.1 and the no-`setup()` fix above."
+    },
+    {
+      "package": "svelte-p5",
       "version": "1.0.1",
       "breaking": false,
       "summary": "Fixes two p5 2.x incompatibilities. `P5Canvas` now calls `onReady` after the sketch's `setup()` has finished (awaited if it is `async`); on p5 2.x it used to fire before `setup()` ran, so `<Sketch>` sized the canvas and `createCanvas()` then overwrote it. `disableFES()` now also turns off the Friendly Error System on p5 2.x by setting `p5.disableFriendlyErrors` before each instance is created.",

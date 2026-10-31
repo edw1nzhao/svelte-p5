@@ -42,8 +42,8 @@ updates:
         update-types:
           - 'minor'
     ignore:
-      # p5 v2 is a deliberate future release (see README roadmap). Bumps
-      # to p5@2+ will be reintroduced when we explicitly support them.
+      # Dev tracks p5 2.x and the peer range stops at <3. p5@3 needs a
+      # deliberate support decision and a new CI leg, not a bot bump.
       - dependency-name: 'p5'
         update-types: ['version-update:semver-major']
 

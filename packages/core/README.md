@@ -147,8 +147,9 @@ The public API is `P5Canvas`, `createP5Bridge`, the exported types, and everythi
 `utils`. Anything reachable only through a deep import path is internal and may change in
 a minor.
 
-p5 itself is a peer dependency pinned to `>=1.11.0 <3`. p5 2.x changes `setup` to async
-and reworks the WEBGL renderer, so support for it will land as a major.
+p5 itself is a peer dependency pinned to `>=1.11.0 <3`. p5 1.11+ and 2.x are both supported
+and tested: CI runs the unit tests and a real-browser test of `<P5Canvas>` and `<Sketch>`
+against each. On p5 2, use `svelte-p5` 1.0.1 or later for the `onReady` timing fix.
 
 See [Upgrading](https://svelte-p5.dev/docs/upgrading) for per-version notes and the compatibility matrix.
 
