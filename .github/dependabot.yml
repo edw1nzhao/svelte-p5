@@ -12,6 +12,11 @@ updates:
       prefix: 'chore'
       include: 'scope'
     groups:
+      # neodrag is a 3.0 prerelease whose "patch" bumps break the API, so it
+      # moves as one group and is excluded from auto-merge.
+      neodrag:
+        patterns:
+          - '@neodrag/*'
       # Patch groups match first and auto-merge (dependabot-auto-merge.yml);
       # a group reports its highest update type, so patch must stay separate.
       dev-deps-patch:
@@ -22,7 +27,6 @@ updates:
         patterns:
           - 'svelte'
           - 'p5'
-          - '@neodrag/*'
         update-types:
           - 'patch'
       # One PR for all minor updates across dev deps.
@@ -35,7 +39,6 @@ updates:
         patterns:
           - 'svelte'
           - 'p5'
-          - '@neodrag/*'
         update-types:
           - 'minor'
     ignore:
