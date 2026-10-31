@@ -4,7 +4,8 @@
 	import { createP5Bridge, downloadCanvas } from 'svelte-p5';
 	import { Sketch } from 'svelte-p5-components';
 	import type p5 from 'p5';
-	import { Play, Link, FileCode, Download } from '@lucide/svelte';
+	import { Play, Pause, Link, FileCode, Download } from '@lucide/svelte';
+	import { prefersReducedMotion } from 'svelte/motion';
 	import CodeEditor from '#lib/playground/CodeEditor.svelte';
 	import { BRIDGE_DEFAULTS, BRIDGE_RANGES, type LoopMode } from '#lib/playground/bridge.js';
 	import { DEFAULT_EXAMPLE, EXAMPLES } from '#lib/playground/examples.js';
@@ -43,6 +44,8 @@
 	let modKey = $state('Ctrl');
 	let instance = $state<p5 | null>(null);
 	let framesDrawn = $state(0);
+	let pauseChoice = $state<boolean | null>(null);
+	const paused = $derived(pauseChoice ?? prefersReducedMotion.current);
 
 	let lastRunCode = '';
 	let writtenToken: string | null = null;
@@ -183,7 +186,15 @@
 	}
 
 	let status = $derived(
-		sharedPending ? 'Waiting for Run' : error ? 'Error' : sketch ? 'Running' : 'Stopped'
+		sharedPending
+			? 'Waiting for Run'
+			: error
+				? 'Error'
+				: sketch
+					? paused
+						? 'Paused'
+						: 'Running'
+					: 'Stopped'
 	);
 
 	const buttonBase =
@@ -326,7 +337,7 @@
 						{#key runId}
 							<Sketch
 								{sketch}
-								{loop}
+								loop={paused ? 'manual' : loop}
 								{bridge}
 								bind:instance
 								style="position: absolute; inset: 0; overflow: hidden;"
@@ -348,11 +359,30 @@
 						Frames drawn: <output class="tabular-nums" data-testid="pg-frames">{framesDrawn}</output
 						>
 						{#if loop === 'demand'}<span>(loop="demand")</span>{/if}
+						{#if paused && pauseChoice === null}
+							<span>Paused because your system asks for reduced motion.</span>
+						{/if}
 					</p>
-					<button type="button" class={secondary} onclick={exportPng} disabled={!instance}>
-						<Download class="size-4" aria-hidden="true" />
-						Export PNG
-					</button>
+					<div class="flex flex-wrap gap-3">
+						<button
+							type="button"
+							class={secondary}
+							aria-pressed={paused}
+							onclick={() => (pauseChoice = !paused)}
+							disabled={!instance}
+						>
+							{#if paused}
+								<Play class="size-4" aria-hidden="true" />
+							{:else}
+								<Pause class="size-4" aria-hidden="true" />
+							{/if}
+							Pause
+						</button>
+						<button type="button" class={secondary} onclick={exportPng} disabled={!instance}>
+							<Download class="size-4" aria-hidden="true" />
+							Export PNG
+						</button>
+					</div>
 				</div>
 
 				{#if error}
