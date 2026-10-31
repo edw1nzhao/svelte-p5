@@ -10,8 +10,9 @@ vi.mock('p5', () => {
 		height = 0;
 		resizeCanvas = vi.fn();
 		pixelDensity = vi.fn();
+		draws = 0;
 		get frameCount() {
-			return Math.floor(performance.now() / 10);
+			return ++this.draws;
 		}
 		remove = vi.fn();
 		constructor(sketch: (p: FakeP5) => void) {
@@ -63,7 +64,7 @@ describe('sketch context', () => {
 	it('lets FPSMonitor find the instance without an instance prop', async () => {
 		const { container, ready } = await renderOverlay();
 		expect(ready).not.toBeNull();
-		// An unconnected monitor stays at 0 fps; the fake draws about 100 frames a second.
+		// An unconnected monitor stays at 0 fps; the fake counts a draw on every read.
 		await vi.waitFor(
 			() =>
 				expect(container.querySelector('.fps-monitor')?.textContent).toMatch(/^\s*[1-9]\d* fps/),
