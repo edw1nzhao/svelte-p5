@@ -136,3 +136,39 @@ test('example sketches describe their canvas for screen readers', async ({ page 
 		stage(page).locator('canvas [role="region"][aria-label="Canvas Description"]')
 	).toHaveText('A recursive branching tree whose branches bend with the mouse position.');
 });
+
+async function framesStayStill(page: Page) {
+	const frames = page.getByTestId('pg-frames');
+	await expect(frames).not.toHaveText('0');
+	await page.waitForTimeout(600);
+	const still = await frames.textContent();
+	await page.waitForTimeout(800);
+	await expect(frames).toHaveText(still!);
+	return Number(still);
+}
+
+test('Pause stops the sketch and Resume restarts it', async ({ page }) => {
+	await page.goto('/playground?example=bounce');
+	await expect(stage(page).locator('canvas')).toBeVisible();
+	const pause = page.getByRole('button', { name: 'Pause' });
+	await expect(pause).toHaveAttribute('aria-pressed', 'false');
+
+	await pause.click();
+	await expect(pause).toHaveAttribute('aria-pressed', 'true');
+	await expect(page.getByTestId('pg-status')).toHaveText('Paused');
+	const still = await framesStayStill(page);
+
+	await pause.click();
+	await expect
+		.poll(async () => Number(await page.getByTestId('pg-frames').textContent()))
+		.toBeGreaterThan(still + 10);
+});
+
+test('with reduced motion the sketch starts paused on its first frame', async ({ page }) => {
+	await page.emulateMedia({ reducedMotion: 'reduce' });
+	await page.goto('/playground?example=bounce');
+	await expect(stage(page).locator('canvas')).toBeVisible();
+	await expect(page.getByRole('button', { name: 'Pause' })).toHaveAttribute('aria-pressed', 'true');
+	await expect(page.getByText('reduced motion')).toBeVisible();
+	expect(await framesStayStill(page)).toBeLessThanOrEqual(2);
+});

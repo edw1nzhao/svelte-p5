@@ -62,6 +62,37 @@ Follow p5's guidance: say what is on the canvas and what it does, in the present
 
 Leave decorative canvases undescribed and hide them instead, with `aria-hidden="true"` on a wrapping element, as the svelte-p5.dev home page does for its background sketch.
 
+## Reduced motion
+
+Some people set their system to reduce motion because animation makes them unwell. Svelte's [`prefersReducedMotion`](https://svelte.dev/docs/svelte/svelte-motion#prefersReducedMotion) reads that setting, and the `loop` prop turns it into a sketch that draws its first frame and then waits:
+
+```svelte
+<script lang="ts">
+	import { prefersReducedMotion } from 'svelte/motion';
+	import { P5Canvas, type SketchFn } from 'svelte-p5';
+
+	let t = 0;
+	const sketch: SketchFn = (p) => {
+		p.setup = () => {
+			p.createCanvas(400, 200);
+		};
+		p.draw = () => {
+			p.background(245);
+			p.circle(200 + Math.sin(t) * 150, 100, 40);
+			t += 0.05;
+		};
+	};
+</script>
+
+<P5Canvas
+	{sketch}
+	loop={prefersReducedMotion.current ? 'manual' : 'always'}
+	description="A circle swinging from side to side."
+/>
+```
+
+With `'manual'` the sketch redraws only when you call `invalidate(instance)`, so a still sketch can still respond to its controls. Give people a way to start the animation anyway: the playground's Pause button starts pressed under reduced motion, and pressing it resumes the sketch.
+
 ## Beyond a description
 
 For sketches whose content is the point, such as charts or diagrams, p5's [`textOutput()`](https://p5js.org/reference/p5/textOutput/) and [`gridOutput()`](https://p5js.org/reference/p5/gridOutput/) generate a running description of the shapes on the canvas. Call them from `setup()`; they work inside `<P5Canvas>` like any other p5 function.
