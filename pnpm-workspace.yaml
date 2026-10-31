@@ -14,6 +14,7 @@ catalog:
   '@testing-library/svelte': ^5.4.2
   '@testing-library/user-event': ^14.6.8
   '@tsconfig/svelte': ^5.0.0
+  '@types/youtube': ^0.3.0
   '@vitest/coverage-v8': ^5.0.5
   happy-dom: ^21.0.4
   p5: ^2.3.4

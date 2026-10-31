@@ -54,6 +54,8 @@ interface MediaSource {
 
 ### A YouTube adapter
 
+For production use, prefer the maintained adapter in `svelte-p5-components/youtube`; see [Syncing a timeline to YouTube](./youtube.md). The version below shows the shape of a port.
+
 The iframe API reports state changes but never emits a continuous time event, so this adapter implements `subscribe` for state and lets the helper sample the clock.
 
 ```ts
