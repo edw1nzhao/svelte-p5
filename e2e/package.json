@@ -6,7 +6,7 @@
   "scripts": {
     "build": "vite build",
     "typecheck": "svelte-check --tsconfig ./tsconfig.json",
-    "test:browser": "vite build && playwright test"
+    "test:browser": "vite build && pnpm --filter @svelte-p5/site build && playwright test"
   },
   "dependencies": {
     "p5": "catalog:",
