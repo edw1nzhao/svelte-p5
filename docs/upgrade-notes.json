@@ -2,6 +2,20 @@
   "$comment": "Hand-written upgrade guidance. Everything mechanical (versions, dates, peer ranges, the compatibility matrix, broken-peer detection) is derived from the npm registry by scripts/build-upgrade-doc.mjs. Only judgement lives here: what a release means for a consumer and what they have to do about it. Add an entry when a release needs more than 'no action'; omitted versions render as a one-line entry from their changelog.",
   "notes": [
     {
+      "package": "svelte-p5",
+      "version": "1.2.0",
+      "breaking": false,
+      "summary": "Adds four opt-in features. A sketch context: `getSketchContext()` gives components rendered in the new `children` snippet of `<P5Canvas>` the instance once `setup()` has finished. On-demand rendering: a `loop` prop (`'always'` by default, `'demand'`, `'manual'`), a `bridge` prop whose state changes redraw a `'demand'` sketch, and `invalidate(instance)`. Canvas export: `exportCanvas`, `downloadCanvas`, `exportFilename` and `stepFrames` for high-resolution images and frame-by-frame capture. An `addons` prop that registers p5 2 add-on functions once per p5 constructor; on p5 1.x a non-empty `addons` throws. `@types/p5` is now an optional peer dependency.",
+      "action": "None. Without the new props `<P5Canvas>` renders the same markup and leaves p5's loop alone. p5 1.11 projects keep installing `@types/p5@^1.7.7` themselves; p5 2 projects need nothing. See the sketch context, on-demand rendering, export and addons pages."
+    },
+    {
+      "package": "svelte-p5-components",
+      "version": "2.2.0",
+      "breaking": false,
+      "summary": "`<Sketch>` forwards the new `svelte-p5` 1.2 props: `loop`, `bridge`, `addons` and a `children` snippet for overlays. `FPSMonitor` and `SketchDebug` pick the instance up from the sketch context when no `instance` prop is given. A new entry, `svelte-p5-components/export`, has `<ExportButton>`. `@types/p5` is now an optional peer dependency.",
+      "action": "None for the main entry, which still accepts `svelte-p5` ^1.0.0; the new props and context fallback take effect once `svelte-p5` is 1.2. `svelte-p5-components/export` needs `svelte-p5` 1.2 or later."
+    },
+    {
       "package": "svelte-p5-components",
       "version": "2.1.0",
       "breaking": false,

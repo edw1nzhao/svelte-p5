@@ -11,6 +11,8 @@ svelte-p5 is written in TypeScript and ships declarations for every entry point.
 
 p5 2 bundles its declarations, including `setup(): void | Promise<void>`, so an `async` setup typechecks without a cast. p5 1.x ships none, and `@types/p5` stops at 1.7.7, so it can lag behind p5 1.11 itself.
 
+`svelte-p5` and `svelte-p5-components` (from 1.2.0 and 2.2.0) declare `@types/p5@^1.7.7` as an optional peer dependency. Package managers do not install optional peers, so p5 2 projects get nothing extra; the declaration only tells a p5 1.11 project which range the packages' declarations were checked against, and lets pnpm and npm flag an incompatible version you already have.
+
 Without `@types/p5` on p5 1.11, `import type p5 from 'p5'` fails with TS7016 ("Could not find a declaration file for module 'p5'"). The error appears in your code and, unless `skipLibCheck` is on, in svelte-p5's own declarations. Install the types rather than silencing it.
 
 Both setups are exercised on every pull request: the smoke test packs the packages, installs them into a fresh SvelteKit app and a plain Vite app on p5 2.x and on p5 1.11 with `@types/p5`, and runs `svelte-check` with `skipLibCheck: false`.
@@ -157,8 +159,8 @@ Because the factory is called once, the sketch function keeps a stable identity 
 
 ## Types exported by the packages
 
-| Import                 | Type                                                                    |
-| ---------------------- | ----------------------------------------------------------------------- |
-| `svelte-p5`            | `SketchFn<Ext>`, `ExtendedP5<Ext>`, `P5CanvasProps<Ext>`, `P5Bridge<T>` |
-| `svelte-p5-components` | `SketchProps<Ext>` and the props of each component                      |
-| `svelte-p5-viz`        | `VizPanel`, `PanelContext`, `SceneConfig` and friends                   |
+| Import                 | Type                                                                                                                                                                                                            |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `svelte-p5`            | `SketchFn<Ext>`, `ExtendedP5<Ext>`, `P5CanvasProps<Ext>`, `P5Bridge<T>`, `SketchContext<Ext>`, `LoopMode`, `ExportOptions`, `ExportFormat`, `StepFramesOptions`, `SteppedFrame`, `P5Addon`, `P5AddonLifecycles` |
+| `svelte-p5-components` | `SketchProps<Ext>` and the props of each component                                                                                                                                                              |
+| `svelte-p5-viz`        | `VizPanel`, `PanelContext`, `SceneConfig` and friends                                                                                                                                                           |

@@ -75,14 +75,16 @@ The [getting started guide](https://svelte-p5.dev/docs/getting-started) walks th
 
 [`p5-svelte`](https://github.com/tonyketcham/p5-svelte) was the original Svelte wrapper for p5. svelte-p5 is a Svelte 5 rebuild with a reactive state bridge and an optional component layer on top.
 
-|                       | `svelte-p5`                                     | `p5-svelte`                  |
-| --------------------- | ----------------------------------------------- | ---------------------------- |
-| Last published        | Ongoing, via release-please                     | 3.1.2, April 2022            |
-| p5.js peer range      | `>=1.11.0 <3` (1.11 and 2.x, both tested in CI) | `^1.4.0` (p5 1 only)         |
-| Svelte peer range     | `^5.0.0`                                        | None declared (Svelte 3 era) |
-| Reactive state bridge | `createP5Bridge`, a `$state` proxy              | Not included                 |
-| Pre-built components  | `svelte-p5-components`                          | Not included                 |
-| npm provenance        | Yes, via trusted publishing                     | No attestation published     |
+|                       | `svelte-p5`                                                              | `p5-svelte`                        |
+| --------------------- | ------------------------------------------------------------------------ | ---------------------------------- |
+| Last published        | Ongoing, via release-please                                              | 3.1.2, April 2022                  |
+| p5.js peer range      | `>=1.11.0 <3` (1.11 and 2.x, both tested in CI)                          | `^1.4.0` (p5 1 only)               |
+| Svelte peer range     | `^5.0.0`                                                                 | None declared (Svelte 3 era)       |
+| Reactive state bridge | `createP5Bridge`, a `$state` proxy                                       | Not included                       |
+| Pre-built components  | `svelte-p5-components`                                                   | Not included                       |
+| On-demand rendering   | `loop="demand"` redraws only when bridge state changes                   | Not included                       |
+| Image export          | `exportCanvas` at any scale or print size, `stepFrames` for video frames | p5's `saveCanvas()` at screen size |
+| npm provenance        | Yes, via trusted publishing                                              | No attestation published           |
 
 `<P5Canvas>` also calls `instance.remove()` on unmount. The [wrapper comparison](https://svelte-p5.dev/docs/perf-comparison) has the data and says when that does and does not matter. Moving over: [migration guide](https://svelte-p5.dev/docs/recipes/migration-from-p5-svelte).
 
