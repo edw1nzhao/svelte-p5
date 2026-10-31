@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0](https://github.com/edw1nzhao/svelte-p5/compare/viz-v0.2.4...viz-v0.3.0) (2026-10-31)
+
+
+### Features
+
+* **core:** support p5.js 2 ([#109](https://github.com/edw1nzhao/svelte-p5/issues/109)) ([97bbe19](https://github.com/edw1nzhao/svelte-p5/commit/97bbe1972deddf0187dc42af910bc915a55a7350))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 1.1.0
+  * peerDependencies
+    * svelte-p5 bumped from >=0.4.0 <2 to >=1.1.0
+
 ## [0.2.4](https://github.com/edw1nzhao/svelte-p5/compare/viz-v0.2.3...viz-v0.2.4) (2026-10-31)
 
 
