@@ -78,3 +78,11 @@ test('Copy link reproduces the current sketch', async ({ page, context }) => {
 	await fresh.getByRole('button', { name: 'Run shared sketch' }).click();
 	await expect(stage(fresh).locator('canvas')).toBeVisible();
 });
+
+test('?example= opens that example and runs it', async ({ page }) => {
+	await page.goto('/playground?example=size-cache');
+	await expect(page.locator('.cm-content')).toContainText('caching them in locals');
+	await expect(page.getByLabel('Example')).toHaveValue('size-cache');
+	await expect(stage(page).locator('canvas')).toBeVisible();
+	await expect(page.getByTestId('pg-status')).toHaveText('Running');
+});

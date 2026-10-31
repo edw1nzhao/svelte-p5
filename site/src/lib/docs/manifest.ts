@@ -51,6 +51,14 @@ export const docs: readonly DocEntry[] = [
 		section: 'Concepts'
 	},
 	{
+		slug: 'p5-2-pitfalls',
+		title: 'p5 1 to 2 pitfalls',
+		description:
+			'Async setup, the width and height getters, pixelDensity, and which add-ons run on p5 2.',
+		file: 'docs/p5-2-pitfalls.md',
+		section: 'Concepts'
+	},
+	{
 		slug: 'upgrading',
 		title: 'Upgrading',
 		description: 'Per-version upgrade notes, the compatibility matrix, and known-bad releases.',
@@ -62,6 +70,27 @@ export const docs: readonly DocEntry[] = [
 		title: 'Migrate from p5-svelte',
 		description: 'API mapping and ten-minute port.',
 		file: 'docs/recipes/migration-from-p5-svelte.md',
+		section: 'Recipes'
+	},
+	{
+		slug: 'recipes/migration-from-react-p5-wrapper',
+		title: 'Migrate from @p5-wrapper/react',
+		description: 'Map updateWithProps, updater, fallback and plugins to P5Canvas and the bridge.',
+		file: 'docs/recipes/migration-from-react-p5-wrapper.md',
+		section: 'Recipes'
+	},
+	{
+		slug: 'recipes/loading-addons',
+		title: 'Loading p5 add-ons',
+		description: 'registerAddon add-ons and the global p5 that classic add-ons need, in a bundler.',
+		file: 'docs/recipes/loading-addons.md',
+		section: 'Recipes'
+	},
+	{
+		slug: 'recipes/parameter-panels',
+		title: 'Parameter panels with Tweakpane',
+		description: 'Bind svelte-tweakpane-ui controls to bridge state, with presets and URL state.',
+		file: 'docs/recipes/parameter-panels.md',
 		section: 'Recipes'
 	},
 	{
