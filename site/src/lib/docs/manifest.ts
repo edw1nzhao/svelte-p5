@@ -79,6 +79,13 @@ export const docs: readonly DocEntry[] = [
 		section: 'Recipes'
 	},
 	{
+		slug: 'recipes/timeline-zoom',
+		title: 'Zooming a timeline',
+		description: 'A zoomable view window that doubles as your sketch x-axis domain.',
+		file: 'docs/recipes/timeline-zoom.md',
+		section: 'Recipes'
+	},
+	{
 		slug: 'recipes/shared-state',
 		title: 'Shared state across sketches',
 		description: 'A reactive class as the single source of truth for a dashboard.',
