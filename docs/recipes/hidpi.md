@@ -52,6 +52,8 @@ Very large canvases on high-DPR displays. A 4K canvas at 3× DPR is a 36-megapix
 
 Dense small text with a loaded font on p5 1.x. OpenType.js path rendering at 3× DPR is even slower than at 1×. Cap pixel density, use a font atlas, or fall back to system fonts. p5 2 draws loaded fonts natively and is not affected.
 
+On p5 2, `createCanvas()` resets the density, so call `pixelDensity()` after it ([details](../p5-2-pitfalls.md#createcanvas-resets-pixeldensity)).
+
 ## Things that don't change
 
 `p.mouseX` and `p.mouseY` stay in CSS pixels regardless of `pixelDensity`. Don't multiply them. `p.width` and `p.height` are also CSS pixels - p5 hides the backing-store scaling from you, which is almost always what you want.

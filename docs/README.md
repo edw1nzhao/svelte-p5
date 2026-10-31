@@ -5,9 +5,13 @@
 - **[Architecture](./architecture.md)** - the layering philosophy, when to use what
 - **[State bridges](./bridges.md)** - `$state`, `createP5Bridge`, or a reactive class
 - **[Wrapper behavior comparison](./perf-comparison.md)** - measured differences from `p5-svelte`
+- **[p5 1 to 2 pitfalls](./p5-2-pitfalls.md)** - async `setup`, the `width`/`height` getters, `pixelDensity`, add-on status on p5 2
 - **[Upgrading](./upgrading.md)** - per-version notes and the compatibility matrix
 - **Recipes** - focused how-tos
   - [Migration from `p5-svelte`](./recipes/migration-from-p5-svelte.md) - the 10-minute port
+  - [Migration from `@p5-wrapper/react`](./recipes/migration-from-react-p5-wrapper.md) - `updateWithProps`, `updater` and plugins mapped to the bridge
+  - [Loading p5 add-ons](./recipes/loading-addons.md) - `registerAddon`, the global `p5`, p5.brush and p5.sound
+  - [Parameter panels](./recipes/parameter-panels.md) - Tweakpane controls bound to bridge state, presets, URL state
   - [Performance](./recipes/performance.md) - the `loadFont()` trap on p5 1.x, FES, color caching, font atlas, `drawingContext`
   - [Interaction](./recipes/interaction.md) - mouse, touch, hit-testing, syncing hover with UI
   - [Shared state](./recipes/shared-state.md) - one reactive class across several sketches

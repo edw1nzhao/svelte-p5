@@ -2,6 +2,8 @@
 
 The real p5 perf traps, ordered by how much impact they have. Each one is tied to a specific place in p5's source; the file and line references are to p5 1.11, and the notes say where p5 2 differs.
 
+On p5 2, `width`, `height` and `pixels` are getters and cost something in hot loops; see [p5 1 to 2 pitfalls](../p5-2-pitfalls.md#width-height-and-pixels-are-getters).
+
 ## 1. On p5 1.x, don't `loadFont()` unless you must
 
 <!-- snippet: declare const p = stub<P5>(); -->
