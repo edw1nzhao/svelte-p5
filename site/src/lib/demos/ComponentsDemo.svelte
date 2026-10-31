@@ -25,6 +25,10 @@
 </script>
 
 <div class="relative w-full h-full bg-[#1a1a2e]">
-	<Sketch {sketch} bind:instance />
+	<Sketch
+		{sketch}
+		bind:instance
+		description="A ring of coloured dots on a dark background, pulsing in and out as it turns."
+	/>
 	<FPSMonitor {instance} />
 </div>

@@ -98,7 +98,10 @@
 
 <div class="flex flex-col h-full bg-slate-900">
 	<div class="flex-1 min-h-0 relative overflow-hidden">
-		<P5Canvas {sketch} />
+		<P5Canvas
+			{sketch}
+			description="Three circles labelled A, B and C on a dark background; hovering highlights one, and clicking bursts coloured particles from the pointer."
+		/>
 		<div
 			class="absolute top-2 left-2 text-[0.6875rem] text-slate-300 bg-slate-800/80 backdrop-blur px-2 py-1 rounded pointer-events-none font-mono"
 		>

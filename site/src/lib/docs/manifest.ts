@@ -71,6 +71,14 @@ export const docs: readonly DocEntry[] = [
 		section: 'Concepts'
 	},
 	{
+		slug: 'accessibility',
+		title: 'Accessibility',
+		description:
+			'Describe the canvas for screen readers with the description prop and p5 describe().',
+		file: 'docs/accessibility.md',
+		section: 'Concepts'
+	},
+	{
 		slug: 'perf-comparison',
 		title: 'Wrapper behavior comparison',
 		description:

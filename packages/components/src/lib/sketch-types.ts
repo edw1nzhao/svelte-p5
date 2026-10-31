@@ -33,6 +33,8 @@ export interface SketchProps<Ext = unknown> {
 	bridge?: { state: object } | readonly { state: object }[];
 	/** p5 2 add-ons registered before the sketch is created. Needs svelte-p5 1.2. */
 	addons?: readonly ((p5: any, fn: any, lifecycles: any) => void)[];
+	/** Screen-reader description passed to p5's `describe()`. Needs svelte-p5 1.3. */
+	description?: string;
 	/** Absolutely positioned overlays, e.g. `<FPSMonitor />`; they get the sketch context. */
 	children?: Snippet;
 }

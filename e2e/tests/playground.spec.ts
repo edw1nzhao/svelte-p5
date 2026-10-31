@@ -129,3 +129,10 @@ test('a shared on-demand sketch keeps its loop mode and control values', async (
 	await fresh.waitForTimeout(800);
 	await expect(frames).toHaveText(idle!);
 });
+
+test('example sketches describe their canvas for screen readers', async ({ page }) => {
+	await page.goto('/playground?example=tree');
+	await expect(
+		stage(page).locator('canvas [role="region"][aria-label="Canvas Description"]')
+	).toHaveText('A recursive branching tree whose branches bend with the mouse position.');
+});

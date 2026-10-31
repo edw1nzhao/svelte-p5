@@ -22,6 +22,7 @@
 		loop = 'always',
 		bridge,
 		addons,
+		description,
 		children
 	}: P5CanvasProps<Ext> = $props();
 
@@ -66,6 +67,12 @@
 			if (primed) untrack(() => invalidate(p));
 			primed = true;
 		});
+	});
+
+	$effect(() => {
+		const p = readyInstance;
+		const text = description;
+		if (p && text) untrack(() => p.describe(text));
 	});
 
 	onMount(() => {
