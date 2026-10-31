@@ -124,7 +124,7 @@ Detached-canvas counts stay flat on `{#if}` toggles, HMR no longer accumulates c
 
 ## Dependency version
 
-`p5-svelte` peered on `p5 ^1.4`. This library peers `p5 >=1.11.0 <3`. If you're on an older p5 minor, bump to 1.11.x for the latest bugfixes. p5 2.x support lands in a later release.
+`p5-svelte` peered on `p5 ^1.4`. This library peers `p5 >=1.11.0 <3`. If you're on an older p5 minor, bump to 1.11.x for the latest bugfixes, or move to p5 2.x, which is also supported.
 
 ## Typing custom instance members
 

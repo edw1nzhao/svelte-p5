@@ -20,7 +20,7 @@ Svelte 5 bindings for p5.js. Low-level primitives if you want control, pre-built
 - **Reactive state bridge.** `createP5Bridge` returns a `$state` proxy that both Svelte UI and the sketch can read and write directly, so you don't need stores or subscription boilerplate.
 - **Pre-built components.** Optional package with auto-resize + HiDPI canvas, FPS overlay, draggable windows, and debug overlays.
 
-Built for Svelte 5 runes and instance-based p5; the API is `bind:instance` instead of event dispatchers.
+Built for Svelte 5 runes and instance-based p5; the API is `bind:instance` instead of event dispatchers. p5.js 1.11+ and 2.x are both supported, and CI runs every test, including a real-browser one, against each.
 
 ## Quick starts
 
@@ -109,9 +109,8 @@ Two channels off `main`:
 
 ## Roadmap
 
-1.0 froze the public API on p5 1.x. Next:
+1.0 froze the public API, and p5.js 2.x is supported alongside 1.11+ without a major. Next:
 
-- **p5.js 2.x support**, as a major: p5 2 makes `setup` async and reworks the WEBGL renderer.
 - **neodrag 3 stable**, once upstream leaves `next`.
 
 Candidates with no release attached: a dockable panel variant (via dockview) and a CSS Grid layout helper for multi-viz dashboards. Nothing enters the library until real duplication across consumers calls for it; see [`docs/proposals/igs-port-roadmap.md`](./docs/proposals/igs-port-roadmap.md).

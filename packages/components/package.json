@@ -68,7 +68,6 @@
     "@testing-library/jest-dom": "catalog:",
     "@testing-library/svelte": "catalog:",
     "@testing-library/user-event": "catalog:",
-    "@types/p5": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "happy-dom": "catalog:",
     "p5": "catalog:",

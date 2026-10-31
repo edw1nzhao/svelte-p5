@@ -59,7 +59,6 @@
   "devDependencies": {
     "@sveltejs/package": "catalog:",
     "@sveltejs/vite-plugin-svelte": "catalog:",
-    "@types/p5": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "p5": "catalog:",
     "publint": "catalog:",

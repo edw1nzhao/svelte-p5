@@ -7,6 +7,10 @@ export interface SketchHost {
 
 export type SketchCtor<P extends SketchHost> = new (sketch: (p: P) => void, node: HTMLElement) => P;
 
+function majorVersion(Ctor: unknown): number {
+	return Number.parseInt(String((Ctor as { VERSION?: string }).VERSION ?? '1'), 10);
+}
+
 function isThenable(value: unknown): value is PromiseLike<unknown> {
 	return typeof (value as PromiseLike<unknown> | null)?.then === 'function';
 }
@@ -36,9 +40,12 @@ export function mountSketch<P extends SketchHost>(
 
 	const instance = new Ctor((p) => {
 		sketch(p);
-		const userSetup = p.setup;
-		// p5 checks `typeof setup === 'undefined'` elsewhere, so never add one.
-		if (typeof userSetup !== 'function') return;
+		let userSetup = p.setup;
+		if (typeof userSetup !== 'function') {
+			// p5 1 checks `typeof setup === 'undefined'` elsewhere; p5 2 makes its canvas before setup.
+			if (majorVersion(Ctor) < 2) return;
+			userSetup = () => {};
+		}
 		wrapped = true;
 		p.setup = function (this: unknown, ...args: unknown[]) {
 			const result = userSetup.apply(this, args);
