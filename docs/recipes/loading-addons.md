@@ -1,6 +1,6 @@
 # Loading p5 add-ons
 
-Add-on loading is the most repeated question in p5 wrapper trackers ([react#11](https://github.com/P5-wrapper/react/issues/11), [react#505](https://github.com/P5-wrapper/react/issues/505), [p5-svelte#96](https://github.com/tonyketcham/p5-svelte/issues/96)). `svelte-p5` has no add-on prop. You load the add-on yourself before the sketch mounts, and the sketch uses it through the instance. This page shows how, for a bundler (Vite, SvelteKit) and p5 2.x.
+Add-on loading is the most repeated question in p5 wrapper trackers ([react#11](https://github.com/P5-wrapper/react/issues/11), [react#505](https://github.com/P5-wrapper/react/issues/505), [p5-svelte#96](https://github.com/tonyketcham/p5-svelte/issues/96)). Most published add-ons register themselves when they load, so you load the add-on yourself before the sketch mounts, and the sketch uses it through the instance. This page shows how, for a bundler (Vite, SvelteKit) and p5 2.x. For an add-on function you hold yourself, `svelte-p5` 1.2 adds an [`addons` prop](../addons.md) that registers it once before the sketch is created.
 
 ## Two kinds of add-on
 

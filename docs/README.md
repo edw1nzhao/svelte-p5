@@ -4,6 +4,11 @@
 - **[No build step](./no-build-step.md)** - script tags and CDNs, what works without a bundler, and the global → instance conversion
 - **[Architecture](./architecture.md)** - the layering philosophy, when to use what
 - **[State bridges](./bridges.md)** - `$state`, `createP5Bridge`, or a reactive class
+- **[Sketch context](./sketch-context.md)** - `getSketchContext()` and overlays inside the canvas
+- **[On-demand rendering](./on-demand-rendering.md)** - the `loop` prop, `invalidate()`, measured idle savings
+- **[Exporting images and frames](./export.md)** - `exportCanvas` at print sizes, `stepFrames`, WEBGL, `<ExportButton>`
+- **[The `addons` prop](./addons.md)** - registering p5 2 add-ons, and what p5 cannot scope per sketch
+- **[TypeScript](./typescript.md)** - which p5 types to install, typing sketches and bridge state
 - **[Wrapper behavior comparison](./perf-comparison.md)** - measured differences from `p5-svelte`
 - **[p5 1 to 2 pitfalls](./p5-2-pitfalls.md)** - async `setup`, the `width`/`height` getters, `pixelDensity`, add-on status on p5 2
 - **[Upgrading](./upgrading.md)** - per-version notes and the compatibility matrix

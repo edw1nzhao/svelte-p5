@@ -1,0 +1,24 @@
+import { getContext, setContext } from 'svelte';
+import type { LoopMode } from './render.js';
+import type { ExtendedP5 } from './types.js';
+
+/** What `<P5Canvas>` (and `<Sketch>`) share with the components rendered inside them. */
+export interface SketchContext<Ext = unknown> {
+	/** The p5 instance once `setup()` has finished; `null` before that and after unmount. Reactive. */
+	readonly instance: ExtendedP5<Ext> | null;
+	readonly ready: boolean;
+	readonly loop: LoopMode;
+	invalidate(): void;
+}
+
+// Symbol.for, so two bundled copies of svelte-p5 still share one key.
+const KEY = Symbol.for('svelte-p5.sketch-context');
+
+export function setSketchContext(context: SketchContext<any>): void {
+	setContext(KEY, context);
+}
+
+/** The enclosing `<P5Canvas>`'s context; call during component init. `undefined` outside one. */
+export function getSketchContext<Ext = unknown>(): SketchContext<Ext> | undefined {
+	return getContext<SketchContext<Ext> | undefined>(KEY);
+}

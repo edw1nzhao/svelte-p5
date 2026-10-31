@@ -157,8 +157,8 @@ Because the factory is called once, the sketch function keeps a stable identity 
 
 ## Types exported by the packages
 
-| Import                 | Type                                                                    |
-| ---------------------- | ----------------------------------------------------------------------- |
-| `svelte-p5`            | `SketchFn<Ext>`, `ExtendedP5<Ext>`, `P5CanvasProps<Ext>`, `P5Bridge<T>` |
-| `svelte-p5-components` | `SketchProps<Ext>` and the props of each component                      |
-| `svelte-p5-viz`        | `VizPanel`, `PanelContext`, `SceneConfig` and friends                   |
+| Import                 | Type                                                                                                                                                                                                            |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `svelte-p5`            | `SketchFn<Ext>`, `ExtendedP5<Ext>`, `P5CanvasProps<Ext>`, `P5Bridge<T>`, `SketchContext<Ext>`, `LoopMode`, `ExportOptions`, `ExportFormat`, `StepFramesOptions`, `SteppedFrame`, `P5Addon`, `P5AddonLifecycles` |
+| `svelte-p5-components` | `SketchProps<Ext>` and the props of each component                                                                                                                                                              |
+| `svelte-p5-viz`        | `VizPanel`, `PanelContext`, `SceneConfig` and friends                                                                                                                                                           |

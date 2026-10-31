@@ -43,6 +43,34 @@ export const docs: readonly DocEntry[] = [
 		section: 'Concepts'
 	},
 	{
+		slug: 'sketch-context',
+		title: 'Sketch context',
+		description: 'getSketchContext() and overlays rendered inside <Sketch> and <P5Canvas>.',
+		file: 'docs/sketch-context.md',
+		section: 'Concepts'
+	},
+	{
+		slug: 'on-demand-rendering',
+		title: 'On-demand rendering',
+		description: 'The loop prop: redraw only on bridge changes, resizes or invalidate().',
+		file: 'docs/on-demand-rendering.md',
+		section: 'Concepts'
+	},
+	{
+		slug: 'export',
+		title: 'Exporting images and frames',
+		description: 'exportCanvas at print sizes, stepFrames for video, WEBGL notes, ExportButton.',
+		file: 'docs/export.md',
+		section: 'Concepts'
+	},
+	{
+		slug: 'addons',
+		title: 'The addons prop',
+		description: 'Register p5 2 add-ons once per constructor, and what p5 cannot scope.',
+		file: 'docs/addons.md',
+		section: 'Concepts'
+	},
+	{
 		slug: 'perf-comparison',
 		title: 'Wrapper behavior comparison',
 		description:

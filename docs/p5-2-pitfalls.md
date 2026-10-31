@@ -174,6 +174,6 @@ A bare `<P5Canvas>` applies nothing, so call `p.pixelDensity()` after `createCan
 | `p5.js-svg`                                | README documents p5 1.11.x only. Not tested with `svelte-p5`.                                                                   |
 | `@types/p5`                                | Latest is 1.7.7. p5 2 ships its own types, so do not install it for p5 2.                                                       |
 
-Sources: [p5.sound.js](https://github.com/processing/p5.sound.js), [p5.js-compatibility README](https://github.com/processing/p5.js-compatibility), [p5.brush README](https://github.com/acamposuribe/p5.brush), [p5.js-svg](https://github.com/zenozeng/p5.js-svg). How to load these from a bundler is in [loading p5 add-ons](./recipes/loading-addons.md).
+Sources: [p5.sound.js](https://github.com/processing/p5.sound.js), [p5.js-compatibility README](https://github.com/processing/p5.js-compatibility), [p5.brush README](https://github.com/acamposuribe/p5.brush), [p5.js-svg](https://github.com/zenozeng/p5.js-svg). How to load these from a bundler is in [loading p5 add-ons](./recipes/loading-addons.md), and add-on functions you write can go in the [`addons` prop](./addons.md). Which types to install for each major, and how to type sketches and add-on members, is in [TypeScript](./typescript.md).
 
 Other removals that show up when porting shape code: p5 2.3.4 has no `curveVertex()`; use `splineVertex()`. The compatibility package ships a `shapes.js` add-on for code you cannot port yet.

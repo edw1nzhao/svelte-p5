@@ -148,7 +148,7 @@ Linear scans (`items.findIndex`) are fine up to a few thousand entries. Binary s
 
 ## Skipping draws when nothing changed
 
-If your sketch is data-driven and the data only changes occasionally, don't run `p.draw` 60 times per second. Drop the loop, redraw on demand:
+If your sketch is data-driven and the data only changes occasionally, don't run `p.draw` 60 times per second. Since `svelte-p5` 1.2 the [`loop` prop](../on-demand-rendering.md) does this for you; the hand-rolled version below shows the mechanism. Drop the loop, redraw on demand:
 
 ```svelte
 <script lang="ts">
