@@ -1,3 +1,5 @@
+import { BRIDGE_DEFAULTS, BRIDGE_RANGES, type BridgeValues, type LoopMode } from './bridge.js';
+
 const HASH_KEY = 'code';
 
 function toBase64Url(bytes: Uint8Array): string {
@@ -33,8 +35,39 @@ export async function decodeSketch(token: string): Promise<string> {
 	return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
 }
 
-export function shareHash(token: string): string {
-	return `#${HASH_KEY}=${token}`;
+export interface ShareSettings {
+	loop: LoopMode;
+	bridge: BridgeValues;
+}
+
+export function shareHash(token: string, settings?: ShareSettings): string {
+	const params = new URLSearchParams({ [HASH_KEY]: token });
+	if (settings) {
+		if (settings.loop !== 'always') params.set('loop', settings.loop);
+		params.set('color', settings.bridge.color);
+		params.set('size', String(settings.bridge.size));
+		params.set('speed', String(settings.bridge.speed));
+	}
+	return `#${params}`;
+}
+
+function readNumber(raw: string | null, range: { min: number; max: number }, fallback: number) {
+	const n = raw === null || raw === '' ? NaN : Number(raw);
+	return Number.isFinite(n) ? Math.min(range.max, Math.max(range.min, n)) : fallback;
+}
+
+/** Reads loop and bridge values from a share hash; anything missing or invalid falls back to the defaults. */
+export function readShareSettings(hash: string): ShareSettings {
+	const params = new URLSearchParams(hash.replace(/^#/, ''));
+	const color = params.get('color');
+	return {
+		loop: params.get('loop') === 'demand' ? 'demand' : 'always',
+		bridge: {
+			color: color && /^#[0-9a-f]{6}$/i.test(color) ? color : BRIDGE_DEFAULTS.color,
+			size: readNumber(params.get('size'), BRIDGE_RANGES.size, BRIDGE_DEFAULTS.size),
+			speed: readNumber(params.get('speed'), BRIDGE_RANGES.speed, BRIDGE_DEFAULTS.speed)
+		}
+	};
 }
 
 /** Returns the share token in a location hash, or null when there is none. */

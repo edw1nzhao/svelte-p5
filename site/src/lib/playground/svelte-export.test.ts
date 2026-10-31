@@ -11,7 +11,7 @@ function compiles(source: string) {
 describe('toSvelteComponent', () => {
 	for (const example of EXAMPLES) {
 		it(`compiles the "${example.label}" example without warnings`, () => {
-			const result = compiles(toSvelteComponent(example.code, BRIDGE_DEFAULTS));
+			const result = compiles(toSvelteComponent(example.code, BRIDGE_DEFAULTS, example.loop));
 			expect(result.warnings.map((w) => w.message)).toEqual([]);
 			expect(result.js.code).toContain('svelte-p5-components');
 		});
@@ -46,5 +46,19 @@ describe('toSvelteComponent', () => {
 	it('keeps a closing script tag inside a string from ending the block', () => {
 		const out = toSvelteComponent("p.draw = () => console.log('</script>');", BRIDGE_DEFAULTS);
 		expect(() => compiles(out)).not.toThrow();
+	});
+
+	it('carries loop="demand" and hands the bridge to Sketch so controls trigger redraws', () => {
+		const demand = EXAMPLES.find((e) => e.loop === 'demand')!;
+		const out = toSvelteComponent(demand.code, BRIDGE_DEFAULTS, 'demand');
+		expect(out).toContain('<Sketch {sketch} {bridge} loop="demand" />');
+
+		const plain = toSvelteComponent('p.draw = () => p.background(0);', BRIDGE_DEFAULTS, 'demand');
+		expect(plain).toContain('<Sketch {sketch} loop="demand" />');
+	});
+
+	it('omits the loop attribute for the default mode', () => {
+		const out = toSvelteComponent('p.draw = () => p.background(0);', BRIDGE_DEFAULTS);
+		expect(out).toContain('<Sketch {sketch} />');
 	});
 });
