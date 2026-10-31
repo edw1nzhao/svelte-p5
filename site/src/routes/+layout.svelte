@@ -20,13 +20,10 @@
 		document.documentElement.style.scrollBehavior = 'auto';
 	});
 
-	afterNavigate(({ to, from }) => {
+	// SvelteKit does the scrolling (top, `#hash` target, or back-button restore);
+	// a manual scrollTo here would override the latter two.
+	afterNavigate(() => {
 		if (typeof window === 'undefined') return;
-		const isHashOnly = to && from && to.url.pathname === from.url.pathname;
-		if (!isHashOnly) {
-			window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-		}
-		// Restore the CSS smooth-scroll for subsequent in-page anchor jumps
 		requestAnimationFrame(() => {
 			document.documentElement.style.scrollBehavior = '';
 		});
