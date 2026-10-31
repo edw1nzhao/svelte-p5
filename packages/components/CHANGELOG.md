@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.0.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v1.1.2...components-v2.0.0) (2026-10-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* **components:** replace the neodrag plugins prop with axis, grid and threshold ([#107](https://github.com/edw1nzhao/svelte-p5/issues/107))
+
+### Features
+
+* **components:** replace the neodrag plugins prop with axis, grid and threshold ([#107](https://github.com/edw1nzhao/svelte-p5/issues/107)) ([96fb840](https://github.com/edw1nzhao/svelte-p5/commit/96fb840b7326257b6824986ff453454a4546e1f5))
+* **core:** support p5.js 2 ([#109](https://github.com/edw1nzhao/svelte-p5/issues/109)) ([97bbe19](https://github.com/edw1nzhao/svelte-p5/commit/97bbe1972deddf0187dc42af910bc915a55a7350))
+
+
+### Bug Fixes
+
+* **components:** stop publishing test files in the package ([#106](https://github.com/edw1nzhao/svelte-p5/issues/106)) ([13cb488](https://github.com/edw1nzhao/svelte-p5/commit/13cb4883e3f57b249b00dd5169f24d76f3d656eb))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 1.1.0
+  * peerDependencies
+    * svelte-p5 bumped from ^1.0.0 to ^1.1.0
+
 ## [1.1.2](https://github.com/edw1nzhao/svelte-p5/compare/components-v1.1.1...components-v1.1.2) (2026-10-31)
 
 

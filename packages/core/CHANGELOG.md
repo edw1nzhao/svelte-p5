@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.0.1...core-v1.1.0) (2026-10-31)
+
+
+### Features
+
+* **core:** support p5.js 2 ([#109](https://github.com/edw1nzhao/svelte-p5/issues/109)) ([97bbe19](https://github.com/edw1nzhao/svelte-p5/commit/97bbe1972deddf0187dc42af910bc915a55a7350))
+
 ## [1.0.1](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.0.0...core-v1.0.1) (2026-10-31)
 
 
