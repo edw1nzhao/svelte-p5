@@ -97,6 +97,10 @@ jobs:
         if: matrix.primary
         run: pnpm check:peers
 
+      - name: Compile-check doc snippets
+        if: matrix.primary
+        run: pnpm docs:snippets
+
       # Reads the npm registry, so it reports rather than gates: a registry
       # blip must not fail an unrelated PR.
       - name: Check upgrade docs are current

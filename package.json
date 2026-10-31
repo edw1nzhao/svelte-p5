@@ -24,7 +24,8 @@
     "prepare": "husky",
     "docs:upgrade": "node scripts/build-upgrade-doc.mjs",
     "docs:upgrade:check": "node scripts/build-upgrade-doc.mjs --check",
-    "check:peers": "node scripts/check-peer-ranges.mjs"
+    "check:peers": "node scripts/check-peer-ranges.mjs",
+    "docs:snippets": "node scripts/check-doc-snippets.mjs"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
