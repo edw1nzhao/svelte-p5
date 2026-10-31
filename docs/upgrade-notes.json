@@ -2,6 +2,13 @@
   "$comment": "Hand-written upgrade guidance. Everything mechanical (versions, dates, peer ranges, the compatibility matrix, broken-peer detection) is derived from the npm registry by scripts/build-upgrade-doc.mjs. Only judgement lives here: what a release means for a consumer and what they have to do about it. Add an entry when a release needs more than 'no action'; omitted versions render as a one-line entry from their changelog.",
   "notes": [
     {
+      "package": "svelte-p5-components",
+      "version": "2.0.0",
+      "breaking": true,
+      "summary": "`DraggableWindow` and `DraggableSketch` move to neodrag 3.0.0-next.12, which removed the plugin API. The `plugins` prop is replaced by library-owned `axis`, `grid` and `threshold` props, and no neodrag type is part of the public API any more. Everything else (props, bindables, classes, DOM, `data-neodrag-state`) is unchanged.",
+      "action": "Replace `plugins={[axis('x'), grid([20, 20])]}` with `axis=\"x\" grid={[20, 20]}`, and a `threshold()` plugin with `threshold={n}` (default 3). Remove any `@neodrag/svelte` import that only existed to build plugins; neodrag is now an internal dependency pinned at 3.0.0-next.12. A drag now starts at exactly `threshold` px of travel rather than just past it, and `grid` snaps the window's position to the grid rather than snapping each movement."
+    },
+    {
       "package": "svelte-p5",
       "version": "1.0.1",
       "breaking": false,

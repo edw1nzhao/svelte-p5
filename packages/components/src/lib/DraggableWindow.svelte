@@ -1,15 +1,5 @@
 <script lang="ts">
-	import {
-		draggable,
-		controls,
-		ControlFrom,
-		bounds,
-		BoundsFrom,
-		events,
-		position,
-		Compartment,
-		type Plugin
-	} from '@neodrag/svelte';
+	import { Draggable, type DragPlugin } from '@neodrag/svelte';
 	import { untrack, type Snippet } from 'svelte';
 	import { registerWindow } from './windowManager.svelte.js';
 
@@ -27,8 +17,12 @@
 		constrained?: ConstrainTo;
 		/** Pixels of the window that must remain visible after clamp. Default: 60 */
 		minVisible?: number;
-		/** Extra neodrag plugins appended to the ones the window sets internally. Escape hatch for power users (axis, grid, threshold, etc.). */
-		plugins?: Plugin<unknown>[];
+		/** Lock dragging to one axis. Both axes when unset. */
+		axis?: 'x' | 'y';
+		/** Snap the window position to a `[x, y]` grid in px. */
+		grid?: [number, number];
+		/** Pointer travel in px before a drag starts. Default: 3 */
+		threshold?: number;
 		/** Called when the close (×) button is clicked. Omit to hide the button. */
 		onClose?: () => void;
 		/** Optional custom content for the title-bar (defaults to `title`). */
@@ -46,7 +40,9 @@
 		minHeight = 120,
 		constrained = 'viewport',
 		minVisible = 60,
-		plugins: userPlugins,
+		axis,
+		grid,
+		threshold = 3,
 		onClose,
 		header,
 		children
@@ -60,9 +56,9 @@
 	// across every DraggableWindow on the page. Clicking brings it to top.
 	const win = registerWindow();
 
-	// Live position. Neodrag's `position` plugin drives the element via
+	// Live position. Neodrag's `position` option drives the element via
 	// transform; we update this state from onDrag AND on resize/clamp,
-	// and the Compartment re-evaluates to push changes back into neodrag.
+	// and the `position` getter pushes changes back into neodrag.
 	// `untrack` prevents these props from forming a reactive dep - they're
 	// *initial* values only; later position comes from user drag.
 	let pos = $state(untrack(() => ({ x: initialX, y: initialY })));
@@ -157,25 +153,45 @@
 		return () => ro.disconnect();
 	});
 
-	// The neodrag `position` plugin takes a `current: {x, y}` and forces
-	// the element to that transform. Wrapped in a Compartment so updates
-	// to `pos` re-run just this plugin (not the whole plugin list).
-	const posComp = Compartment.of(() => position({ current: pos }));
+	let dragCount = $state(0);
 
-	const plugins = $derived([
-		posComp,
-		controls({ allow: ControlFrom.selector('.dw-handle') }),
-		events({
-			onDragStart: () => win.focus(),
-			onDrag: ({ offset }) => {
-				pos = { x: offset.x, y: offset.y };
-			},
-			onDragEnd: () => clamp()
-		}),
-		...(constrained === 'viewport' ? [bounds(BoundsFrom.viewport())] : []),
-		...(constrained === 'parent' ? [bounds(BoundsFrom.parent())] : []),
-		...(userPlugins ?? [])
-	]);
+	// neodrag's own `axis` option zeroes the locked axis; hold it at its drag-start value instead.
+	let dragStart = { x: 0, y: 0 };
+	const axisLock: DragPlugin = {
+		name: 'svelte-p5:axis-lock',
+		onStart: ({ offset }) => {
+			dragStart = { x: offset.x, y: offset.y };
+		},
+		onMove: ({ offset }) => {
+			if (axis === 'x') return { x: offset.x, y: dragStart.y };
+			if (axis === 'y') return { x: dragStart.x, y: offset.y };
+		}
+	};
+
+	const drag = new Draggable({
+		get position() {
+			return pos;
+		},
+		get bounds() {
+			return constrained === 'none' ? undefined : constrained;
+		},
+		get grid() {
+			return grid;
+		},
+		get threshold() {
+			return threshold;
+		},
+		touchAction: 'none',
+		use: [axisLock],
+		onDragStart: () => win.focus(),
+		onDrag: ({ offset }) => {
+			pos = { x: offset.x, y: offset.y };
+		},
+		onDragEnd: () => {
+			dragCount++;
+			clamp();
+		}
+	});
 </script>
 
 <div
@@ -189,10 +205,13 @@
 	style:min-height={toCssSize(minHeight)}
 	style:z-index={win.z}
 	onpointerdowncapture={() => win.focus()}
-	{@attach draggable(() => plugins)}
+	data-neodrag=""
+	data-neodrag-state={drag.isDragging ? 'dragging' : 'idle'}
+	data-neodrag-count={dragCount}
+	{...drag.attach}
 >
 	<div class="dw-titlebar">
-		<div class="dw-handle">
+		<div class="dw-handle" {...drag.handle()}>
 			{#if header}{@render header()}{:else}<span class="dw-title-text">{title}</span>{/if}
 		</div>
 		{#if onClose}
