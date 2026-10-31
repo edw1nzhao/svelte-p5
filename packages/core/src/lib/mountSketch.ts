@@ -1,3 +1,5 @@
+import { fesDisableRequested } from './utils/disableFES.js';
+
 export interface SketchHost {
 	setup?: (...args: unknown[]) => unknown;
 	remove(): void;
@@ -17,6 +19,10 @@ export function mountSketch<P extends SketchHost>(
 	onCreated: (p: P) => void,
 	onReady?: (p: P) => void
 ): () => void {
+	if (fesDisableRequested()) {
+		(Ctor as { disableFriendlyErrors?: boolean }).disableFriendlyErrors = true;
+	}
+
 	let constructed = false;
 	let destroyed = false;
 	let wrapped = false;

@@ -25,7 +25,7 @@ import { disableFES } from 'svelte-p5';
 disableFES(); // before any new p5(...)
 ```
 
-p5's Friendly Error System validates arguments on every `map()`, `fill()`, `stroke()`, `text()` call via deep type checking and Levenshtein-distance typo detection ([`src/core/friendly_errors/fes_core.js:41-45`](https://github.com/processing/p5.js/blob/main/src/core/friendly_errors/fes_core.js)). Setting `window.IS_MINIFIED = true` short-circuits it. Worth 1-5% CPU in production.
+p5's Friendly Error System validates arguments on every `map()`, `fill()`, `stroke()`, `text()` call via deep type checking and Levenshtein-distance typo detection ([`src/core/friendly_errors/fes_core.js:41-45`](https://github.com/processing/p5.js/blob/main/src/core/friendly_errors/fes_core.js)). On p5 1.x `disableFES()` sets `window.IS_MINIFIED = true`, which short-circuits it. p5 2.x dropped that global, so `<P5Canvas>` also sets `p5.disableFriendlyErrors = true` before creating each instance. Worth 1-5% CPU in production.
 
 ## 3. Cache colors, don't call `color()` in loops
 

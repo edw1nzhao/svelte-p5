@@ -92,7 +92,7 @@ Exported from the main entry (and from `./utils` for explicit imports):
 ```ts
 import { disableFES, createColorCache, createFontAtlas, hitTest } from 'svelte-p5';
 
-disableFES(); // call once, before creating any p5 instance
+disableFES(); // call once, before creating any p5 instance (works on p5 1 and 2)
 hitTest.rect(mouseX, mouseY, x, y, w, h);
 ```
 

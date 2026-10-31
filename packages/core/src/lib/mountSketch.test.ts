@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mountSketch, type SketchCtor, type SketchHost } from './mountSketch.js';
+import { disableFES } from './utils/disableFES.js';
 
 type Host = SketchHost;
 type Sketch = (p: Host) => void;
@@ -182,5 +183,22 @@ describe('mountSketch on p5 2 semantics', () => {
 		await flush();
 		expect(onReady).not.toHaveBeenCalled();
 		expect(log).toContain('remove');
+	});
+});
+
+describe('mountSketch and disableFES', () => {
+	it.each([
+		['p5 1', FakeP5v1],
+		['p5 2', FakeP5v2]
+	])('sets disableFriendlyErrors before constructing on %s', (_, Ctor) => {
+		disableFES();
+		mount(Ctor, syncSetup);
+		expect(Ctor.disableFriendlyErrors).toBe(true);
+		expect(log[0]).toBe('ctor:fes=true');
+	});
+
+	it('leaves disableFriendlyErrors alone when disableFES was not called', () => {
+		mount(FakeP5v2, syncSetup);
+		expect(FakeP5v2.disableFriendlyErrors).toBe(false);
 	});
 });
