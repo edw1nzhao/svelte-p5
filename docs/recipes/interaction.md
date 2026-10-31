@@ -5,7 +5,9 @@ p5 gives you `p.mouseX`, `p.mouseY`, and event hooks like `p.mousePressed`. Most
 ## Basic mouse events
 
 ```ts
-const sketch = (p) => {
+import type p5 from 'p5';
+
+const sketch = (p: p5) => {
 	p.mousePressed = () => {
 		// Returns true to allow default; false to prevent (rarely needed)
 		console.log('clicked at', p.mouseX, p.mouseY);
@@ -33,13 +35,18 @@ The `hitTest` utility from `svelte-p5/utils` covers the common shapes:
 
 ```ts
 import { hitTest } from 'svelte-p5/utils';
+import type p5 from 'p5';
 
-const items = [
+type Item =
+	| { id: string; x: number; y: number; r: number }
+	| { id: string; x: number; y: number; w: number; h: number };
+
+const items: Item[] = [
 	{ id: 'a', x: 100, y: 100, r: 30 },
 	{ id: 'b', x: 200, y: 150, w: 80, h: 60 }
 ];
 
-const sketch = (p) => {
+const sketch = (p: p5) => {
 	let hovered: string | null = null;
 
 	p.draw = () => {
@@ -80,7 +87,9 @@ The most common pattern for any list-on-the-side, viz-in-the-middle dashboard: h
 	const ui = createP5Bridge<{ hoveredId: string | null }>({ hoveredId: null });
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(400, 300);
+		p.setup = () => {
+			p.createCanvas(400, 300);
+		};
 		p.draw = () => {
 			p.background(245);
 			let h: string | null = null;
@@ -118,25 +127,28 @@ The sketch writes `ui.state.hoveredId` when the mouse is over a circle. The side
 
 ## Touch events
 
-`p.mousePressed`, `p.mouseDragged`, and friends fire for touch on most devices, with `p.mouseX`/`p.mouseY` reflecting the touch position. p5 also exposes touch-specific hooks:
+`p.mousePressed`, `p.mouseDragged`, and friends fire for touch, with `p.mouseX`/`p.mouseY` reflecting the touch position. `p.touches` lists every current touch:
+
+<!-- snippet: declare const p = stub<P5>(); -->
 
 ```ts
-p.touchStarted = (event) => {
+p.mouseDragged = () => {
 	// `p.touches` is an array of all current touches: [{ x, y, id }, ...]
-};
-p.touchMoved = () => {
-	/* ... */
-};
-p.touchEnded = () => {
-	/* ... */
+	for (const touch of p.touches) console.log(touch);
 };
 ```
 
-For a draggable element on a sketch you're putting on phones, you usually want `p.touchStarted` over `p.mousePressed` because the former fires earlier (no synthesized-mouse delay).
+p5 1.x also has `p.touchStarted`, `p.touchMoved` and `p.touchEnded`, which fire earlier than the synthesized mouse events. p5 2 removed them: its type definitions do not declare them and it never calls them. Code that must run on both should use the mouse hooks above.
 
 **Critical**: if your sketch handles drag, set `touch-action: none` on the canvas so the browser doesn't try to scroll the page when the user drags inside it:
 
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
+
 ```svelte
+<script lang="ts">
+	import { P5Canvas } from 'svelte-p5';
+</script>
+
 <P5Canvas {sketch} class="touch-none" />
 ```
 
@@ -144,9 +156,13 @@ If your sketch is just decorative or only responds to single taps (not drags), l
 
 ## Disabling default scroll on `mouseWheel`
 
+<!-- snippet: declare const p = stub<P5>(); -->
+
 ```ts
-p.mouseWheel = (event) => {
-	zoom += event.delta * -0.001;
+let zoom = 1;
+
+p.mouseWheel = (event: WheelEvent) => {
+	zoom += event.deltaY * -0.001;
 	return false; // prevent the page from scrolling
 };
 ```
@@ -161,6 +177,8 @@ p5's event hooks are tied to the canvas DOM node. If you need:
 - Pointer-event subtleties (`pointerType`, `pressure`) that p5 doesn't expose
 
 …you can grab the canvas element from `bind:instance` and add listeners yourself. Just remember to remove them on unmount:
+
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
 
 ```svelte
 <script lang="ts">

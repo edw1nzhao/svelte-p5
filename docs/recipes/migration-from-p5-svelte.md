@@ -35,6 +35,8 @@ pnpm add svelte-p5-components
 
 Before:
 
+<!-- snippet: skip (old p5-svelte API, which is not a dependency here) -->
+
 ```svelte
 <script>
 	import P5 from 'p5-svelte';
@@ -42,7 +44,9 @@ Before:
 	let p5Instance;
 
 	const sketch = (p5) => {
-		p5.setup = () => p5.createCanvas(400, 400);
+		p5.setup = () => {
+			p5.createCanvas(400, 400);
+		};
 		p5.draw = () => {
 			p5.background(240);
 			p5.circle(p5.mouseX, p5.mouseY, 40);
@@ -63,7 +67,9 @@ After:
 	let p5Instance = $state<p5 | null>(null);
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(400, 400);
+		p.setup = () => {
+			p.createCanvas(400, 400);
+		};
 		p.draw = () => {
 			p.background(240);
 			p.circle(p.mouseX, p.mouseY, 40);
@@ -79,6 +85,8 @@ After:
 `p5-svelte` focused on the canvas wrapper itself, leaving state management to the consumer (typically writable stores). svelte-p5 ships `createP5Bridge` for the same job, plus reactive class patterns for shared state.
 
 Before:
+
+<!-- snippet: skip (old p5-svelte API, which is not a dependency here) -->
 
 ```svelte
 <script>
@@ -138,7 +146,7 @@ See the [core README](../../packages/core/README.md#typed-instance-extensions).
 
 Your sketch code is unchanged. `p.setup`, `p.draw`, `p.loadFont`, every p5 API call ports 1:1.
 
-The `loadFont()` perf trap isn't a library issue either. Variable-font path rendering is slow in p5 regardless of the wrapper. See [performance.md](./performance.md) for the full treatment.
+On p5 1.x the `loadFont()` perf trap isn't a library issue either. Variable-font path rendering is slow in p5 regardless of the wrapper (p5 2 draws loaded fonts natively). See [performance.md](./performance.md) for the full treatment.
 
 SSR is the same story. `<P5Canvas>` dynamically imports p5 on the client, so SvelteKit SSR works without `{#if browser}` guards.
 

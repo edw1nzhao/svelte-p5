@@ -7,10 +7,10 @@
 Pass the element. The library wraps it for you.
 
 ```svelte
-<script>
+<script lang="ts">
 	import { createMediaSync } from 'svelte-p5-components';
 
-	let video;
+	let video = $state<HTMLVideoElement | null>(null);
 	let currentTime = $state(0);
 	let speed = $state(1);
 
@@ -19,8 +19,8 @@ Pass the element. The library wraps it for you.
 
 	// Your animation loop.
 	$effect(() => {
-		let raf;
-		const tick = (now, last = now) => {
+		let raf = 0;
+		const tick = (now: number, last = now) => {
 			if (sync.isLocked) currentTime = sync.mediaTime;
 			else currentTime += (speed * (now - last)) / 1000;
 			raf = requestAnimationFrame((t) => tick(t, now));
@@ -57,6 +57,8 @@ interface MediaSource {
 For production use, prefer the maintained adapter in `svelte-p5-components/youtube`; see [Syncing a timeline to YouTube](./youtube.md). The version below shows the shape of a port.
 
 The iframe API reports state changes but never emits a continuous time event, so this adapter implements `subscribe` for state and lets the helper sample the clock.
+
+The `YT.Player` type below comes from `@types/youtube`.
 
 ```ts
 import type { MediaPort } from 'svelte-p5-components';
@@ -105,6 +107,8 @@ export function youTubePort(player: YT.Player): MediaPort {
 
 Attach it exactly like an element:
 
+<!-- snippet: declare const sync = stub<import('svelte-p5-components').MediaSync>(); const youTubePort = stub<(p: YT.Player) => import('svelte-p5-components').MediaPort>(); const player = stub<YT.Player>(); -->
+
 ```ts
 sync.attach(youTubePort(player));
 ```
@@ -119,6 +123,8 @@ Implement `subscribe` when you can. It removes the idle polling entirely.
 
 A hand-rolled sync usually looks like this, and the bug is easy to miss:
 
+<!-- snippet: declare const player = stub<{ getCurrentTime(): number } | null>(); const isPlaying = stub<boolean>(); const setCurrentTime = stub<(t: number) => void>(); -->
+
 ```ts
 function updateTime() {
 	if (player && isPlaying) setCurrentTime(player.getCurrentTime());
@@ -132,7 +138,11 @@ The guard skips the work but not the scheduling, so the frame callback outlives 
 
 Both helpers take an injectable scheduler, so a test can drive the loop without real frames:
 
+<!-- snippet: declare const fakeScheduler = stub<import('svelte-p5-components').TickerScheduler>(); -->
+
 ```ts
+import { createMediaSync } from 'svelte-p5-components';
+
 const sync = createMediaSync({ scheduler: fakeScheduler });
 ```
 

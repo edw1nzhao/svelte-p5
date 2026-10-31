@@ -28,7 +28,9 @@ Pin to a SHA (`@<commit-sha>`) instead of `@main` for reproducible installs.
 	import type p5 from 'p5';
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(p.windowWidth, p.windowHeight);
+		p.setup = () => {
+			p.createCanvas(p.windowWidth, p.windowHeight);
+		};
 		p.draw = () => {
 			p.background(240);
 			p.circle(p.mouseX, p.mouseY, 40);
@@ -48,12 +50,14 @@ Props:
 | `sketch`   | `SketchFn<Ext>`                      | —       | Required. Generic over custom instance members (see the core README).                                                                                               |
 | `hidpi`    | `boolean \| number`                  | `true`  | `true` → `devicePixelRatio`, `false` → `pixelDensity(1)`, number → that exact density (cap for large WEBGL canvases: `Math.min(devicePixelRatio, 2)`).              |
 | `instance` | `ExtendedP5<Ext> \| null` (bindable) | `null`  | The p5 instance once mounted.                                                                                                                                       |
-| `onReady`  | `(instance) => void`                 | —       | Fires once after creation, density, and initial sizing.                                                                                                             |
+| `onReady`  | `(instance) => void`                 | —       | Fires once after your `setup()`, density, and initial sizing.                                                                                                       |
 | `onResize` | `(instance, width, height) => void`  | —       | Fires after each `ResizeObserver`-driven `resizeCanvas` (not the initial sizing). Rebuild size-dependent state here; call `instance.loop()` if you're noLoop-gated. |
 
 ## `<FPSMonitor>`
 
 Absolute-positioned FPS readout. Takes the p5 instance and samples `p.frameRate()` every 30 frames by default.
+
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
 
 ```svelte
 <script lang="ts">
@@ -112,7 +116,13 @@ What it handles for you:
 
 `<DraggableWindow>` with a `<Sketch>` inside. One line for a floating, draggable, resizable p5 sketch. This is the primitive for multi-window visualization suites.
 
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
+
 ```svelte
+<script lang="ts">
+	import { DraggableSketch } from 'svelte-p5-components';
+</script>
+
 <DraggableSketch
 	title="Speaker Garden"
 	{sketch}
@@ -128,7 +138,9 @@ Takes the same `axis`, `grid` and `threshold` props as `<DraggableWindow>`.
 ## Stability
 
 `svelte-p5-components` follows semantic versioning from 1.0.0. Within a major, minor and
-patch releases never break a documented API, so `^1.0.0` is safe to leave in place.
+patch releases never break a documented API, so a caret range such as `^2.0.0` is safe to
+leave in place. Moving from 1.x to 2.0.0 is the one breaking step so far: the `plugins` prop
+on `<DraggableWindow>` and `<DraggableSketch>` became `axis`, `grid` and `threshold`.
 
 The public API is everything exported from the package root. Component internals, class
 names and DOM structure are not API: style through the documented props and CSS custom

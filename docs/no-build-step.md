@@ -16,13 +16,18 @@ Short answer: **not for `<P5Canvas>`, and that's inherent rather than an oversig
 ```bash
 node_modules/svelte-p5/dist/
 ├── P5Canvas.svelte      # not compiled - this is the .svelte file itself
+├── createP5Bridge.svelte.js
 ├── index.js
+├── mountSketch.js
+├── types.js
 └── utils/
 ```
 
 That is the standard way to publish a Svelte library ([`svelte-package`](https://svelte.dev/docs/kit/packaging) does it deliberately) so your app's compiler can inline and optimize the component against your Svelte version. A browser cannot execute a `.svelte` file, so there is no `<script src="svelte-p5.js">` that would make `<P5Canvas>` appear.
 
 We could publish a prebuilt bundle with the Svelte runtime baked in, exposing something like `SvelteP5.mount(el, sketch)`. We deliberately don't, because in a no-build page that function would be a slower spelling of:
+
+<!-- snippet: skip (illustrative one-liner using the UMD global p5 from a script tag) -->
 
 ```js
 new p5(sketch, el);
@@ -81,7 +86,9 @@ The part of this library that _isn't_ Svelte does work in a plain page. `svelte-
 	const colors = createColorCache();
 
 	new p5((p) => {
-		p.setup = () => p.createCanvas(400, 300);
+		p.setup = () => {
+			p.createCanvas(400, 300);
+		};
 
 		p.draw = () => {
 			p.background(245);

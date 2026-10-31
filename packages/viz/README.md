@@ -98,9 +98,11 @@ Layouts cover the three shapes every multi-panel canvas app ends up reinventing:
 - `{ kind: 'split', orientation, position, first, second }` — two-up with a divider.
 - `{ kind: 'grid', columns, gap, padding, panels }` — N-up grid.
 
-That's intentionally sparse. Arbitrary dock trees (tabs, nested splits, floating windows) are out of scope — for those use [`dockview`](https://dockview.dev/) or similar. Chrome for each of the three layouts lives in [`svelte-p5-components`](../components).
+That's intentionally sparse. Arbitrary dock trees (tabs, nested splits, floating windows) are out of scope — for those use [`dockview`](https://dockview.dev/) or similar. [`svelte-p5-components`](../components) provides `<SplitPane>` as chrome for the split layout.
 
 ## Registry
+
+<!-- snippet: declare const [WordCloudPanel, TimelineTrackPanel] = stub<import('svelte-p5-viz').VizPanel[]>(); -->
 
 ```ts
 import { createPanelRegistry } from 'svelte-p5-viz';
@@ -131,7 +133,7 @@ Scene state is a Svelte 5 `$state` proxy — mutate it directly, Svelte handles 
 ## What this package deliberately doesn't ship
 
 - **Any panel implementations.** Those belong in app code or a future `svelte-p5-viz-pack`.
-- **A scene runner.** One sample runner lives in [`svelte-p5-components`](../components/) as `<SceneRenderer>`; you can also write your own in ~30 lines.
+- **A scene runner.** None ships in this repo; `<SplitPane>` in [`svelte-p5-components`](../components/) covers the split chrome, and a runner itself is a short loop over the layout.
 - **Runtime schema validation.** `VizPanel.schema` is typed as `unknown` so you can plug zod/valibot/arktype (or none). Validation is a studio concern, not a runtime one.
 - **Persistence.** Serializing a `SceneConfig` is `JSON.stringify`; loading is `JSON.parse`. That's the whole API.
 

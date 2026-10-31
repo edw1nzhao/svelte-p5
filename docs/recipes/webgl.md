@@ -1,10 +1,12 @@
 # WEBGL sketches
 
-The library is renderer-agnostic: pass `p.WEBGL` to `createCanvas` in your sketch and everything — `<P5Canvas>`, `<Sketch>`, resize, cleanup — works the same. This recipe collects the WEBGL-specific behaviors worth knowing, verified against p5 1.11.
+The library is renderer-agnostic: pass `p.WEBGL` to `createCanvas` in your sketch and everything — `<P5Canvas>`, `<Sketch>`, resize, cleanup — works the same. This recipe collects the WEBGL-specific behaviors worth knowing, verified against p5 1.11 and 2.3.
 
 ## Origin is the center, not the corner
 
 The WEBGL renderer puts `(0, 0)` at the canvas center. 2D-style drawing code (and most visualization math) expects a top-left origin. Recenter once per frame, first thing in `draw`:
+
+<!-- snippet: declare const p = stub<P5>(); -->
 
 ```ts
 p.draw = () => {
@@ -22,11 +24,17 @@ Two details:
 
 - `resizeCanvas` triggers an internal `redraw()` (unless you pass `noRedraw`). A noLoop-gated sketch repaints on resize — but with whatever size-dependent state it had. If your sketch caches layout that depends on `p.width`/`p.height`, rebuild it in `<Sketch>`'s `onResize` callback:
 
+<!-- snippet: declare const sketch = stub<import('svelte-p5').SketchFn<{ rebuildLayout(): void }>>(); -->
+
 ```svelte
+<script lang="ts">
+	import { Sketch } from 'svelte-p5-components';
+</script>
+
 <Sketch
 	{sketch}
 	onResize={(p) => {
-		p.rebuildLayout?.();
+		p.rebuildLayout();
 		p.loop();
 	}}
 />
@@ -42,7 +50,13 @@ In WEBGL mode, `smooth()` is `setAttributes('antialias', true)`, and `setAttribu
 
 p5 defaults to `devicePixelRatio` density. A full-viewport WEBGL canvas on a 3× display is a huge framebuffer; fill-rate and memory are real limits for geometry-heavy sketches. `<Sketch>` accepts a numeric `hidpi`:
 
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
+
 ```svelte
+<script lang="ts">
+	import { Sketch } from 'svelte-p5-components';
+</script>
+
 <Sketch {sketch} hidpi={Math.min(window.devicePixelRatio, 2)} />
 ```
 
@@ -52,8 +66,13 @@ See [hidpi.md](./hidpi.md) for the full treatment.
 
 Browsers cap live WebGL contexts (on the order of 8–16), and Safari in particular can degrade after repeated large uploads to a long-lived context. When you need a genuinely fresh canvas — e.g. after clearing a large dataset — don't fight the instance: remount the component with `{#key}` and release the old context explicitly:
 
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
+
 ```svelte
 <script lang="ts">
+	import { Sketch } from 'svelte-p5-components';
+	import type p5 from 'p5';
+
 	let epoch = $state(0);
 	let instance = $state<p5 | null>(null);
 
