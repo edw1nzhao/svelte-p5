@@ -56,3 +56,27 @@ declare global {
 		__demand: DemandE2EState;
 	}
 }
+
+export interface ExportE2EState {
+	ready: boolean;
+	stop(): void;
+	live(): {
+		backingWidth: number;
+		backingHeight: number;
+		cssWidth: string;
+		density: number;
+		frameCount: number;
+		pixels: string;
+	};
+	exportSize(
+		options?: import('svelte-p5').ExportOptions
+	): Promise<{ width: number; height: number; type: string }>;
+	exportInk(options?: import('svelte-p5').ExportOptions): Promise<number>;
+	step(count: number): Promise<{ frameCount: number; width: number }[]>;
+}
+
+declare global {
+	interface Window {
+		__export: ExportE2EState;
+	}
+}
