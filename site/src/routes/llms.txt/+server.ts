@@ -32,6 +32,8 @@ export function GET() {
 
 > A thin Svelte 5 wrapper for p5.js, plus composable canvas UI components. Three packages: \`svelte-p5\` (the canvas primitive and utilities), \`svelte-p5-components\` (layout, timeline, media and panel components), and \`svelte-p5-viz\` (panel contract and scene format).
 
+Supports p5.js 1.11+ and 2.x on Svelte 5 and SvelteKit, tested in CI against both p5 versions. Coming from \`p5-svelte\` (Svelte 3/4, p5 1 only)? See [Migrate from p5-svelte](https://svelte-p5.dev/docs/recipes/migration-from-p5-svelte).
+
 The guiding constraint is that p5 draws pixels and Svelte owns UI and state. Components are unopinionated about your data; state lives in Svelte runes or your own stores, never inside the wrapper.
 
 ${sections}
