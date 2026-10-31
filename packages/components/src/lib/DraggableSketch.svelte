@@ -2,7 +2,6 @@
 	import DraggableWindow from './DraggableWindow.svelte';
 	import Sketch from './Sketch.svelte';
 	import type { SketchFn } from 'svelte-p5';
-	import type { Plugin } from '@neodrag/svelte';
 	import type p5 from 'p5';
 
 	interface Props {
@@ -17,8 +16,12 @@
 		minVisible?: number;
 		hidpi?: boolean;
 		constrained?: 'viewport' | 'parent' | 'none';
-		/** Extra neodrag plugins appended to the ones DraggableWindow sets internally. Escape hatch for power users (axis, grid, threshold, etc.). */
-		plugins?: Plugin<unknown>[];
+		/** Lock dragging to one axis. Both axes when unset. */
+		axis?: 'x' | 'y';
+		/** Snap the window position to a `[x, y]` grid in px. */
+		grid?: [number, number];
+		/** Pointer travel in px before a drag starts. Default: 3 */
+		threshold?: number;
 		onClose?: () => void;
 		instance?: p5 | null;
 	}
@@ -35,7 +38,9 @@
 		minVisible = 60,
 		hidpi = true,
 		constrained = 'viewport',
-		plugins,
+		axis,
+		grid,
+		threshold,
 		onClose,
 		instance = $bindable(null)
 	}: Props = $props();
@@ -51,7 +56,9 @@
 	{minHeight}
 	{minVisible}
 	{constrained}
-	{plugins}
+	{axis}
+	{grid}
+	{threshold}
 	{onClose}
 >
 	<Sketch {sketch} {hidpi} bind:instance />

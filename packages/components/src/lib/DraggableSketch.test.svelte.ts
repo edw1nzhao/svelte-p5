@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/svelte';
-import { axis } from '@neodrag/svelte';
 import DraggableSketch from './DraggableSketch.svelte';
 import { translateOf, settle, drag, useFakeLayout } from './tests/drag.js';
 
@@ -85,10 +84,19 @@ describe('<DraggableSketch>', () => {
 		expect(translateOf(root)).toEqual({ x: 140, y: 120 });
 	});
 
-	it('forwards plugins to the window', async () => {
-		const { root } = renderSketch({ initialX: 100, initialY: 100, plugins: [axis('y')] });
+	it('forwards axis to the window', async () => {
+		const { root } = renderSketch({ initialX: 100, initialY: 100, axis: 'y' });
 		await settle();
 		await drag(root.querySelector('.dw-handle') as HTMLElement, 40, 20);
 		expect(translateOf(root)).toEqual({ x: 100, y: 120 });
+	});
+
+	it('forwards grid and threshold to the window', async () => {
+		const { root } = renderSketch({ initialX: 100, initialY: 100, grid: [25, 25], threshold: 20 });
+		await settle();
+		await drag(root.querySelector('.dw-handle') as HTMLElement, 12, 12);
+		expect(translateOf(root)).toEqual({ x: 100, y: 100 });
+		await drag(root.querySelector('.dw-handle') as HTMLElement, 40, 20);
+		expect(translateOf(root)).toEqual({ x: 150, y: 125 });
 	});
 });

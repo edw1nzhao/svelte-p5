@@ -83,12 +83,11 @@ What it handles for you:
 - Drag-by-title-bar only, so buttons in the header stay clickable.
 - Focus to front on click. Every `<DraggableWindow>` on the page shares a z-index manager; clicking raises.
 - Clamps back into view on drag end and on window resize. `minVisible` (default 60px) guarantees a reachable grab handle.
-- Passes extra neodrag plugins through, so you can add grid snapping, axis locks, thresholds without forking the component.
+- `axis` (`'x'` or `'y'`), `grid` (`[x, y]` in px) and `threshold` (px of pointer travel before a drag starts, default 3) cover axis locks, snapping and drag sensitivity. neodrag is an internal dependency; none of its types are part of this API.
 
 ```svelte
 <script lang="ts">
 	import { DraggableWindow } from 'svelte-p5-components';
-	import { grid, axis } from '@neodrag/svelte';
 
 	let showInspector = $state(true);
 </script>
@@ -100,7 +99,8 @@ What it handles for you:
 		initialY={80}
 		width={320}
 		height={240}
-		plugins={[grid([20, 20]), axis('x')]}
+		axis="x"
+		grid={[20, 20]}
 		onClose={() => (showInspector = false)}
 	>
 		<p>Snaps to a 20px grid, slides horizontally only.</p>
@@ -123,7 +123,7 @@ What it handles for you:
 />
 ```
 
-Same `plugins` escape hatch as `<DraggableWindow>`.
+Takes the same `axis`, `grid` and `threshold` props as `<DraggableWindow>`.
 
 ## Stability
 

@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/svelte';
 import { createRawSnippet } from 'svelte';
-import { axis } from '@neodrag/svelte';
 import DraggableWindow from './DraggableWindow.svelte';
 import {
 	WIN_W,
@@ -187,11 +186,42 @@ describe('<DraggableWindow> dragging', () => {
 		expect(translateOf(root)).toEqual({ x: 100, y: 100 });
 	});
 
-	it('appends user plugins to its own', async () => {
-		const { root } = renderWindow({ initialX: 100, initialY: 100, plugins: [axis('x')] });
+	it('locks movement to the x axis', async () => {
+		const { root } = renderWindow({ initialX: 100, initialY: 100, axis: 'x' });
 		await settle();
 		await drag(q(root, '.dw-handle'), 50, 30);
 		expect(translateOf(root)).toEqual({ x: 150, y: 100 });
+	});
+
+	it('snaps the position to the grid', async () => {
+		const { root } = renderWindow({ initialX: 100, initialY: 100, grid: [20, 20] });
+		await settle();
+		await drag(q(root, '.dw-handle'), 50, 30);
+		expect(translateOf(root)).toEqual({ x: 160, y: 140 });
+	});
+
+	it('combines axis and grid', async () => {
+		const { root } = renderWindow({ initialX: 100, initialY: 100, axis: 'x', grid: [20, 20] });
+		await settle();
+		await drag(q(root, '.dw-handle'), 50, 30);
+		expect(translateOf(root)).toEqual({ x: 160, y: 100 });
+	});
+
+	// next.8 started only past 3px; next.12 starts at exactly the threshold.
+	it('starts a drag once the pointer travels the threshold', async () => {
+		const { root } = renderWindow({ initialX: 100, initialY: 100 });
+		await settle();
+		await drag(q(root, '.dw-handle'), 3, 0);
+		expect(translateOf(root)).toEqual({ x: 103, y: 100 });
+	});
+
+	it('honours a custom threshold', async () => {
+		const { root } = renderWindow({ initialX: 100, initialY: 100, threshold: 20 });
+		await settle();
+		await drag(q(root, '.dw-handle'), 12, 12);
+		expect(translateOf(root)).toEqual({ x: 100, y: 100 });
+		await drag(q(root, '.dw-handle'), 30, 0);
+		expect(translateOf(root)).toEqual({ x: 130, y: 100 });
 	});
 });
 
