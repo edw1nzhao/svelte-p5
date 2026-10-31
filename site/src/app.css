@@ -18,7 +18,30 @@
 	--font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 	--color-accent: #6366f1;
 	--color-accent-light: #818cf8;
-	--color-surface: #f8fafc;
+
+	/* Theme tokens: components use these, never the raw palette, so a theme swaps them in one place. */
+	--color-page: var(--color-white);
+	--color-panel: var(--color-slate-50);
+	--color-panel-2: var(--color-slate-100);
+	--color-panel-3: var(--color-slate-200);
+	--color-fg: var(--color-slate-900);
+	--color-fg-secondary: var(--color-slate-700);
+	--color-fg-muted: var(--color-slate-600);
+	--color-fg-subtle: var(--color-slate-500);
+	--color-fg-faint: var(--color-slate-400);
+	--color-fg-ghost: var(--color-slate-300);
+	--color-line-soft: var(--color-slate-100);
+	--color-line: var(--color-slate-200);
+	--color-line-strong: var(--color-slate-300);
+	--color-brand: var(--color-indigo-500);
+	--color-brand-strong: var(--color-indigo-600);
+	--color-brand-ink: var(--color-indigo-700);
+	--color-brand-deep: var(--color-indigo-900);
+	--color-brand-soft: var(--color-indigo-50);
+	--color-brand-ring: var(--color-indigo-100);
+	--color-brand-line-soft: var(--color-indigo-200);
+	--color-brand-line: var(--color-indigo-300);
+	--color-brand-line-strong: var(--color-indigo-400);
 	--color-code-bg: #0f172a;
 	--color-code-border: #1e293b;
 }

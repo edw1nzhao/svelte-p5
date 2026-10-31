@@ -18,17 +18,17 @@
 	}
 </script>
 
-<div class="docs-root bg-white" style="padding-top: var(--header-h);">
+<div class="docs-root bg-page" style="padding-top: var(--header-h);">
 	<!-- Mobile sidebar trigger -->
 	<div
-		class="lg:hidden sticky z-30 bg-white/85 backdrop-blur-md border-b border-slate-200"
+		class="lg:hidden sticky z-30 bg-page/85 backdrop-blur-md border-b border-line"
 		style="top: var(--header-h);"
 	>
 		<div class="px-4 sm:px-6 h-12 flex items-center gap-2">
 			<button
 				type="button"
 				onclick={openDrawer}
-				class="inline-flex items-center gap-2 h-9 px-3 -ml-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100"
+				class="inline-flex items-center gap-2 h-9 px-3 -ml-2 rounded-md text-sm font-medium text-fg-secondary hover:bg-panel-2"
 			>
 				<Menu class="size-4" />
 				Docs menu
@@ -59,21 +59,21 @@
 	aria-label="Documentation menu"
 >
 	<div
-		class="bg-white text-slate-900 w-full sm:w-80 sm:rounded-2xl sm:m-4 overflow-hidden flex flex-col"
+		class="bg-page text-fg w-full sm:w-80 sm:rounded-2xl sm:m-4 overflow-hidden flex flex-col"
 		style="padding-bottom: max(1rem, env(safe-area-inset-bottom)); max-height: 85dvh;"
 	>
 		<div
-			class="flex items-center justify-between px-5 py-3 border-b border-slate-100 shrink-0"
+			class="flex items-center justify-between px-5 py-3 border-b border-line-soft shrink-0"
 			style="padding-top: max(0.75rem, env(safe-area-inset-top));"
 		>
 			<div class="flex items-center gap-2">
-				<BookOpen class="size-5 text-slate-700" />
-				<span class="font-semibold text-base text-slate-900">Documentation</span>
+				<BookOpen class="size-5 text-fg-secondary" />
+				<span class="font-semibold text-base text-fg">Documentation</span>
 			</div>
 			<button
 				type="button"
 				onclick={closeDrawer}
-				class="inline-flex items-center justify-center size-11 rounded-md text-slate-700 hover:bg-slate-100"
+				class="inline-flex items-center justify-center size-11 rounded-md text-fg-secondary hover:bg-panel-2"
 				aria-label="Close menu"
 			>
 				<X class="size-5" />

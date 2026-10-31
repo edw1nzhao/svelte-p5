@@ -51,9 +51,9 @@
 		{sketch}
 		description="Dots drifting across the canvas and leaving fading trails; the sliders set their hue, speed and size."
 	/>
-	<div class="flex gap-4 px-3 py-2 bg-slate-50 border-t border-slate-200 shrink-0">
+	<div class="flex gap-4 px-3 py-2 bg-panel border-t border-line shrink-0">
 		<label
-			class="flex-1 flex items-center gap-1.5 text-[0.6875rem] text-slate-500 whitespace-nowrap"
+			class="flex-1 flex items-center gap-1.5 text-[0.6875rem] text-fg-subtle whitespace-nowrap"
 		>
 			radius
 			<input
@@ -61,14 +61,14 @@
 				min="4"
 				max="40"
 				bind:value={bridge.state.radius}
-				class="flex-1 min-w-0 accent-indigo-500"
+				class="flex-1 min-w-0 accent-brand"
 			/>
-			<span class="font-mono tabular-nums text-slate-400 min-w-8 text-right"
+			<span class="font-mono tabular-nums text-fg-faint min-w-8 text-right"
 				>{bridge.state.radius}</span
 			>
 		</label>
 		<label
-			class="flex-1 flex items-center gap-1.5 text-[0.6875rem] text-slate-500 whitespace-nowrap"
+			class="flex-1 flex items-center gap-1.5 text-[0.6875rem] text-fg-subtle whitespace-nowrap"
 		>
 			hue
 			<input
@@ -76,14 +76,14 @@
 				min="0"
 				max="360"
 				bind:value={bridge.state.hue}
-				class="flex-1 min-w-0 accent-indigo-500"
+				class="flex-1 min-w-0 accent-brand"
 			/>
-			<span class="font-mono tabular-nums text-slate-400 min-w-8 text-right"
+			<span class="font-mono tabular-nums text-fg-faint min-w-8 text-right"
 				>{bridge.state.hue}&deg;</span
 			>
 		</label>
 		<label
-			class="flex-1 flex items-center gap-1.5 text-[0.6875rem] text-slate-500 whitespace-nowrap"
+			class="flex-1 flex items-center gap-1.5 text-[0.6875rem] text-fg-subtle whitespace-nowrap"
 		>
 			speed
 			<input
@@ -92,9 +92,9 @@
 				max="6"
 				step="0.1"
 				bind:value={bridge.state.speed}
-				class="flex-1 min-w-0 accent-indigo-500"
+				class="flex-1 min-w-0 accent-brand"
 			/>
-			<span class="font-mono tabular-nums text-slate-400 min-w-8 text-right"
+			<span class="font-mono tabular-nums text-fg-faint min-w-8 text-right"
 				>{bridge.state.speed.toFixed(1)}</span
 			>
 		</label>
