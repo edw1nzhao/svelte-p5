@@ -1,28 +1,23 @@
 # svelte-p5
 
-Svelte 5 bindings for p5.js. Low-level primitives if you want control, pre-built components if you want defaults.
+Svelte 5 bindings for p5.js: a canvas component with correct cleanup, a reactive `$state` bridge between sketch and UI, and optional pre-built components.
 
-**[svelte-p5.dev](https://svelte-p5.dev)** is the docs site, with live demos and full reference.
+[![CI](https://img.shields.io/github/actions/workflow/status/edw1nzhao/svelte-p5/ci.yml?branch=main&label=CI&style=flat)](https://github.com/edw1nzhao/svelte-p5/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/svelte-p5?label=svelte-p5&style=flat&color=6366f1)](https://www.npmjs.com/package/svelte-p5)
+[![npm](https://img.shields.io/npm/v/svelte-p5-components?label=components&style=flat&color=6366f1)](https://www.npmjs.com/package/svelte-p5-components)
+[![npm](https://img.shields.io/npm/v/svelte-p5-viz?label=viz&style=flat&color=6366f1)](https://www.npmjs.com/package/svelte-p5-viz)
+[![downloads](https://img.shields.io/npm/dm/svelte-p5?style=flat&color=6366f1)](https://www.npmjs.com/package/svelte-p5)
+[![minzipped size](https://img.shields.io/bundlejs/size/svelte-p5?style=flat&color=6366f1)](https://bundlejs.com/?q=svelte-p5)
+[![license](https://img.shields.io/npm/l/svelte-p5?style=flat&color=64748b)](./LICENSE)
+[![p5.js 1.11 | 2.x tested](https://img.shields.io/badge/p5.js-1.11%20%7C%202.x%20tested-ed225d?style=flat)](https://github.com/edw1nzhao/svelte-p5/actions/workflows/ci.yml)
+[![Svelte 5](https://img.shields.io/badge/Svelte-5-ff3e00?style=flat)](https://svelte.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-types%20included-3178c6?style=flat)](https://www.npmjs.com/package/svelte-p5?activeTab=code)
 
-## Packages
+[![A p5 sketch driven by Svelte sliders through createP5Bridge, next to the code that does it](./.github/assets/bridge-demo.png)](https://svelte-p5.dev)
 
-| Package                                         | Version                                                                                                                             | Contents                                                                              |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| [`svelte-p5`](./packages/core)                  | [![npm](https://img.shields.io/npm/v/svelte-p5?label=&color=6366f1)](https://www.npmjs.com/package/svelte-p5)                       | `<P5Canvas>`, `createP5Bridge`, a handful of perf utilities                           |
-| [`svelte-p5-components`](./packages/components) | [![npm](https://img.shields.io/npm/v/svelte-p5-components?label=&color=6366f1)](https://www.npmjs.com/package/svelte-p5-components) | `<Sketch>`, `<FPSMonitor>`, `<SketchDebug>`, `<DraggableWindow>`, `<DraggableSketch>` |
-| [`svelte-p5-viz`](./packages/viz)               | [![npm](https://img.shields.io/npm/v/svelte-p5-viz?label=&color=6366f1)](https://www.npmjs.com/package/svelte-p5-viz)               | `VizPanel` contract, `createPanelRegistry`, `createSceneState`, `SceneConfig` types   |
+**[svelte-p5.dev](https://svelte-p5.dev)** has the docs, live demos and full reference.
 
-## What it adds
-
-[`p5-svelte`](https://github.com/tonyketcham/p5-svelte) was the original Svelte wrapper for p5; this library is a Svelte-5-native rebuild with three additions on top of the wrapper itself:
-
-- **Lifecycle teardown.** `<P5Canvas>` calls `instance.remove()` on unmount. If your app mounts/unmounts sketches (route changes, `{#if}` toggles, HMR), this releases each instance instead of leaving it scheduled. The [wrapper comparison](https://svelte-p5.dev/docs/perf-comparison) has the data and explains when this is and isn't a meaningful difference.
-- **Reactive state bridge.** `createP5Bridge` returns a `$state` proxy that both Svelte UI and the sketch can read and write directly, so you don't need stores or subscription boilerplate.
-- **Pre-built components.** Optional package with auto-resize + HiDPI canvas, FPS overlay, draggable windows, and debug overlays.
-
-Built for Svelte 5 runes and instance-based p5; the API is `bind:instance` instead of event dispatchers. p5.js 1.11+ and 2.x are both supported, and CI runs every test, including a real-browser one, against each.
-
-## Quick starts
+## Quick start
 
 ```bash
 pnpm add svelte-p5 p5
@@ -45,75 +40,100 @@ pnpm add svelte-p5 p5
 <P5Canvas {sketch} />
 ```
 
-Already using `p5-svelte`? The [migration guide](https://svelte-p5.dev/docs/recipes/migration-from-p5-svelte) is the fastest way over. Otherwise the [getting started guide](https://svelte-p5.dev/docs/getting-started) walks through each layer.
+For a canvas that fills its parent and handles HiDPI, add the components package:
 
-Coming from the p5 web editor, or want this without a bundler? [No build step](https://svelte-p5.dev/docs/no-build-step) covers what works from a plain `<script>` tag — the utilities do, the component can't, and why — plus the global → instance mode conversion.
+```bash
+pnpm add svelte-p5-components
+```
+
+```svelte
+<script lang="ts">
+	import { Sketch } from 'svelte-p5-components';
+	import type p5 from 'p5';
+
+	const sketch = (p: p5) => {
+		p.setup = () => p.createCanvas(400, 400);
+		p.draw = () => {
+			p.background(240);
+			p.circle(p.mouseX, p.mouseY, 40);
+		};
+	};
+</script>
+
+<div style="width: 100%; height: 320px;">
+	<Sketch {sketch} />
+</div>
+```
+
+The [getting started guide](https://svelte-p5.dev/docs/getting-started) walks through each layer. Without a bundler, see [no build step](https://svelte-p5.dev/docs/no-build-step).
+
+## Why svelte-p5
+
+[`p5-svelte`](https://github.com/tonyketcham/p5-svelte) was the original Svelte wrapper for p5. svelte-p5 is a Svelte 5 rebuild with a reactive state bridge and an optional component layer on top.
+
+|                       | `svelte-p5`                                     | `p5-svelte`                  |
+| --------------------- | ----------------------------------------------- | ---------------------------- |
+| Last published        | Ongoing, via release-please                     | 3.1.2, April 2022            |
+| p5.js peer range      | `>=1.11.0 <3` (1.11 and 2.x, both tested in CI) | `^1.4.0` (p5 1 only)         |
+| Svelte peer range     | `^5.0.0`                                        | None declared (Svelte 3 era) |
+| Reactive state bridge | `createP5Bridge`, a `$state` proxy              | Not included                 |
+| Pre-built components  | `svelte-p5-components`                          | Not included                 |
+| npm provenance        | Yes, via trusted publishing                     | No attestation published     |
+
+`<P5Canvas>` also calls `instance.remove()` on unmount. The [wrapper comparison](https://svelte-p5.dev/docs/perf-comparison) has the data and says when that does and does not matter. Moving over: [migration guide](https://svelte-p5.dev/docs/recipes/migration-from-p5-svelte).
+
+## Packages
+
+| Package                                         | Version                                                                                                                             | Contents                                                                              |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| [`svelte-p5`](./packages/core)                  | [![npm](https://img.shields.io/npm/v/svelte-p5?label=&color=6366f1)](https://www.npmjs.com/package/svelte-p5)                       | `<P5Canvas>`, `createP5Bridge`, a handful of perf utilities                           |
+| [`svelte-p5-components`](./packages/components) | [![npm](https://img.shields.io/npm/v/svelte-p5-components?label=&color=6366f1)](https://www.npmjs.com/package/svelte-p5-components) | `<Sketch>`, `<FPSMonitor>`, `<SketchDebug>`, `<DraggableWindow>`, `<DraggableSketch>` |
+| [`svelte-p5-viz`](./packages/viz)               | [![npm](https://img.shields.io/npm/v/svelte-p5-viz?label=&color=6366f1)](https://www.npmjs.com/package/svelte-p5-viz)               | `VizPanel` contract, `createPanelRegistry`, `createSceneState`, `SceneConfig` types   |
+
+`svelte-p5-viz` is below 1.0, so a caret range pins the minor. The [upgrade guide](./docs/upgrading.md) has the details for every release.
+
+## Compatibility
+
+- **p5.js:** 1.11+ and 2.x. CI runs every test against both, including a real-browser Playwright test.
+- **Svelte:** 5, with SvelteKit.
+- **Language:** TypeScript types are included.
+- **License:** MIT.
+- **Releases:** published to npm with provenance via trusted publishing.
+
+## Used by
+
+- [Interaction Geography Slicer](https://github.com/BenRydal/igs) (IGS), published at CHI 2025: Shapiro, Hall, Mathur and Zhao, [doi:10.1145/3706598.3713490](https://doi.org/10.1145/3706598.3713490)
+- [Transcript Explorer](https://github.com/BenRydal/transcript-explorer)
+- [Mondrian Transcription](https://github.com/BenRydal/mondrian-transcription)
 
 ## Documentation
 
-Full docs at **[svelte-p5.dev/docs](https://svelte-p5.dev/docs)**:
+- [Getting started](https://svelte-p5.dev/docs/getting-started), [no build step](https://svelte-p5.dev/docs/no-build-step), [three layers](https://svelte-p5.dev/docs/architecture), [state bridges](https://svelte-p5.dev/docs/bridges)
+- Recipes: [shared state](https://svelte-p5.dev/docs/recipes/shared-state), [interaction](https://svelte-p5.dev/docs/recipes/interaction), [data-driven viz](https://svelte-p5.dev/docs/recipes/data-driven-viz), [cleanup](https://svelte-p5.dev/docs/recipes/cleanup), [performance](https://svelte-p5.dev/docs/recipes/performance), [HiDPI](https://svelte-p5.dev/docs/recipes/hidpi)
+- [Migrating from p5-svelte](https://svelte-p5.dev/docs/recipes/migration-from-p5-svelte)
+- [Upgrade guide](./docs/upgrading.md)
+- Runnable [examples](./docs/examples), from a plain HTML page to a draggable dashboard
 
-- [Getting started](https://svelte-p5.dev/docs/getting-started) - install and use the three layers
-- [No build step](https://svelte-p5.dev/docs/no-build-step) - script tags, CDNs, and global vs instance mode
-- [Three layers](https://svelte-p5.dev/docs/architecture) - primitives, components, composition
-- [State bridges](https://svelte-p5.dev/docs/bridges) - when to use `$state`, `createP5Bridge`, or a reactive class
-- [Wrapper behavior comparison](https://svelte-p5.dev/docs/perf-comparison) - reproducible benchmark with honest framing on when it matters
-- Recipes for [shared state](https://svelte-p5.dev/docs/recipes/shared-state), [interaction](https://svelte-p5.dev/docs/recipes/interaction), [data-driven viz](https://svelte-p5.dev/docs/recipes/data-driven-viz), [cleanup](https://svelte-p5.dev/docs/recipes/cleanup), [performance](https://svelte-p5.dev/docs/recipes/performance), [HiDPI](https://svelte-p5.dev/docs/recipes/hidpi), and [migration](https://svelte-p5.dev/docs/recipes/migration-from-p5-svelte)
+The same markdown lives in [`docs/`](./docs) for browsing on GitHub.
 
-The same markdown also lives in [`docs/`](./docs) for browsing on GitHub.
+## Contributing
 
-## Runnable examples
-
-Four examples in `docs/examples/`, ordered by increasing scope:
-
-- [`00-no-build`](./docs/examples/00-no-build) - plain HTML files, no install and no bundler
-- [`01-basic`](./docs/examples/01-basic) - `<P5Canvas>` and a sketch, nothing else
-- [`02-store-bridge`](./docs/examples/02-store-bridge) - UI sliders drive a particle field through `createP5Bridge`
-- [`03-draggable-dashboard`](./docs/examples/03-draggable-dashboard) - three floating sketches sharing one reactive class
-
-```bash
-pnpm --filter @svelte-p5-example/01-basic dev
-pnpm --filter @svelte-p5-example/02-store-bridge dev
-pnpm --filter @svelte-p5-example/03-draggable-dashboard dev
-```
-
-`00-no-build` has no install step — open its HTML files in a browser directly.
-
-## Development
-
-[mise](https://mise.jdx.dev/) pins node 24, pnpm 10, and bun. If you prefer not to install mise, `nvm use` + `corepack enable pnpm` works (reads `.nvmrc`).
+Issues and PRs are welcome; see [CONTRIBUTING](./.github/CONTRIBUTING.md). [mise](https://mise.jdx.dev/) pins node, pnpm and bun.
 
 ```bash
 mise install
 pnpm install
-pnpm build         # both packages
-pnpm typecheck     # workspace-wide
-pnpm lint          # prettier + eslint
-pnpm test          # vitest
+pnpm build
+pnpm typecheck
+pnpm lint
+pnpm test
 ```
 
-The site lives in [`site/`](./site) and the perf benchmark in [`bench/`](./bench).
-
-## Releases
-
-Two channels off `main`:
-
-- **Stable** — `pnpm add svelte-p5`. Automated via [release-please](https://github.com/googleapis/release-please-action) with a monorepo manifest. Merging a conventional-commit (`feat:`, `fix:`, `feat!:`) to `main` maintains a release PR per package; merging that PR publishes to npm.
-- **Canary preview** — every PR and every push to `main` publishes per-commit preview builds via [pkg-pr-new](https://pkg.pr.new/). Install any commit directly:
-
-  ```bash
-  pnpm add https://pkg.pr.new/edw1nzhao/svelte-p5/svelte-p5@<sha-or-main>
-  ```
-
-  Handy for testing a fix before the stable release lands. Full details in [`docs/releasing.md`](./docs/releasing.md#canary-preview-builds).
+The site lives in [`site/`](./site) and the perf benchmark in [`bench/`](./bench). Releases are automated with release-please, and every PR gets installable preview builds from [pkg-pr-new](https://pkg.pr.new/); see [`docs/releasing.md`](./docs/releasing.md).
 
 ## Roadmap
 
-1.0 froze the public API, and p5.js 2.x is supported alongside 1.11+ without a major. Next:
-
-- **neodrag 3 stable**, once upstream leaves `next`.
-
-Candidates with no release attached: a dockable panel variant (via dockview) and a CSS Grid layout helper for multi-viz dashboards. Nothing enters the library until real duplication across consumers calls for it; see [`docs/proposals/igs-port-roadmap.md`](./docs/proposals/igs-port-roadmap.md).
+The 1.0 API is frozen. Next is neodrag 3 stable, once upstream leaves `next`. Nothing else is committed; see [`docs/proposals/igs-port-roadmap.md`](./docs/proposals/igs-port-roadmap.md).
 
 ## License
 
