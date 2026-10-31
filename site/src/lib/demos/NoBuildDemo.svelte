@@ -41,10 +41,10 @@
 		margin: 0 0 2rem;
 	}
 	.frame {
-		border: 1px solid rgb(226 232 240);
+		border: 1px solid var(--color-line);
 		border-radius: 0.5rem;
 		overflow: hidden;
-		background: rgb(248 250 252);
+		background: var(--color-panel);
 	}
 	iframe {
 		display: block;
@@ -58,13 +58,13 @@
 		justify-content: center;
 		height: 22rem;
 		font-size: 0.875rem;
-		color: rgb(100 116 139);
+		color: var(--color-fg-subtle);
 	}
 	figcaption {
 		margin-top: 0.625rem;
 		font-size: 0.8125rem;
 		line-height: 1.5;
-		color: rgb(100 116 139);
+		color: var(--color-fg-subtle);
 		text-wrap: pretty;
 	}
 	figcaption code {

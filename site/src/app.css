@@ -48,6 +48,20 @@
 
 :root {
 	color-scheme: light;
+	--cm-meta: #404740;
+	--cm-keyword: #708;
+	--cm-atom: #219;
+	--cm-literal: #164;
+	--cm-string: #a11;
+	--cm-regexp: #e40;
+	--cm-definition: #00f;
+	--cm-local: #30a;
+	--cm-type: #085;
+	--cm-class: #167;
+	--cm-special: #256;
+	--cm-property: #00c;
+	--cm-comment: #940;
+	--cm-invalid: #f00;
 	--header-h: 3.5rem;
 	/* Combined offset to clear sticky header + any page-level sticky bar.
 	   Pages add to this (e.g. docs adds the mobile docs bar). */
@@ -60,7 +74,49 @@
 	}
 }
 
+:root[data-theme='dark'] {
+	color-scheme: dark;
+	color: var(--color-fg);
+	--color-page: var(--color-slate-950);
+	--color-panel: var(--color-slate-900);
+	--color-panel-2: var(--color-slate-800);
+	--color-panel-3: var(--color-slate-700);
+	--color-fg: var(--color-slate-100);
+	--color-fg-secondary: var(--color-slate-300);
+	--color-fg-muted: var(--color-slate-300);
+	--color-fg-subtle: var(--color-slate-400);
+	--color-fg-faint: var(--color-slate-400);
+	--color-fg-ghost: var(--color-slate-600);
+	--color-line-soft: var(--color-slate-900);
+	--color-line: var(--color-slate-800);
+	--color-line-strong: var(--color-slate-700);
+	--color-brand: var(--color-indigo-400);
+	--color-brand-strong: var(--color-indigo-300);
+	--color-brand-ink: var(--color-indigo-200);
+	--color-brand-deep: var(--color-indigo-100);
+	--color-brand-soft: var(--color-indigo-950);
+	--color-brand-ring: var(--color-indigo-900);
+	--color-brand-line-soft: var(--color-indigo-800);
+	--color-brand-line: var(--color-indigo-700);
+	--color-brand-line-strong: var(--color-indigo-500);
+	--cm-meta: #cbd5e1;
+	--cm-keyword: #d8b4fe;
+	--cm-atom: #93c5fd;
+	--cm-literal: #86efac;
+	--cm-string: #fca5a5;
+	--cm-regexp: #fdba74;
+	--cm-definition: #93c5fd;
+	--cm-local: #c4b5fd;
+	--cm-type: #6ee7b7;
+	--cm-class: #5eead4;
+	--cm-special: #a5f3fc;
+	--cm-property: #a5b4fc;
+	--cm-comment: #e7c08a;
+	--cm-invalid: #f87171;
+}
+
 html {
+	background: var(--color-page);
 	scroll-behavior: smooth;
 	-webkit-text-size-adjust: 100%;
 	text-size-adjust: 100%;
@@ -254,7 +310,7 @@ pre.shiki code {
 	font-family: var(--font-mono);
 	font-size: 0.875em;
 	background: color-mix(in srgb, var(--color-accent) 8%, transparent);
-	color: #4f46e5;
+	color: var(--color-brand-strong);
 	padding: 0.125rem 0.375rem;
 	border-radius: 0.25rem;
 	word-break: break-word;

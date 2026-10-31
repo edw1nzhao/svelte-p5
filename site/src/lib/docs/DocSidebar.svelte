@@ -47,8 +47,8 @@
 			transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
 	}
 	.sidebar-link:hover:not([aria-current='page']) {
-		background-color: rgb(241 245 249);
-		color: rgb(15 23 42);
+		background-color: var(--color-panel-2);
+		color: var(--color-fg);
 	}
 	.sidebar-link:active {
 		transform: translateX(1px);

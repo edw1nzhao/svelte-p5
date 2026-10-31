@@ -148,7 +148,7 @@
 	:global(.prose-doc h2 .anchor:focus),
 	:global(.prose-doc h3 .anchor:focus) {
 		opacity: 1;
-		color: rgb(99 102 241);
+		color: var(--color-brand);
 	}
 	@media (max-width: 767px) {
 		:global(.prose-doc h2 .anchor),
@@ -201,7 +201,7 @@
 	/* p5 reference autolinks: subtle dotted underline */
 	:global(.prose-doc a.p5-ref) {
 		text-decoration: underline dotted;
-		text-decoration-color: rgb(199 210 254);
+		text-decoration-color: var(--color-brand-line-soft);
 		text-underline-offset: 3px;
 	}
 
@@ -209,7 +209,7 @@
 	:global(.prose-doc h2) {
 		font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
 		font-weight: 700;
-		color: rgb(15 23 42);
+		color: var(--color-fg);
 		margin-top: 2.5rem;
 		margin-bottom: 0.75rem;
 		letter-spacing: -0.01em;
@@ -217,13 +217,13 @@
 	:global(.prose-doc h3) {
 		font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
 		font-weight: 600;
-		color: rgb(15 23 42);
+		color: var(--color-fg);
 		margin-top: 2rem;
 		margin-bottom: 0.5rem;
 	}
 	:global(.prose-doc p),
 	:global(.prose-doc li) {
-		color: rgb(51 65 85);
+		color: var(--color-fg-secondary);
 		line-height: 1.7;
 		margin-bottom: 1rem;
 	}
@@ -242,20 +242,20 @@
 		margin-bottom: 0.375rem;
 	}
 	:global(.prose-doc a) {
-		color: rgb(79 70 229);
+		color: var(--color-brand-strong);
 		text-decoration: underline;
 		text-underline-offset: 2px;
 		text-decoration-thickness: 1px;
-		text-decoration-color: rgb(199 210 254);
+		text-decoration-color: var(--color-brand-line-soft);
 	}
 	:global(.prose-doc a:hover) {
-		text-decoration-color: rgb(79 70 229);
+		text-decoration-color: var(--color-brand-strong);
 	}
 	:global(.prose-doc :not(pre) > code) {
 		font-family: var(--font-mono);
 		font-size: 0.875em;
-		background: rgb(238 242 255);
-		color: rgb(67 56 202);
+		background: var(--color-brand-soft);
+		color: var(--color-brand-ink);
 		padding: 0.125rem 0.375rem;
 		border-radius: 0.25rem;
 		word-break: break-word;
@@ -267,10 +267,10 @@
 		border: 1px solid rgb(30 41 59);
 	}
 	:global(.prose-doc blockquote) {
-		border-left: 3px solid rgb(199 210 254);
+		border-left: 3px solid var(--color-brand-line-soft);
 		padding-left: 1rem;
 		margin: 1.25rem 0;
-		color: rgb(71 85 105);
+		color: var(--color-fg-muted);
 		font-style: italic;
 	}
 	:global(.prose-doc table) {
@@ -285,19 +285,19 @@
 	}
 	:global(.prose-doc th),
 	:global(.prose-doc td) {
-		border: 1px solid rgb(226 232 240);
+		border: 1px solid var(--color-line);
 		padding: 0.5rem 0.75rem;
 		text-align: left;
 		vertical-align: top;
 	}
 	:global(.prose-doc th) {
-		background: rgb(248 250 252);
+		background: var(--color-panel);
 		font-weight: 600;
-		color: rgb(15 23 42);
+		color: var(--color-fg);
 	}
 	:global(.prose-doc hr) {
 		border: 0;
-		border-top: 1px solid rgb(226 232 240);
+		border-top: 1px solid var(--color-line);
 		margin: 2rem 0;
 	}
 </style>

@@ -3,6 +3,7 @@
 	import GithubIcon from './icons/GithubIcon.svelte';
 	import Logo from './Logo.svelte';
 	import SiteSearch from './SiteSearch.svelte';
+	import ThemeToggle from './ThemeToggle.svelte';
 	import { page } from '$app/state';
 
 	let scrolled = $state(false);
@@ -221,7 +222,8 @@
 			</a>
 		</div>
 
-		<div class="ml-auto md:ml-0">
+		<div class="ml-auto md:ml-0 flex items-center gap-1">
+			<ThemeToggle />
 			<SiteSearch />
 		</div>
 
