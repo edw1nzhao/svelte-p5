@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.2](https://github.com/edw1nzhao/svelte-p5/compare/components-v1.1.1...components-v1.1.2) (2026-10-31)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 1.0.1
+  * peerDependencies
+    * svelte-p5 bumped from ^1.0.0 to ^1.0.1
+
 ## [1.1.1](https://github.com/edw1nzhao/svelte-p5/compare/components-v1.1.0...components-v1.1.1) (2026-10-30)
 
 
