@@ -5,8 +5,6 @@ export const prerender = true;
 const SITE = 'https://svelte-p5.dev';
 
 export function GET() {
-	const lastmod = new Date().toISOString().split('T')[0];
-
 	const urls = [
 		{ loc: `${SITE}/`, priority: '1.0', changefreq: 'weekly' },
 		{ loc: `${SITE}/docs`, priority: '0.9', changefreq: 'weekly' },
@@ -24,7 +22,6 @@ ${urls
 	.map(
 		(u) => `	<url>
 		<loc>${u.loc}</loc>
-		<lastmod>${lastmod}</lastmod>
 		<changefreq>${u.changefreq}</changefreq>
 		<priority>${u.priority}</priority>
 	</url>`
