@@ -20,11 +20,33 @@
 		start: number;
 		end: number;
 	}
+
+	/** What the `underlay` snippet receives: the visible view and a time to left-% mapper. */
+	export interface TimelineViewContext {
+		view: TimelineView;
+		duration: number;
+		timeToPercent: (time: number) => number;
+	}
+
+	/** The track's position in viewport (client) pixels. */
+	export interface TimelineTrackBounds {
+		left: number;
+		right: number;
+		width: number;
+	}
 </script>
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { onDestroy } from 'svelte';
+	import {
+		clampView,
+		panView,
+		xToTime,
+		zoomView,
+		zoomViewToRange,
+		type TimelineView
+	} from './timeline-view.js';
 
 	// TimelineTrack is a horizontal scrub track for canvas apps. It models
 	// three draggable concepts at once:
@@ -87,6 +109,20 @@
 		 * the start handle should preview the frame it lands on. Default: false.
 		 */
 		playheadFollowsSelectionStart?: boolean;
+		/** Start of the visible window. Bindable. Default: 0. */
+		viewStart?: number;
+		/** End of the visible window. Bindable. Default: `duration`. */
+		viewEnd?: number;
+		/** Let the user zoom and pan with drag, wheel, pinch and keys. Default: false. */
+		zoomable?: boolean;
+		/** Narrowest view the user can zoom to. Default: `duration / 1000`. */
+		minViewDuration?: number;
+		/** Called when the user changes the view. */
+		onViewChange?: (view: TimelineView) => void;
+		/** Called with the track's client-pixel bounds on mount and whenever they change. */
+		onBoundsChange?: (bounds: TimelineTrackBounds) => void;
+		/** Snippet rendered behind the rail, e.g. an activity gradient. */
+		underlay?: Snippet<[TimelineViewContext]>;
 		class?: string;
 	}
 
@@ -105,13 +141,37 @@
 		onHoverTime,
 		hoverPreview,
 		playheadFollowsSelectionStart = false,
+		viewStart = $bindable<number | undefined>(undefined),
+		viewEnd = $bindable<number | undefined>(undefined),
+		zoomable = false,
+		minViewDuration,
+		onViewChange,
+		onBoundsChange,
+		underlay,
 		class: className = ''
 	}: Props = $props();
 
+	type DragKind =
+		| 'playhead'
+		| 'selection-start'
+		| 'selection-end'
+		| 'selection-body'
+		| 'zoom-region'
+		| 'pan'
+		| 'pinch';
+
+	const ZOOM_DRAG_THRESHOLD_PX = 5;
+	const KEY_ZOOM_IN = 0.7;
+	const KEY_ZOOM_OUT = 1.4;
+	const WHEEL_ZOOM_BASE = 1.15;
+
 	let trackEl: HTMLDivElement | null = $state(null);
-	let dragging = $state<null | 'playhead' | 'selection-start' | 'selection-end' | 'selection-body'>(
-		null
-	);
+	let dragging = $state<null | DragKind>(null);
+	let zoomRegion = $state<{ from: number; to: number } | null>(null);
+	let gestureStartX = 0;
+	let gestureStartView: TimelineView = { start: 0, end: 0 };
+	let pinchCenter = 0;
+	let touches: { id: number; x: number }[] = [];
 	let dragStartTime = $state(0);
 	let dragStartSelection = $state<TimelineSelection>({ start: 0, end: 0 });
 	let hoverX = $state<number | null>(null);
@@ -124,9 +184,20 @@
 	);
 
 	const safeDuration = $derived(Math.max(0.0001, duration));
+	const view = $derived(
+		clampView({ start: viewStart ?? 0, end: viewEnd ?? safeDuration }, safeDuration)
+	);
+	const viewWidth = $derived(view.end - view.start);
+	const isZoomed = $derived(view.start > 0 || view.end < safeDuration);
+	const minWidth = $derived(minViewDuration ?? safeDuration / 1000);
 
 	function timeToPercent(t: number): number {
-		return Math.max(0, Math.min(100, (t / safeDuration) * 100));
+		return Math.max(0, Math.min(100, ((t - view.start) / viewWidth) * 100));
+	}
+
+	// Off-view items hide only while zoomed, so the unzoomed track renders as before.
+	function isVisible(t: number): boolean {
+		return !isZoomed || (t >= view.start && t <= view.end);
 	}
 
 	function eventToTime(event: PointerEvent): number | null {
@@ -134,7 +205,114 @@
 		const rect = trackEl.getBoundingClientRect();
 		const x = event.clientX - rect.left;
 		const pct = Math.max(0, Math.min(1, x / rect.width));
-		return pct * safeDuration;
+		return view.start + pct * viewWidth;
+	}
+
+	function setView(next: TimelineView): boolean {
+		if (next.start === view.start && next.end === view.end) return false;
+		viewStart = next.start;
+		viewEnd = next.end;
+		onViewChange?.(next);
+		return true;
+	}
+
+	function zoomBy(factor: number, center: number): boolean {
+		return setView(zoomView(view, factor, center, safeDuration, minWidth));
+	}
+
+	function seekTo(time: number) {
+		currentTime = clamp(time, 0, safeDuration);
+		onSeek?.(currentTime);
+	}
+
+	function addDocListeners() {
+		document.addEventListener('pointermove', handleDocPointerMove);
+		document.addEventListener('pointerup', handleDocPointerUp);
+		document.addEventListener('pointercancel', handleDocPointerUp);
+	}
+
+	function removeDocListeners() {
+		document.removeEventListener('pointermove', handleDocPointerMove);
+		document.removeEventListener('pointerup', handleDocPointerUp);
+		document.removeEventListener('pointercancel', handleDocPointerUp);
+	}
+
+	function capturePointer(event: PointerEvent) {
+		const target = event.target as Element & { setPointerCapture?: (id: number) => void };
+		try {
+			target.setPointerCapture?.(event.pointerId);
+		} catch {
+			/* fall back to document listeners */
+		}
+	}
+
+	function handleZoomablePointerDown(event: PointerEvent) {
+		if (event.pointerType === 'touch' && (!dragging || dragging === 'zoom-region')) {
+			touches = [
+				...touches.filter((t) => t.id !== event.pointerId),
+				{ id: event.pointerId, x: event.clientX }
+			];
+		}
+		if (touches.length === 2 && trackEl) {
+			const rect = trackEl.getBoundingClientRect();
+			const [a, b] = touches.map((t) => t.x) as [number, number];
+			dragging = 'pinch';
+			zoomRegion = null;
+			gestureStartX = Math.abs(a - b);
+			gestureStartView = view;
+			pinchCenter = xToTime((a + b) / 2 - rect.left, view, 0, rect.width);
+			return;
+		}
+		if (dragging) return;
+		const time = eventToTime(event);
+		if (time === null) return;
+		dragging = event.button === 1 || event.altKey ? 'pan' : 'zoom-region';
+		gestureStartX = event.clientX;
+		gestureStartView = view;
+		dragStartTime = time;
+		capturePointer(event);
+		addDocListeners();
+	}
+
+	function handleZoomableMove(event: PointerEvent) {
+		if (!trackEl) return;
+		const rect = trackEl.getBoundingClientRect();
+		if (dragging === 'pinch') {
+			const touch = touches.find((t) => t.id === event.pointerId);
+			if (!touch) return;
+			touch.x = event.clientX;
+			if (touches.length < 2) return;
+			const [a, b] = touches.map((t) => t.x) as [number, number];
+			const dist = Math.abs(a - b);
+			if (dist > 0 && gestureStartX > 0) {
+				const factor = gestureStartX / dist;
+				setView(zoomView(gestureStartView, factor, pinchCenter, safeDuration, minWidth));
+			}
+		} else if (dragging === 'pan') {
+			const width = gestureStartView.end - gestureStartView.start;
+			const delta = -((event.clientX - gestureStartX) / rect.width) * width;
+			setView(panView(gestureStartView, delta, safeDuration));
+		} else if (dragging === 'zoom-region') {
+			if (Math.abs(event.clientX - gestureStartX) < ZOOM_DRAG_THRESHOLD_PX) return;
+			const time = eventToTime(event);
+			if (time !== null) zoomRegion = { from: dragStartTime, to: time };
+		}
+	}
+
+	function handleZoomableUp(event: PointerEvent) {
+		touches = touches.filter((t) => t.id !== event.pointerId);
+		if (dragging === 'pinch' && touches.length > 0) return;
+		if (dragging === 'zoom-region') {
+			if (zoomRegion) {
+				setView(zoomViewToRange(zoomRegion.from, zoomRegion.to, safeDuration, minWidth));
+			} else if (event.type === 'pointerup') {
+				seekTo(dragStartTime);
+			}
+		}
+		zoomRegion = null;
+		dragging = null;
+		touches = [];
+		removeDocListeners();
 	}
 
 	function eventToClientX(event: PointerEvent): number | null {
@@ -151,6 +329,11 @@
 		// Skip if user grabbed a child that manages its own drag (handles,
 		// segments, the playhead knob, or the selection band drag zone).
 		if ((event.target as HTMLElement).closest('[data-skip-rail]')) return;
+
+		if (zoomable) {
+			handleZoomablePointerDown(event);
+			return;
+		}
 
 		const time = eventToTime(event);
 		if (time === null) return;
@@ -190,6 +373,10 @@
 
 	function handleDocPointerMove(event: PointerEvent) {
 		if (!dragging) return;
+		if (dragging === 'zoom-region' || dragging === 'pan' || dragging === 'pinch') {
+			handleZoomableMove(event);
+			return;
+		}
 		const time = eventToTime(event);
 		if (time === null) return;
 
@@ -221,8 +408,12 @@
 		}
 	}
 
-	function handleDocPointerUp() {
+	function handleDocPointerUp(event: PointerEvent) {
 		if (!dragging) return;
+		if (dragging === 'zoom-region' || dragging === 'pan' || dragging === 'pinch') {
+			handleZoomableUp(event);
+			return;
+		}
 		const wasDragging = dragging;
 		dragging = null;
 		document.removeEventListener('pointermove', handleDocPointerMove);
@@ -266,18 +457,74 @@
 	function handleKeyDown(event: KeyboardEvent) {
 		if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
 			event.preventDefault();
-			const step = event.shiftKey ? safeDuration / 20 : safeDuration / 100;
+			const step = event.shiftKey ? viewWidth / 20 : viewWidth / 100;
 			const delta = event.key === 'ArrowRight' ? step : -step;
 			currentTime = clamp(currentTime + delta, 0, safeDuration);
 			onSeek?.(currentTime);
+			return;
 		}
+		if (!zoomable || event.ctrlKey || event.metaKey || event.altKey) return;
+		const center =
+			currentTime >= view.start && currentTime <= view.end
+				? currentTime
+				: view.start + viewWidth / 2;
+		let handled = true;
+		if (event.key === '+' || event.key === '=') zoomBy(KEY_ZOOM_IN, center);
+		else if (event.key === '-' || event.key === '_') zoomBy(KEY_ZOOM_OUT, center);
+		else if (event.key === '0') setView({ start: 0, end: safeDuration });
+		else if (event.key === '[' || event.key === ']') {
+			const delta = (event.key === ']' ? 1 : -1) * viewWidth * 0.1;
+			setView(panView(view, delta, safeDuration));
+		} else handled = false;
+		if (handled) event.preventDefault();
 	}
+
+	function handleWheel(event: WheelEvent) {
+		if (!trackEl) return;
+		const rect = trackEl.getBoundingClientRect();
+		const unit = event.deltaMode === 1 ? 33 : event.deltaMode === 2 ? rect.width : 1;
+		if (event.ctrlKey || event.metaKey) {
+			event.preventDefault();
+			const center = xToTime(event.clientX - rect.left, view, 0, rect.width);
+			const steps = clamp((event.deltaY * unit) / 100, -1, 1);
+			zoomBy(Math.pow(WHEEL_ZOOM_BASE, steps), center);
+			return;
+		}
+		const raw = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+		const delta = ((raw * unit) / rect.width) * viewWidth * 0.5;
+		// Let the page scroll when there is nothing left to pan.
+		if (setView(panView(view, delta, safeDuration))) event.preventDefault();
+	}
+
+	$effect(() => {
+		if (!zoomable || !trackEl) return;
+		const el = trackEl;
+		el.addEventListener('wheel', handleWheel, { passive: false });
+		return () => el.removeEventListener('wheel', handleWheel);
+	});
+
+	$effect(() => {
+		if (!onBoundsChange || !trackEl) return;
+		const el = trackEl;
+		const report = () => {
+			const r = el.getBoundingClientRect();
+			onBoundsChange?.({ left: r.left, right: r.right, width: r.width });
+		};
+		report();
+		const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(report);
+		ro?.observe(el);
+		window.addEventListener('resize', report);
+		return () => {
+			ro?.disconnect();
+			window.removeEventListener('resize', report);
+		};
+	});
 
 	const hoveredTime = $derived.by(() => {
 		if (hoverX === null || !trackEl) return null;
 		const rect = trackEl.getBoundingClientRect();
 		const pct = Math.max(0, Math.min(1, hoverX / rect.width));
-		return pct * safeDuration;
+		return view.start + pct * viewWidth;
 	});
 
 	const hoveredPercent = $derived.by(() => {
@@ -297,8 +544,7 @@
 
 	onDestroy(() => {
 		if (typeof document !== 'undefined') {
-			document.removeEventListener('pointermove', handleDocPointerMove);
-			document.removeEventListener('pointerup', handleDocPointerUp);
+			removeDocListeners();
 		}
 	});
 </script>
@@ -308,6 +554,8 @@
 	class="timeline-track {className}"
 	class:is-active={isActive}
 	class:is-dragging={dragging !== null}
+	class:is-zooming={dragging === 'zoom-region'}
+	class:is-panning={dragging === 'pan' || dragging === 'pinch'}
 	onpointerdown={handleRailPointerDown}
 	onpointermove={handleRailPointerMove}
 	onpointerenter={handleRailPointerEnter}
@@ -317,8 +565,15 @@
 	aria-valuemin={0}
 	aria-valuemax={safeDuration}
 	aria-valuenow={currentTime}
+	aria-keyshortcuts={zoomable ? '+ - 0 [ ]' : undefined}
 	tabindex="0"
 >
+	{#if underlay}
+		<div class="timeline-track__underlay" aria-hidden="true">
+			{@render underlay({ view, duration: safeDuration, timeToPercent })}
+		</div>
+	{/if}
+
 	<div class="timeline-track__rail"></div>
 
 	<div class="timeline-track__progress" style:width="{currentPercent}%" aria-hidden="true"></div>
@@ -367,49 +622,60 @@
 		></div>
 
 		<!-- Start handle -->
-		<div
-			data-skip-rail
-			data-selection-handle
-			class="timeline-track__handle timeline-track__handle--start"
-			class:is-dragging={dragging === 'selection-start'}
-			style:left="{selectionStartPercent}%"
-			onpointerdown={(e) => {
-				e.stopPropagation();
-				startDrag('selection-start', e);
-			}}
-			role="slider"
-			aria-label="Selection start"
-			aria-valuemin={0}
-			aria-valuemax={selectionEnd}
-			aria-valuenow={selectionStart}
-			tabindex="0"
-		>
-			<div class="timeline-track__handle-bar"></div>
-		</div>
+		{#if isVisible(selectionStart as number)}<div
+				data-skip-rail
+				data-selection-handle
+				class="timeline-track__handle timeline-track__handle--start"
+				class:is-dragging={dragging === 'selection-start'}
+				style:left="{selectionStartPercent}%"
+				onpointerdown={(e) => {
+					e.stopPropagation();
+					startDrag('selection-start', e);
+				}}
+				role="slider"
+				aria-label="Selection start"
+				aria-valuemin={0}
+				aria-valuemax={selectionEnd}
+				aria-valuenow={selectionStart}
+				tabindex="0"
+			>
+				<div class="timeline-track__handle-bar"></div>
+			</div>{/if}
 
 		<!-- End handle -->
-		<div
-			data-skip-rail
-			data-selection-handle
-			class="timeline-track__handle timeline-track__handle--end"
-			class:is-dragging={dragging === 'selection-end'}
-			style:left="{selectionEndPercent}%"
-			onpointerdown={(e) => {
-				e.stopPropagation();
-				startDrag('selection-end', e);
-			}}
-			role="slider"
-			aria-label="Selection end"
-			aria-valuemin={selectionStart}
-			aria-valuemax={safeDuration}
-			aria-valuenow={selectionEnd}
-			tabindex="0"
-		>
-			<div class="timeline-track__handle-bar"></div>
-		</div>
+		{#if isVisible(selectionEnd as number)}<div
+				data-skip-rail
+				data-selection-handle
+				class="timeline-track__handle timeline-track__handle--end"
+				class:is-dragging={dragging === 'selection-end'}
+				style:left="{selectionEndPercent}%"
+				onpointerdown={(e) => {
+					e.stopPropagation();
+					startDrag('selection-end', e);
+				}}
+				role="slider"
+				aria-label="Selection end"
+				aria-valuemin={selectionStart}
+				aria-valuemax={safeDuration}
+				aria-valuenow={selectionEnd}
+				tabindex="0"
+			>
+				<div class="timeline-track__handle-bar"></div>
+			</div>{/if}
 	{/if}
 
-	{#if showPlayhead}
+	{#if zoomRegion}
+		{@const zLeft = timeToPercent(Math.min(zoomRegion.from, zoomRegion.to))}
+		{@const zRight = timeToPercent(Math.max(zoomRegion.from, zoomRegion.to))}
+		<div
+			class="timeline-track__zoom-region"
+			style:left="{zLeft}%"
+			style:width="{zRight - zLeft}%"
+			aria-hidden="true"
+		></div>
+	{/if}
+
+	{#if showPlayhead && isVisible(currentTime)}
 		<div
 			data-skip-rail
 			class="timeline-track__playhead"
@@ -465,6 +731,31 @@
 		--timeline-knob-ring: #ffffff;
 		/* Grip dots inset into the selection handle bars. */
 		--timeline-handle-dot: rgba(255, 255, 255, 0.85);
+	}
+
+	.timeline-track.is-zooming {
+		cursor: crosshair;
+	}
+
+	.timeline-track.is-panning {
+		cursor: grabbing;
+	}
+
+	.timeline-track__underlay {
+		position: absolute;
+		inset: 0;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
+	.timeline-track__zoom-region {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		background: var(--timeline-zoom-region-bg, rgba(59, 130, 246, 0.18));
+		border-inline: 1px solid var(--timeline-zoom-region-border, rgba(59, 130, 246, 0.7));
+		pointer-events: none;
+		z-index: 5;
 	}
 
 	.timeline-track:focus-visible {

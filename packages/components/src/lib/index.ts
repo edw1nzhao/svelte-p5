@@ -14,9 +14,22 @@ export { default as EntityToggleList, type Entity } from './EntityToggleList.sve
 export {
 	default as TimelineTrack,
 	type TimelineSegment,
-	type TimelineSelection
+	type TimelineSelection,
+	type TimelineTrackBounds,
+	type TimelineViewContext
 } from './TimelineTrack.svelte';
 export { default as TimelineScrubber } from './TimelineScrubber.svelte';
+export {
+	clampView,
+	zoomView,
+	panView,
+	zoomViewToRange,
+	timeToX,
+	xToTime,
+	isTimeInView,
+	viewZoomLevel,
+	type TimelineView
+} from './timeline-view.js';
 export {
 	createMediaSync,
 	type MediaSync,

@@ -5,8 +5,8 @@
       "package": "svelte-p5-components",
       "version": "2.1.0",
       "breaking": false,
-      "summary": "Adds `svelte-p5-components/youtube`, a YouTube IFrame player adapter for the media port: `youTubePort(player)` for `createMediaSync` and `createMediaPlayback`, plus `createYouTubePlayer` and `loadYouTubeIframeApi`. It handles readiness, asynchronous seeks, buffering and the IFrame API's autoplay-on-seek. The main entry is unchanged and gains no YouTube dependency.",
-      "action": "None. Apps that hand-roll YouTube syncing can replace that code with `youTubePort`; see the YouTube recipe."
+      "summary": "Adds `svelte-p5-components/youtube`, a YouTube IFrame player adapter for the media port: `youTubePort(player)` for `createMediaSync` and `createMediaPlayback`, plus `createYouTubePlayer` and `loadYouTubeIframeApi`. It handles readiness, asynchronous seeks, buffering and the IFrame API's autoplay-on-seek. The main entry is unchanged and gains no YouTube dependency. Also: `TimelineTrack` and `TimelineScrubber` gain an optional zoomable view window: bindable `viewStart`/`viewEnd`, `zoomable`, `minViewDuration`, `onViewChange`, `onBoundsChange` and an `underlay` snippet, plus exported view math (`zoomView`, `panView`, `zoomViewToRange`, `clampView`, `timeToX`, `xToTime`, `isTimeInView`, `viewZoomLevel`). See the timeline zoom recipe.",
+      "action": "None. Apps that hand-roll YouTube syncing can replace that code with `youTubePort`; see the YouTube recipe. The timeline view window needs no action either: without the new props both components render and behave exactly as before."
     },
     {
       "package": "svelte-p5-components",

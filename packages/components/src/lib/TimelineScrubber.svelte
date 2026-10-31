@@ -2,8 +2,11 @@
 	import type { Snippet } from 'svelte';
 	import TimelineTrack, {
 		type TimelineSegment,
-		type TimelineSelection
+		type TimelineSelection,
+		type TimelineTrackBounds,
+		type TimelineViewContext
 	} from './TimelineTrack.svelte';
+	import { viewZoomLevel, zoomView, type TimelineView } from './timeline-view.js';
 
 	// Stacked player bar for canvas apps. Lays the timeline out like a
 	// video player:
@@ -72,6 +75,20 @@
 		 * the new start (and fire `onSeek`). Default: false.
 		 */
 		playheadFollowsSelectionStart?: boolean;
+		/** Start of the visible window. Bindable. See `TimelineTrack`. */
+		viewStart?: number;
+		/** End of the visible window. Bindable. See `TimelineTrack`. */
+		viewEnd?: number;
+		/** Enable zoom and pan on the track, plus zoom out / fit / zoom in buttons. Default: false. */
+		zoomable?: boolean;
+		/** Narrowest view the user can zoom to. Default: `duration / 1000`. */
+		minViewDuration?: number;
+		/** Called when the user changes the view. */
+		onViewChange?: (view: TimelineView) => void;
+		/** Called with the track's client-pixel bounds on mount and whenever they change. */
+		onBoundsChange?: (bounds: TimelineTrackBounds) => void;
+		/** Snippet rendered behind the track's rail. */
+		underlay?: Snippet<[TimelineViewContext]>;
 		class?: string;
 	}
 
@@ -97,8 +114,35 @@
 		onSegmentClick,
 		hoverPreview,
 		playheadFollowsSelectionStart = false,
+		viewStart = $bindable<number | undefined>(undefined),
+		viewEnd = $bindable<number | undefined>(undefined),
+		zoomable = false,
+		minViewDuration,
+		onViewChange,
+		onBoundsChange,
+		underlay,
 		class: className = ''
 	}: Props = $props();
+
+	const fullDuration = $derived(Math.max(0.0001, duration));
+	const currentView = $derived<TimelineView>({
+		start: viewStart ?? 0,
+		end: viewEnd ?? fullDuration
+	});
+	const zoomLevel = $derived(viewZoomLevel(currentView, fullDuration));
+	const minWidth = $derived(Math.min(minViewDuration ?? fullDuration / 1000, fullDuration));
+
+	function applyView(next: TimelineView) {
+		if (next.start === currentView.start && next.end === currentView.end) return;
+		viewStart = next.start;
+		viewEnd = next.end;
+		onViewChange?.(next);
+	}
+
+	function zoomButton(factor: number) {
+		const center = (currentView.start + currentView.end) / 2;
+		applyView(zoomView(currentView, factor, center, fullDuration, minWidth));
+	}
 
 	let timeMode = $state<'total' | 'remaining'>('total');
 
@@ -162,6 +206,13 @@
 			{onSegmentClick}
 			{hoverPreview}
 			{playheadFollowsSelectionStart}
+			bind:viewStart
+			bind:viewEnd
+			{zoomable}
+			{minViewDuration}
+			{onViewChange}
+			{onBoundsChange}
+			{underlay}
 		/>
 	</div>
 
@@ -228,6 +279,45 @@
 				<span class="timeline-scrubber__time-total">{formatTime(displayEnd)}</span>
 			{/if}
 		</button>
+
+		{#if zoomable}
+			<div class="timeline-scrubber__zoom" role="group" aria-label="Timeline zoom">
+				<button
+					type="button"
+					class="timeline-scrubber__btn"
+					aria-label="Zoom out"
+					title="Zoom out"
+					disabled={zoomLevel <= 1}
+					onclick={() => zoomButton(1.4)}
+				>
+					<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+						<path d="M5 11h14v2H5z" fill="currentColor" />
+					</svg>
+				</button>
+				<button
+					type="button"
+					class="timeline-scrubber__btn timeline-scrubber__btn--zoom-level"
+					aria-label="Zoom to fit ({zoomLevel.toFixed(1)}x)"
+					title="Zoom to fit"
+					disabled={zoomLevel <= 1}
+					onclick={() => applyView({ start: 0, end: fullDuration })}
+				>
+					<span>{zoomLevel.toFixed(1)}×</span>
+				</button>
+				<button
+					type="button"
+					class="timeline-scrubber__btn"
+					aria-label="Zoom in"
+					title="Zoom in"
+					disabled={currentView.end - currentView.start <= minWidth}
+					onclick={() => zoomButton(0.7)}
+				>
+					<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+						<path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z" fill="currentColor" />
+					</svg>
+				</button>
+			</div>
+		{/if}
 	</div>
 </div>
 
@@ -321,6 +411,22 @@
 	}
 
 	.timeline-scrubber__btn--speed.is-locked {
+		opacity: 0.5;
+	}
+
+	.timeline-scrubber__zoom {
+		display: inline-flex;
+		gap: 4px;
+		margin-left: auto;
+	}
+
+	.timeline-scrubber__btn--zoom-level {
+		font-variant-numeric: tabular-nums;
+		font-size: 13px;
+		min-width: 52px;
+	}
+
+	.timeline-scrubber__zoom .timeline-scrubber__btn:disabled {
 		opacity: 0.5;
 	}
 
