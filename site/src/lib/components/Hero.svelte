@@ -72,7 +72,7 @@
 	     the text a real frosted-glass backdrop instead of a flat white scrim. -->
 	<div aria-hidden="true" class="hero-glass absolute inset-0 pointer-events-none"></div>
 
-	<div bind:this={inner} class="relative z-10 text-center max-w-2xl">
+	<div bind:this={inner} class="relative z-10 text-center w-full max-w-2xl min-w-0">
 		<h1
 			data-anim
 			class="font-bold leading-tight text-slate-900 tracking-tight mb-5"
@@ -92,7 +92,7 @@
 			A Svelte 5 toolkit for p5.js: clean lifecycles, a reactive <code
 				class="font-mono text-[0.92em] text-indigo-600 bg-indigo-50/60 px-1.5 py-0.5 rounded"
 				>$state</code
-			> bridge between sketch and UI, and pre-built components. Pre-1.0 and evolving.
+			> bridge between sketch and UI, and pre-built components. Works with p5.js 1.11 and 2.x.
 		</p>
 
 		<div
@@ -156,6 +156,14 @@
 				>
 			{/each}
 		</div>
+
+		<p data-anim class="text-sm text-slate-600 mt-5">
+			Coming from p5-svelte?
+			<a
+				href="/docs/recipes/migration-from-p5-svelte"
+				class="text-indigo-600 font-medium hover:underline">Read the migration guide</a
+			>.
+		</p>
 	</div>
 </section>
 

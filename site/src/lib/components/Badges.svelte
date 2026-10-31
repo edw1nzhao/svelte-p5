@@ -29,6 +29,16 @@
 			src: npmVersion('svelte-p5-viz', 'viz')
 		},
 		{
+			alt: 'Tested with p5.js 1.11 and 2.x',
+			href: `https://github.com/${REPO}/actions/workflows/ci.yml`,
+			src: `https://img.shields.io/badge/p5.js-1.11%20%7C%202.x%20tested-ed225d?style=${STYLE}&labelColor=1e293b`
+		},
+		{
+			alt: 'Svelte 5',
+			href: 'https://svelte.dev',
+			src: `https://img.shields.io/badge/Svelte-5-ff3e00?style=${STYLE}&labelColor=1e293b`
+		},
+		{
 			alt: 'License',
 			href: `https://github.com/${REPO}/blob/main/LICENSE`,
 			src: `https://img.shields.io/npm/l/svelte-p5?style=${STYLE}&label=license&labelColor=1e293b&color=64748b`

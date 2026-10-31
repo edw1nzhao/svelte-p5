@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Hero from '#lib/components/Hero.svelte';
 	import Features from '#lib/components/Features.svelte';
+	import Compatibility from '#lib/components/Compatibility.svelte';
 	import CodeDemo from '#lib/components/CodeDemo.svelte';
 	import Footer from '#lib/components/Footer.svelte';
 	import BasicDemo from '#lib/demos/BasicDemo.svelte';
@@ -21,6 +22,8 @@
 	/>
 
 	<Features />
+
+	<Compatibility />
 
 	<section
 		id="examples"
