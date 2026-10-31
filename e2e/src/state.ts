@@ -20,8 +20,14 @@ export interface TimelineE2EState {
 	view: { start: number; end: number } | null;
 }
 
+export interface DescribeE2EState {
+	ready: boolean;
+	set: (text: string) => void;
+}
+
 declare global {
 	interface Window {
+		__describe: DescribeE2EState;
 		__e2e: E2EState;
 		__timeline: TimelineE2EState;
 	}

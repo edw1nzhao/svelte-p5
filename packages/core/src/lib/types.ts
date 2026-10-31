@@ -51,6 +51,8 @@ export interface P5CanvasProps<Ext = unknown> {
 	bridge?: { state: object } | readonly { state: object }[];
 	/** p5 2 add-ons, registered once each before the sketch is created. Throws on p5 1.x. */
 	addons?: readonly P5Addon[];
+	/** Text for p5's `describe()`, the canvas's screen-reader description; re-applied when it changes. */
+	description?: string;
 	/** Overlays rendered in the container, which gets `position: relative`. */
 	children?: Snippet;
 }

@@ -31,4 +31,7 @@
 	};
 </script>
 
-<P5Canvas {sketch} />
+<P5Canvas
+	{sketch}
+	description="A red ball with a soft shadow bouncing around a light grey canvas."
+/>

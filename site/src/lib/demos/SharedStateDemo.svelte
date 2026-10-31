@@ -61,10 +61,16 @@
 <div class="flex flex-col h-full bg-slate-900">
 	<div class="grid grid-cols-2 gap-px bg-slate-800 flex-1 min-h-0">
 		<div class="bg-slate-900 overflow-hidden">
-			<P5Canvas sketch={orbitSketch} />
+			<P5Canvas
+				sketch={orbitSketch}
+				description="A ring of dots orbiting the centre, coloured by the shared hue."
+			/>
 		</div>
 		<div class="bg-slate-900 overflow-hidden">
-			<P5Canvas sketch={gridSketch} />
+			<P5Canvas
+				sketch={gridSketch}
+				description="A grid of squares rippling in brightness, coloured by the shared hue."
+			/>
 		</div>
 	</div>
 	<div class="flex gap-3 px-3 py-2.5 bg-slate-800 border-t border-slate-700 shrink-0">

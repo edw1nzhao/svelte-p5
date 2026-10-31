@@ -13,6 +13,7 @@
 		loop,
 		bridge,
 		addons,
+		description,
 		children
 	}: SketchProps<Ext> = $props();
 
@@ -57,5 +58,14 @@
 </script>
 
 <div bind:this={container} class={className} {style}>
-	<P5Canvas {sketch} bind:instance onReady={handleReady} {loop} {bridge} {addons} {children} />
+	<P5Canvas
+		{sketch}
+		bind:instance
+		onReady={handleReady}
+		{loop}
+		{bridge}
+		{addons}
+		{description}
+		{children}
+	/>
 </div>

@@ -12,6 +12,7 @@ let t = 0;
 
 p.setup = () => {
   p.createCanvas(400, 400);
+  p.describe('Five rings of dots turning around the centre in alternating directions; colour, size and speed follow the controls.');
   p.noStroke();
 };
 
@@ -39,6 +40,7 @@ const particles = [];
 
 p.setup = () => {
   p.createCanvas(400, 400);
+  p.describe('Particles drifting along a Perlin noise field, leaving trails.');
   p.background(15, 23, 42);
   for (let i = 0; i < 600; i++) {
     particles.push(p.createVector(p.random(p.width), p.random(p.height)));
@@ -64,6 +66,7 @@ p.draw = () => {
 const tree = `// Move the mouse left and right to bend the branches.
 p.setup = () => {
   p.createCanvas(400, 400);
+  p.describe('A recursive branching tree whose branches bend with the mouse position.');
   p.stroke(30, 41, 59);
 };
 
@@ -97,6 +100,7 @@ function addBall(x, y) {
 
 p.setup = () => {
   p.createCanvas(400, 400);
+  p.describe('Coloured balls bouncing around the canvas; clicking adds another.');
   p.colorMode(p.HSB);
   p.noStroke();
   for (let i = 0; i < 12; i++) addBall(p.random(p.width), p.random(p.height / 2));
@@ -176,6 +180,7 @@ function stepCached() {
 
 p.setup = () => {
   p.createCanvas(400, 300);
+  p.describe("Conway's Game of Life on a grid, with a bar showing frames per second.");
   p.noStroke();
   reseed();
 };
@@ -217,6 +222,7 @@ p.draw = () => {
 const demand = `// Runs with loop="demand": draw() only runs when the bridge state changes
 // or the canvas resizes. Watch "Frames drawn" stay still while you are idle.
 p.setup = () => {
+  p.describe('A grid of dots fading towards the edges; colour and size follow the controls.');
   p.noStroke();
 };
 

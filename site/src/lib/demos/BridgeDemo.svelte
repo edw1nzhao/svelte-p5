@@ -47,7 +47,10 @@
 </script>
 
 <div class="flex flex-col h-full">
-	<P5Canvas {sketch} />
+	<P5Canvas
+		{sketch}
+		description="Dots drifting across the canvas and leaving fading trails; the sliders set their hue, speed and size."
+	/>
 	<div class="flex gap-4 px-3 py-2 bg-slate-50 border-t border-slate-200 shrink-0">
 		<label
 			class="flex-1 flex items-center gap-1.5 text-[0.6875rem] text-slate-500 whitespace-nowrap"
