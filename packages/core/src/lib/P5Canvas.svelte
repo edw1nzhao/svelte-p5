@@ -4,6 +4,7 @@
 	import type { ExtendedP5, P5CanvasProps } from './types.js';
 	import { mountSketch, type SketchCtor, type SketchHost } from './mountSketch.js';
 	import { setSketchContext } from './context.js';
+	import { registerAddons } from './addons.js';
 	import {
 		applyLoopMode,
 		disposeInvalidation,
@@ -20,6 +21,7 @@
 		onReady,
 		loop = 'always',
 		bridge,
+		addons,
 		children
 	}: P5CanvasProps<Ext> = $props();
 
@@ -73,6 +75,7 @@
 		(async () => {
 			const mod = await import('p5');
 			if (cancelled || !container) return;
+			registerAddons(mod.default, addons);
 
 			// The sketch installs its Ext members during construction, so the
 			// instance is already the extended type when it becomes observable.

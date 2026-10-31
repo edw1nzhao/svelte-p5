@@ -34,6 +34,8 @@ export interface SketchProps<Ext = unknown> {
 	loop?: 'always' | 'demand' | 'manual';
 	/** Bridges whose changes redraw a `'demand'` sketch. Needs svelte-p5 1.2. */
 	bridge?: { state: object } | readonly { state: object }[];
+	/** p5 2 add-ons registered before the sketch is created. Needs svelte-p5 1.2. */
+	addons?: readonly ((p5: any, fn: any, lifecycles: any) => void)[];
 	/**
 	 * Overlays rendered over the canvas (inside `<P5Canvas>`), e.g. `<FPSMonitor />`.
 	 * Position them absolutely. They can read the instance with `getSketchContext()`.

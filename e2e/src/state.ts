@@ -80,3 +80,18 @@ declare global {
 		__export: ExportE2EState;
 	}
 }
+
+export interface AddonE2EState {
+	version: string;
+	registrations: number;
+	log: string[];
+	ready: number;
+	postdrawFrames?: number;
+	remount(): void;
+}
+
+declare global {
+	interface Window {
+		__addon: AddonE2EState;
+	}
+}

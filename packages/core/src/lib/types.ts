@@ -1,6 +1,7 @@
 import type p5 from 'p5';
 import type { Snippet } from 'svelte';
 import type { LoopMode } from './render.js';
+import type { P5Addon } from './addons.js';
 
 /**
  * A p5 sketch function in instance mode. Called with the p5 instance;
@@ -52,6 +53,11 @@ export interface P5CanvasProps<Ext = unknown> {
 	loop?: LoopMode;
 	/** Bridges whose state the sketch reads; in `'demand'` mode any change to them redraws. */
 	bridge?: { state: object } | readonly { state: object }[];
+	/**
+	 * p5 2 add-ons, registered with `p5.registerAddon` before the sketch is
+	 * created, once per add-on function. Read at mount. Throws on p5 1.x.
+	 */
+	addons?: readonly P5Addon[];
 	/**
 	 * Rendered inside the container, before the canvas, with `position: relative`
 	 * added to it. Use it for absolutely positioned overlays; components in it can
