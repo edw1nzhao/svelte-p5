@@ -6,7 +6,7 @@
 
 What changed in each release, what you have to do about it, and how to get from any published version to the current one.
 
-Current releases: **`svelte-p5` 1.1.0**, **`svelte-p5-components` 2.0.0**, **`svelte-p5-viz` 0.3.0**.
+Current releases: **`svelte-p5` 1.1.1**, **`svelte-p5-components` 2.1.0**, **`svelte-p5-viz` 0.3.1**.
 
 ## The rule that catches everyone
 
@@ -29,6 +29,7 @@ This is correct npm behaviour, not a bug, and it is why an app can sit several r
 
 | package                | version | requires `svelte-p5` | p5            | svelte   |
 | ---------------------- | ------- | -------------------- | ------------- | -------- |
+| `svelte-p5-components` | 2.1.0   | `^1.0.0`             | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-components` | 2.0.0   | `^1.0.0`             | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-components` | 1.1.2   | `^1.0.0`             | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-components` | 1.1.1   | `^1.0.0`             | `>=1.11.0 <3` | `^5.0.0` |
@@ -42,6 +43,7 @@ This is correct npm behaviour, not a bug, and it is why an app can sit several r
 | `svelte-p5-components` | 0.3.0   | **broken**           | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-components` | 0.2.1   | **broken**           | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-components` | 0.1.0   | **broken**           | `>=1.11.0 <3` | `^5.0.0` |
+| `svelte-p5-viz`        | 0.3.1   | `>=0.4.0 <2`         | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-viz`        | 0.3.0   | `>=0.4.0 <2`         | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-viz`        | 0.2.4   | `>=0.4.0 <2`         | `>=1.11.0 <3` | `^5.0.0` |
 | `svelte-p5-viz`        | 0.2.3   | `>=0.4.0 <2`         | `>=1.11.0 <3` | `^5.0.0` |
@@ -69,6 +71,12 @@ These declare a `svelte-p5` peer with no ceiling, so they claim compatibility wi
 
 Newest first. **Action** is what you have to do; anything marked **Breaking** needs a code change.
 
+### `svelte-p5-components` 2.1.0 — 2026-10-31
+
+Adds `svelte-p5-components/youtube`, a YouTube IFrame player adapter for the media port: `youTubePort(player)` for `createMediaSync` and `createMediaPlayback`, plus `createYouTubePlayer` and `loadYouTubeIframeApi`. It handles readiness, asynchronous seeks, buffering and the IFrame API's autoplay-on-seek. The main entry is unchanged and gains no YouTube dependency. Also: `TimelineTrack` and `TimelineScrubber` gain an optional zoomable view window: bindable `viewStart`/`viewEnd`, `zoomable`, `minViewDuration`, `onViewChange`, `onBoundsChange` and an `underlay` snippet, plus exported view math (`zoomView`, `panView`, `zoomViewToRange`, `clampView`, `timeToX`, `xToTime`, `isTimeInView`, `viewZoomLevel`). See the timeline zoom recipe.
+
+**Action:** None. Apps that hand-roll YouTube syncing can replace that code with `youTubePort`; see the YouTube recipe. The timeline view window needs no action either: without the new props both components render and behave exactly as before.
+
 ### `svelte-p5-components` 2.0.0 — 2026-10-31
 
 **Breaking.** `DraggableWindow` and `DraggableSketch` move to neodrag 3.0.0-next.12, which removed the plugin API. The `plugins` prop is replaced by library-owned `axis`, `grid` and `threshold` props, and no neodrag type is part of the public API any more. Everything else (props, bindables, classes, DOM, `data-neodrag-state`) is unchanged.
@@ -76,6 +84,10 @@ Newest first. **Action** is what you have to do; anything marked **Breaking** ne
 **Action:** Replace `plugins={[axis('x'), grid([20, 20])]}` with `axis="x" grid={[20, 20]}`, and a `threshold()` plugin with `threshold={n}` (default 3). Remove any `@neodrag/svelte` import that only existed to build plugins; neodrag is now an internal dependency pinned at 3.0.0-next.12. A drag now starts at exactly `threshold` px of travel rather than just past it, and `grid` snaps the window's position to the grid rather than snapping each movement.
 
 ### `svelte-p5-components` 1.1.2 — 2026-10-31
+
+No consumer-facing change.
+
+### `svelte-p5` 1.1.1 — 2026-10-31
 
 No consumer-facing change.
 
@@ -90,6 +102,10 @@ p5.js 2.x is officially supported and tested alongside 1.11+. CI runs the unit t
 Fixes two p5 2.x incompatibilities. `P5Canvas` now calls `onReady` after the sketch's `setup()` has finished (awaited if it is `async`); on p5 2.x it used to fire before `setup()` ran, so `<Sketch>` sized the canvas and `createCanvas()` then overwrote it. `disableFES()` now also turns off the Friendly Error System on p5 2.x by setting `p5.disableFriendlyErrors` before each instance is created.
 
 **Action:** None. On p5 2.x, `onReady` now fires after `setup()`, so code there that relied on running before `setup()` should move into `setup()` itself. On p5 1.x the timing only changes when `setup()` did not finish inside the p5 constructor (a `preload()`, an `async setup()`, or a page still loading), where `onReady` now waits for it.
+
+### `svelte-p5-viz` 0.3.1 — 2026-10-31
+
+No consumer-facing change.
 
 ### `svelte-p5-viz` 0.3.0 — 2026-10-31
 
@@ -210,7 +226,7 @@ No consumer-facing change. Carries the unresolvable peer range described above.
 There are no required intermediate versions. Unlike a stateful server, a library has no migrations to step through, so you can jump straight to the current release from any earlier one. What you do need is to read every **Breaking** and **Action** note between your version and the target, because they compound.
 
 ```sh
-pnpm add svelte-p5@^1.1.0 svelte-p5-components@^2.0.0 svelte-p5-viz@^0.3.0
+pnpm add svelte-p5@^1.1.1 svelte-p5-components@^2.1.0 svelte-p5-viz@^0.3.1
 ```
 
 ## Checking what you are on
