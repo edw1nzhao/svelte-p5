@@ -26,3 +26,19 @@ declare global {
 		__timeline: TimelineE2EState;
 	}
 }
+
+export interface LifecycleE2EState {
+	created: number;
+	removed: number;
+	setupStarted: number;
+	setupFinished: number;
+	ready: number;
+	frames: number;
+	release(): void;
+}
+
+declare global {
+	interface Window {
+		__lifecycle: LifecycleE2EState;
+	}
+}
