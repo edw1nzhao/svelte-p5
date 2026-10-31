@@ -6,6 +6,7 @@
 	import PerfCharts from '#lib/charts/PerfCharts.svelte';
 	import { staggerFadeUp } from '#lib/animations.js';
 	import { onMount } from 'svelte';
+	import Seo from '#lib/components/Seo.svelte';
 
 	let { data } = $props();
 
@@ -15,12 +16,7 @@
 	});
 </script>
 
-<svelte:head>
-	<title>{data.doc.title} - svelte-p5 docs</title>
-	{#if data.doc.description}
-		<meta name="description" content={data.doc.description} />
-	{/if}
-</svelte:head>
+<Seo title="{data.doc.title} - svelte-p5 docs" description={data.doc.description} />
 
 <div class="lg:grid lg:grid-cols-[1fr_14rem] lg:gap-10">
 	<article class="min-w-0">

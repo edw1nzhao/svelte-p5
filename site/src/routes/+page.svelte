@@ -4,6 +4,7 @@
 	import Compatibility from '#lib/components/Compatibility.svelte';
 	import CodeDemo from '#lib/components/CodeDemo.svelte';
 	import Footer from '#lib/components/Footer.svelte';
+	import Seo from '#lib/components/Seo.svelte';
 	import BasicDemo from '#lib/demos/BasicDemo.svelte';
 	import BridgeDemo from '#lib/demos/BridgeDemo.svelte';
 	import ComponentsDemo from '#lib/demos/ComponentsDemo.svelte';
@@ -13,6 +14,8 @@
 
 	let { data } = $props();
 </script>
+
+<Seo title="svelte-p5 — creative coding for Svelte 5, reactively" />
 
 <main id="main">
 	<Hero

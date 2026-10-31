@@ -17,6 +17,7 @@
 	} from '#lib/playground/runner.js';
 	import { decodeSketch, encodeSketch, readShareToken, shareHash } from '#lib/playground/share.js';
 	import { toSvelteComponent } from '#lib/playground/svelte-export.js';
+	import Seo from '#lib/components/Seo.svelte';
 
 	const AUTO_RUN_DELAY = 800;
 
@@ -178,13 +179,10 @@
 	const primary = `${buttonBase} bg-indigo-600 text-white hover:bg-indigo-700`;
 </script>
 
-<svelte:head>
-	<title>Playground - svelte-p5</title>
-	<meta
-		name="description"
-		content="Edit a p5.js sketch in the browser and run it live through svelte-p5, with Svelte controls bound to the sketch through createP5Bridge."
-	/>
-</svelte:head>
+<Seo
+	title="Playground - svelte-p5"
+	description="Edit a p5.js sketch in the browser and run it live through svelte-p5, with Svelte controls bound to the sketch through createP5Bridge."
+/>
 
 <svelte:window onhashchange={onHashChange} onkeydown={onWindowKeydown} />
 
