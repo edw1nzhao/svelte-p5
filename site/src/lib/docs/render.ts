@@ -29,9 +29,12 @@ const sources = import.meta.glob('../../../../docs/**/*.md', {
 	import: 'default'
 }) as Record<string, string>;
 
+// Doc-snippet check markers are tooling, not content for readers or copy-for-AI.
+const stripSnippetMarkers = (text: string) => text.replace(/^<!-- snippet:.*-->\r?\n/gm, '');
+
 const sourceByPath: Record<string, string> = {};
 for (const [k, v] of Object.entries(sources)) {
-	sourceByPath[k.replace(/^(\.\.\/)+/, '')] = v;
+	sourceByPath[k.replace(/^(\.\.\/)+/, '')] = stripSnippetMarkers(v);
 }
 
 /**
@@ -56,8 +59,9 @@ export async function getSource(file: string): Promise<string | null> {
 		// glob already covers prod, so we only get here in dev where this works.
 		const repoRoot = resolve(here, '../../../..');
 		const text = await readFile(resolve(repoRoot, file), 'utf-8');
-		sourceByPath[file] = text;
-		return text;
+		const stripped = stripSnippetMarkers(text);
+		sourceByPath[file] = stripped;
+		return stripped;
 	} catch {
 		return null;
 	}
