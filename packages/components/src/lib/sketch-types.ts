@@ -1,3 +1,4 @@
+import type { Snippet } from 'svelte';
 import type { ExtendedP5, SketchFn } from 'svelte-p5';
 
 /**
@@ -26,4 +27,9 @@ export interface SketchProps<Ext = unknown> {
 	 * a redraw if your sketch is noLoop-gated.
 	 */
 	onResize?: (instance: ExtendedP5<Ext>, width: number, height: number) => void;
+	/**
+	 * Overlays rendered over the canvas (inside `<P5Canvas>`), e.g. `<FPSMonitor />`.
+	 * Position them absolutely. They can read the instance with `getSketchContext()`.
+	 */
+	children?: Snippet;
 }

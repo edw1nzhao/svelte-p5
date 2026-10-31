@@ -3,16 +3,28 @@
 	import type p5Type from 'p5';
 	import type { ExtendedP5, P5CanvasProps } from './types.js';
 	import { mountSketch, type SketchCtor, type SketchHost } from './mountSketch.js';
+	import { setSketchContext } from './context.js';
 
 	let {
 		sketch,
 		instance = $bindable(null),
 		class: className = '',
 		style = 'display: block; width: 100%; height: 100%;',
-		onReady
+		onReady,
+		children
 	}: P5CanvasProps<Ext> = $props();
 
 	let container: HTMLDivElement | null = null;
+	let readyInstance: ExtendedP5<Ext> | null = $state(null);
+
+	setSketchContext({
+		get instance() {
+			return readyInstance;
+		},
+		get ready() {
+			return readyInstance !== null;
+		}
+	});
 
 	onMount(() => {
 		let destroy: (() => void) | null = null;
@@ -29,7 +41,10 @@
 				(p) => sketch(p as ExtendedP5<Ext>),
 				container,
 				(p) => (instance = p as ExtendedP5<Ext>),
-				(p) => onReady?.(p as ExtendedP5<Ext>)
+				(p) => {
+					readyInstance = p as ExtendedP5<Ext>;
+					onReady?.(p as ExtendedP5<Ext>);
+				}
 			);
 		})();
 
@@ -42,8 +57,15 @@
 			}
 			destroy = null;
 			instance = null;
+			readyInstance = null;
 		};
 	});
 </script>
 
-<div bind:this={container} class={className} {style}></div>
+<div
+	bind:this={container}
+	class={className}
+	style={children ? `position: relative; ${style}` : style}
+>
+	{@render children?.()}
+</div>

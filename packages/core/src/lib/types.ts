@@ -1,4 +1,5 @@
 import type p5 from 'p5';
+import type { Snippet } from 'svelte';
 
 /**
  * A p5 sketch function in instance mode. Called with the p5 instance;
@@ -42,4 +43,10 @@ export interface P5CanvasProps<Ext = unknown> {
 	style?: string;
 	/** Called once, after `instance` is bound and `setup()` has finished (awaited if async), or right after construction if there is no `setup()`. */
 	onReady?: (instance: ExtendedP5<Ext>) => void;
+	/**
+	 * Rendered inside the container, before the canvas, with `position: relative`
+	 * added to it. Use it for absolutely positioned overlays; components in it can
+	 * call `getSketchContext()`.
+	 */
+	children?: Snippet;
 }

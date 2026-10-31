@@ -9,7 +9,8 @@
 		style = 'display: block; width: 100%; height: 100%; overflow: hidden;',
 		instance = $bindable(null),
 		onReady,
-		onResize
+		onResize,
+		children
 	}: SketchProps<Ext> = $props();
 
 	let container: HTMLDivElement | null = $state(null);
@@ -53,5 +54,5 @@
 </script>
 
 <div bind:this={container} class={className} {style}>
-	<P5Canvas {sketch} bind:instance onReady={handleReady} />
+	<P5Canvas {sketch} bind:instance onReady={handleReady} {children} />
 </div>
