@@ -18,6 +18,19 @@ Coming from `p5-svelte`? See the [migration guide](./recipes/migration-from-p5-s
 
 Coming from the p5 web editor? Read [no build step](./no-build-step.md) first. It covers the global → instance mode conversion that every sample here assumes, and what you can do without a bundler at all.
 
+## Start a new project
+
+```bash
+npm create svelte-p5@latest
+```
+
+This scaffolds a SvelteKit app with the `minimal` (`P5Canvas`) or `components` (`Sketch`, `FPSMonitor`, a bridge control) template. To try one without installing anything:
+
+- [Open `minimal` in StackBlitz](https://stackblitz.com/github/edw1nzhao/svelte-p5/tree/main/packages/create-svelte-p5/templates/minimal)
+- [Open `components` in StackBlitz](https://stackblitz.com/github/edw1nzhao/svelte-p5/tree/main/packages/create-svelte-p5/templates/components)
+
+The apps in `docs/examples/` use the monorepo's workspace packages, so they run from a clone rather than StackBlitz.
+
 ## Layer 1 - just the wrapper
 
 If you already know p5 and just want a correct-lifecycle Svelte wrapper:

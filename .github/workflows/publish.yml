@@ -1,7 +1,7 @@
 name: publish
 
 # Builds and publishes one package to npm via OIDC trusted publishing. This
-# file is the trusted publisher on npmjs.com for all three packages, and npm
+# file is the trusted publisher on npmjs.com for all four packages, and npm
 # checks the top-level workflow name, so it only authenticates when run as its
 # own workflow_dispatch: release-please.yml dispatches it per released package,
 # and a maintainer can dispatch it by hand to republish an existing tag.
@@ -12,7 +12,7 @@ name: publish
 # Preview builds do NOT go through here; they use pkg-pr-new in ci.yml.
 #
 # Do NOT rename this file without updating the trusted publisher entry for
-# all three packages on npmjs.com.
+# all four packages on npmjs.com.
 
 on:
   workflow_dispatch:
@@ -25,6 +25,7 @@ on:
           - packages/core
           - packages/components
           - packages/viz
+          - packages/create-svelte-p5
       npm-tag:
         description: 'npm dist-tag'
         required: false

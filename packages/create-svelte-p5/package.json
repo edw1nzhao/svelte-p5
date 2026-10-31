@@ -1,0 +1,57 @@
+{
+  "name": "create-svelte-p5",
+  "version": "0.1.0",
+  "description": "Scaffold a SvelteKit + svelte-p5 project: npm create svelte-p5@latest",
+  "keywords": [
+    "svelte",
+    "svelte5",
+    "sveltekit",
+    "p5",
+    "p5.js",
+    "create",
+    "scaffold",
+    "starter",
+    "creative-coding"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edw1nzhao/svelte-p5.git",
+    "directory": "packages/create-svelte-p5"
+  },
+  "homepage": "https://github.com/edw1nzhao/svelte-p5/tree/main/packages/create-svelte-p5#readme",
+  "bugs": {
+    "url": "https://github.com/edw1nzhao/svelte-p5/issues"
+  },
+  "author": "Edwin Zhao",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-svelte-p5": "./bin/index.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc --noEmit && publint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "publint": "catalog:",
+    "semver": "^7.8.5",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

@@ -9,13 +9,13 @@ No `next` branch, no `@alpha` dist-tag. For the contributor-facing quick view, s
 
 ## Workflows that drive releases
 
-| File                                   | Trigger             | Responsibility                                                                                                    |
-| -------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `.github/workflows/ci.yml`             | push / PR           | Lint, typecheck, test, build — and the `pkg-pr-new publish` step that drops preview-URL sticky comments on PRs.   |
-| `.github/workflows/release-please.yml` | push to `main`      | Opens/updates the release PR; on merge, dispatches `publish.yml` with `--tag latest` for each released package.   |
-| `.github/workflows/publish.yml`        | `workflow_dispatch` | Holds the actual `npm publish` step. Registered as the **trusted publisher** on npmjs.com for all three packages. |
+| File                                   | Trigger             | Responsibility                                                                                                   |
+| -------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `.github/workflows/ci.yml`             | push / PR           | Lint, typecheck, test, build — and the `pkg-pr-new publish` step that drops preview-URL sticky comments on PRs.  |
+| `.github/workflows/release-please.yml` | push to `main`      | Opens/updates the release PR; on merge, dispatches `publish.yml` with `--tag latest` for each released package.  |
+| `.github/workflows/publish.yml`        | `workflow_dispatch` | Holds the actual `npm publish` step. Registered as the **trusted publisher** on npmjs.com for all four packages. |
 
-`publish.yml` is what npm OIDC pins for trusted publishing. **Do not rename `publish.yml`** without updating the trusted publisher on all three packages at npmjs.com.
+`publish.yml` is what npm OIDC pins for trusted publishing. **Do not rename `publish.yml`** without updating the trusted publisher on all four packages at npmjs.com. A new package cannot be given a trusted publisher until it exists on npm, so its first publish is manual (see `packages/create-svelte-p5/FIRST_PUBLISH.md`).
 
 ### Why `publish.yml` is dispatched, not called
 

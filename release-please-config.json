@@ -21,6 +21,16 @@
       "draft": false,
       "prerelease": false
     },
+    "packages/create-svelte-p5": {
+      "release-type": "node",
+      "component": "create",
+      "package-name": "create-svelte-p5",
+      "changelog-path": "CHANGELOG.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": false,
+      "draft": false,
+      "prerelease": false
+    },
     "packages/viz": {
       "release-type": "node",
       "component": "viz",

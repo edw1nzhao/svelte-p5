@@ -19,7 +19,7 @@ Thanks for the interest. Main use case is my own four projects, but issues and P
 [optional footer(s)]
 ```
 
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`. Scope is optional; use the package name (`core`, `components`, `viz`, `site`, `docs`) for package-specific changes.
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`. Scope is optional; use the package name (`core`, `components`, `viz`, `create`, `site`, `docs`) for package-specific changes.
 
 ```
 feat(core): add createP5Bridge helper
