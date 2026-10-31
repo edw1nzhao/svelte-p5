@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@neodrag/core": "3.0.0-next.8",
-    "@neodrag/svelte": "3.0.0-next.8"
+    "@neodrag/svelte": "3.0.0-next.12"
   },
   "peerDependencies": {
     "svelte-p5": "^1.0.0",
