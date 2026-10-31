@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/svelte';
+import type p5 from 'p5';
 import ExportButton from './ExportButton.svelte';
 
 const download = vi.hoisted(() => vi.fn(async () => new Blob(['x'], { type: 'image/png' })));
@@ -8,7 +9,7 @@ vi.mock('svelte-p5', async (original) => ({
 	downloadCanvas: download
 }));
 
-const instance = {} as import('p5').default;
+const instance = {} as p5;
 
 afterEach(cleanup);
 

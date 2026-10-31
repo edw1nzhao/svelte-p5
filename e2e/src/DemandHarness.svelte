@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type p5 from 'p5';
 	import { createP5Bridge, invalidate, P5Canvas, type LoopMode, type SketchFn } from 'svelte-p5';
 	import { Sketch } from 'svelte-p5-components';
 	import type { DemandE2EState } from './state.js';
@@ -8,7 +9,7 @@
 	const useCanvas = params.get('kind') === 'canvas';
 	const bridge = createP5Bridge({ radius: 10 });
 	let width = $state(200);
-	let instance = $state<import('p5').default | null>(null);
+	let instance = $state<p5 | null>(null);
 
 	const harness: DemandE2EState = {
 		frames: 0,
