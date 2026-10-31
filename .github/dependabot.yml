@@ -12,13 +12,25 @@ updates:
       prefix: 'chore'
       include: 'scope'
     groups:
-      # One PR for all minor + patch updates across dev deps.
+      # Patch groups match first and auto-merge (dependabot-auto-merge.yml);
+      # a group reports its highest update type, so patch must stay separate.
+      dev-deps-patch:
+        dependency-type: 'development'
+        update-types:
+          - 'patch'
+      peer-deps-patch:
+        patterns:
+          - 'svelte'
+          - 'p5'
+          - '@neodrag/*'
+        update-types:
+          - 'patch'
+      # One PR for all minor updates across dev deps.
       dev-deps-minor:
         dependency-type: 'development'
         update-types:
           - 'minor'
-          - 'patch'
-      # One PR for all minor + patch updates across runtime deps.
+      # One PR for all minor updates across runtime deps.
       peer-deps-minor:
         patterns:
           - 'svelte'
@@ -26,7 +38,6 @@ updates:
           - '@neodrag/*'
         update-types:
           - 'minor'
-          - 'patch'
     ignore:
       # p5 v2 is a deliberate future release (see README roadmap). Bumps
       # to p5@2+ will be reintroduced when we explicitly support them.
