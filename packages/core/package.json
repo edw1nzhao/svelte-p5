@@ -1,6 +1,6 @@
 {
   "name": "svelte-p5",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "p5.js for Svelte 5 and SvelteKit: <P5Canvas>, a rune state bridge and performance utilities. Supports p5.js 1.11+ and 2.x; a maintained Svelte 5 alternative to p5-svelte.",
   "keywords": [
     "svelte",
