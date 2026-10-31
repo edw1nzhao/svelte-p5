@@ -38,6 +38,11 @@
     "./youtube": {
       "types": "./dist/youtube.d.ts",
       "default": "./dist/youtube.js"
+    },
+    "./export": {
+      "types": "./dist/export.d.ts",
+      "svelte": "./dist/export.js",
+      "default": "./dist/export.js"
     }
   },
   "files": [

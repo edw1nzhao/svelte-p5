@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { P5Canvas, createP5Bridge, disableFES, type ExtendedP5, type SketchFn } from 'svelte-p5';
-	import { Sketch } from 'svelte-p5-components';
+	import { FPSMonitor, Sketch } from 'svelte-p5-components';
+	import { ExportButton } from 'svelte-p5-components/export';
 	import { surface } from './entries.js';
 
 	interface Ext {
@@ -43,7 +44,10 @@
 		<P5Canvas {sketch} bind:instance onReady={() => (ready = true)} />
 	</div>
 	<div data-testid="sketch-host" style="width: 200px; height: 120px">
-		<Sketch {sketch} />
+		<Sketch {sketch} loop="demand" {bridge}>
+			<FPSMonitor />
+			<ExportButton options={{ scale: 2, seed: 'smoke' }} />
+		</Sketch>
 	</div>
 	<p data-testid="status">ready={ready} instance={instance !== null}</p>
 	<div hidden id="surface" data-surface={JSON.stringify(surface)}></div>

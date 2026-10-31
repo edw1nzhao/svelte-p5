@@ -1,3 +1,4 @@
+import type { Snippet } from 'svelte';
 import type { ExtendedP5, SketchFn } from 'svelte-p5';
 
 /**
@@ -26,4 +27,12 @@ export interface SketchProps<Ext = unknown> {
 	 * a redraw if your sketch is noLoop-gated.
 	 */
 	onResize?: (instance: ExtendedP5<Ext>, width: number, height: number) => void;
+	/** `P5Canvas`'s loop mode. Needs svelte-p5 1.2. */
+	loop?: 'always' | 'demand' | 'manual';
+	/** Bridges whose changes redraw a `'demand'` sketch. Needs svelte-p5 1.2. */
+	bridge?: { state: object } | readonly { state: object }[];
+	/** p5 2 add-ons registered before the sketch is created. Needs svelte-p5 1.2. */
+	addons?: readonly ((p5: any, fn: any, lifecycles: any) => void)[];
+	/** Absolutely positioned overlays, e.g. `<FPSMonitor />`; they get the sketch context. */
+	children?: Snippet;
 }

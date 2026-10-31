@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { replaceState } from '$app/navigation';
-	import { createP5Bridge } from 'svelte-p5';
+	import { createP5Bridge, downloadCanvas } from 'svelte-p5';
 	import { Sketch } from 'svelte-p5-components';
 	import type p5 from 'p5';
-	import { Play, Link, FileCode } from '@lucide/svelte';
+	import { Play, Link, FileCode, Download } from '@lucide/svelte';
 	import CodeEditor from '#lib/playground/CodeEditor.svelte';
 	import { BRIDGE_DEFAULTS, BRIDGE_RANGES } from '#lib/playground/bridge.js';
 	import { DEFAULT_EXAMPLE, EXAMPLES } from '#lib/playground/examples.js';
@@ -33,6 +33,8 @@
 	let announcement = $state('');
 	let linkError = $state(false);
 	let modKey = $state('Ctrl');
+	let instance = $state<p5 | null>(null);
+	let framesDrawn = $state(0);
 
 	let lastRunCode = '';
 	let writtenToken: string | null = null;
@@ -146,6 +148,25 @@
 		const timer = setTimeout(() => (announcement = ''), 4000);
 		return () => clearTimeout(timer);
 	});
+
+	const loop = $derived(EXAMPLES.find((e) => e.id === exampleId)?.loop ?? 'always');
+
+	$effect(() => {
+		const p = instance;
+		if (!p) return;
+		const timer = setInterval(() => (framesDrawn = p.frameCount), 250);
+		return () => clearInterval(timer);
+	});
+
+	async function exportPng() {
+		if (!instance) return;
+		try {
+			await downloadCanvas(instance, { scale: 2, filename: 'playground-sketch.png' });
+			announcement = 'Exported the canvas at twice its size.';
+		} catch (err) {
+			announcement = `Export failed: ${err instanceof Error ? err.message : String(err)}`;
+		}
+	}
 
 	let status = $derived(
 		sharedPending ? 'Waiting for Run' : error ? 'Error' : sketch ? 'Running' : 'Stopped'
@@ -292,7 +313,13 @@
 				>
 					{#if sketch}
 						{#key runId}
-							<Sketch {sketch} style="position: absolute; inset: 0; overflow: hidden;" />
+							<Sketch
+								{sketch}
+								{loop}
+								{bridge}
+								bind:instance
+								style="position: absolute; inset: 0; overflow: hidden;"
+							/>
 						{/key}
 					{:else}
 						<p
@@ -303,6 +330,18 @@
 								: 'Press Run to start the sketch.'}
 						</p>
 					{/if}
+				</div>
+
+				<div class="flex flex-wrap items-center justify-between gap-3">
+					<p class="m-0 text-xs text-slate-600">
+						Frames drawn: <output class="tabular-nums" data-testid="pg-frames">{framesDrawn}</output
+						>
+						{#if loop === 'demand'}<span>(loop="demand")</span>{/if}
+					</p>
+					<button type="button" class={secondary} onclick={exportPng} disabled={!instance}>
+						<Download class="size-4" aria-hidden="true" />
+						Export PNG
+					</button>
 				</div>
 
 				{#if error}

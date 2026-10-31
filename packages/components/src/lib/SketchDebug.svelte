@@ -1,10 +1,12 @@
 <script lang="ts">
 	import type p5 from 'p5';
+	import { sketchContext } from './sketch-context.js';
 
 	type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 
 	interface Props {
-		instance: p5 | null;
+		/** Defaults to the instance of the enclosing `<Sketch>` or `<P5Canvas>`. */
+		instance?: p5 | null;
 		position?: Position;
 	}
 
@@ -20,9 +22,12 @@
 		fps: 0
 	});
 
+	const context = sketchContext();
+	const target = $derived(instance ?? context?.instance ?? null);
+
 	$effect(() => {
-		if (!instance) return;
-		const p = instance;
+		if (!target) return;
+		const p = target;
 		let raf = 0;
 		const tick = () => {
 			stats.mouseX = Math.round(p.mouseX);
