@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { disableFES } from './disableFES.js';
+import { disableFES, fesDisableRequested } from './disableFES.js';
 
 describe('disableFES', () => {
 	beforeEach(() => {
@@ -16,5 +16,11 @@ describe('disableFES', () => {
 		disableFES();
 		disableFES();
 		expect((globalThis as { IS_MINIFIED?: boolean }).IS_MINIFIED).toBe(true);
+	});
+
+	it('records the request for P5Canvas to apply on p5 2', () => {
+		expect(fesDisableRequested()).toBe(false);
+		disableFES();
+		expect(fesDisableRequested()).toBe(true);
 	});
 });

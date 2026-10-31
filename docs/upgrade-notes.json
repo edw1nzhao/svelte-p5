@@ -2,6 +2,13 @@
   "$comment": "Hand-written upgrade guidance. Everything mechanical (versions, dates, peer ranges, the compatibility matrix, broken-peer detection) is derived from the npm registry by scripts/build-upgrade-doc.mjs. Only judgement lives here: what a release means for a consumer and what they have to do about it. Add an entry when a release needs more than 'no action'; omitted versions render as a one-line entry from their changelog.",
   "notes": [
     {
+      "package": "svelte-p5",
+      "version": "1.0.1",
+      "breaking": false,
+      "summary": "Fixes two p5 2.x incompatibilities. `P5Canvas` now calls `onReady` after the sketch's `setup()` has finished (awaited if it is `async`); on p5 2.x it used to fire before `setup()` ran, so `<Sketch>` sized the canvas and `createCanvas()` then overwrote it. `disableFES()` now also turns off the Friendly Error System on p5 2.x by setting `p5.disableFriendlyErrors` before each instance is created.",
+      "action": "None. On p5 2.x, `onReady` now fires after `setup()`, so code there that relied on running before `setup()` should move into `setup()` itself. On p5 1.x the timing only changes when `setup()` did not finish inside the p5 constructor (a `preload()`, an `async setup()`, or a page still loading), where `onReady` now waits for it."
+    },
+    {
       "package": "svelte-p5-components",
       "version": "1.1.1",
       "breaking": false,

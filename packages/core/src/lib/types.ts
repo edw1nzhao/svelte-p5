@@ -40,6 +40,6 @@ export interface P5CanvasProps<Ext = unknown> {
 	class?: string;
 	/** Optional inline style on the container div. Defaults to `display: block; width: 100%; height: 100%;`. */
 	style?: string;
-	/** Called once, synchronously, when the p5 instance has been created and the sketch function has returned. */
+	/** Called once, after `instance` is bound and `setup()` has finished (awaited if async), or right after construction if there is no `setup()`. */
 	onReady?: (instance: ExtendedP5<Ext>) => void;
 }

@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import type p5Type from 'p5';
 	import type { ExtendedP5, P5CanvasProps } from './types.js';
+	import { mountSketch, type SketchCtor, type SketchHost } from './mountSketch.js';
 
 	let {
 		sketch,
@@ -14,32 +15,32 @@
 	let container: HTMLDivElement | null = null;
 
 	onMount(() => {
-		// Track the local instance so cleanup works even if `instance` is reassigned
-		// by the parent binding before the async import resolves.
-		let local: p5Type | null = null;
+		let destroy: (() => void) | null = null;
 		let cancelled = false;
 
 		(async () => {
 			const mod = await import('p5');
 			if (cancelled || !container) return;
 
-			const p5Ctor = mod.default;
-			// The sketch installs its Ext members during construction (p5 calls the
-			// sketch function synchronously inside the constructor), so by the time
-			// the instance is observable it is already the extended type.
-			local = new p5Ctor((p: p5Type) => sketch(p as ExtendedP5<Ext>), container);
-			instance = local as ExtendedP5<Ext>;
-			onReady?.(local as ExtendedP5<Ext>);
+			// The sketch installs its Ext members during construction, so the
+			// instance is already the extended type when it becomes observable.
+			destroy = mountSketch(
+				mod.default as unknown as SketchCtor<p5Type & SketchHost>,
+				(p) => sketch(p as ExtendedP5<Ext>),
+				container,
+				(p) => (instance = p as ExtendedP5<Ext>),
+				(p) => onReady?.(p as ExtendedP5<Ext>)
+			);
 		})();
 
 		return () => {
 			cancelled = true;
 			try {
-				local?.remove();
+				destroy?.();
 			} catch {
 				// p5.remove() can throw if the DOM is already gone during HMR; ignore.
 			}
-			local = null;
+			destroy = null;
 			instance = null;
 		};
 	});

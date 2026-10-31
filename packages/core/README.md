@@ -53,6 +53,8 @@ The p5 instance is exposed as a bindable prop. Bind it when you need to call int
 
 `instance` is `null` before mount and after unmount, so guard with `?.`.
 
+`onReady` fires once, after `instance` is bound and your `setup()` has finished (awaited if it is `async`), on both p5 1.x and 2.x.
+
 ## `createP5Bridge`
 
 A reactive object you can read and write from both sides. No subscriptions, no manual sync.
@@ -90,7 +92,7 @@ Exported from the main entry (and from `./utils` for explicit imports):
 ```ts
 import { disableFES, createColorCache, createFontAtlas, hitTest } from 'svelte-p5';
 
-disableFES(); // call once, before creating any p5 instance
+disableFES(); // call once, before creating any p5 instance (works on p5 1 and 2)
 hitTest.rect(mouseX, mouseY, x, y, w, h);
 ```
 
