@@ -34,6 +34,10 @@
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./youtube": {
+      "types": "./dist/youtube.d.ts",
+      "default": "./dist/youtube.js"
     }
   },
   "files": [
@@ -70,6 +74,7 @@
     "@testing-library/jest-dom": "catalog:",
     "@testing-library/svelte": "catalog:",
     "@testing-library/user-event": "catalog:",
+    "@types/youtube": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "happy-dom": "catalog:",
     "p5": "catalog:",

@@ -24,6 +24,9 @@ catalogs:
     '@tsconfig/svelte':
       specifier: ^5.0.0
       version: 5.0.8
+    '@types/youtube':
+      specifier: ^0.3.0
+      version: 0.3.0
     '@vitest/coverage-v8':
       specifier: ^5.0.5
       version: 5.0.5
@@ -293,6 +296,9 @@ importers:
       '@testing-library/user-event':
         specifier: 'catalog:'
         version: 14.6.8(@testing-library/dom@10.4.2)
+      '@types/youtube':
+        specifier: 'catalog:'
+        version: 0.3.0
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 5.0.5(vitest@5.0.5)
@@ -1060,6 +1066,9 @@ packages:
 
   '@types/ws@8.18.2':
     resolution: {integrity: sha512-67MQl+fpWKVTT1NYdnmo3U4sc/xPo/zQBncVnI74qmQa0z/b+1g6iYqNmGCPbxO+zz2aklb08a0oHfegiVd0/w==}
+
+  '@types/youtube@0.3.0':
+    resolution: {integrity: sha512-a+JnwvmYfCShUv2fPs9JL/rUr9JGx5BPjSn7sp3V5UEyyj2AIVkSCRlVoe4CjFBrkBIv9jMpOPakfitMq7tegA==}
 
   '@typescript-eslint/eslint-plugin@8.72.1':
     resolution: {integrity: sha512-5CokTWXpmbylfFabsbvHC0CAw3XLaGnoa+nFJX5FR592h/LoZsENUE6p/rg5xvkKrFEXz6pYmgI29AgXc2N3BQ==}
@@ -2980,6 +2989,8 @@ snapshots:
   '@types/ws@8.18.2':
     dependencies:
       '@types/node': 26.6.6
+
+  '@types/youtube@0.3.0': {}
 
   '@typescript-eslint/eslint-plugin@8.72.1(@typescript-eslint/parser@8.72.1(eslint@10.14.0(jiti@2.7.0))(typescript@6.0.2))(eslint@10.14.0(jiti@2.7.0))(typescript@6.0.2)':
     dependencies:

@@ -3,6 +3,13 @@
   "notes": [
     {
       "package": "svelte-p5-components",
+      "version": "2.1.0",
+      "breaking": false,
+      "summary": "Adds `svelte-p5-components/youtube`, a YouTube IFrame player adapter for the media port: `youTubePort(player)` for `createMediaSync` and `createMediaPlayback`, plus `createYouTubePlayer` and `loadYouTubeIframeApi`. It handles readiness, asynchronous seeks, buffering and the IFrame API's autoplay-on-seek. The main entry is unchanged and gains no YouTube dependency.",
+      "action": "None. Apps that hand-roll YouTube syncing can replace that code with `youTubePort`; see the YouTube recipe."
+    },
+    {
+      "package": "svelte-p5-components",
       "version": "2.0.0",
       "breaking": true,
       "summary": "`DraggableWindow` and `DraggableSketch` move to neodrag 3.0.0-next.12, which removed the plugin API. The `plugins` prop is replaced by library-owned `axis`, `grid` and `threshold` props, and no neodrag type is part of the public API any more. Everything else (props, bindables, classes, DOM, `data-neodrag-state`) is unchanged.",
