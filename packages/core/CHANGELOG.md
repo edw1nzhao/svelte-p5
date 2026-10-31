@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.2.0...core-v1.3.0) (2026-10-31)
+
+
+### Features
+
+* add a description prop for the canvas's screen-reader text ([#138](https://github.com/edw1nzhao/svelte-p5/issues/138)) ([8fbe625](https://github.com/edw1nzhao/svelte-p5/commit/8fbe625d0e0d178350186eace59c0e797b1fd426))
+
 ## [1.2.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.1.1...core-v1.2.0) (2026-10-31)
 
 

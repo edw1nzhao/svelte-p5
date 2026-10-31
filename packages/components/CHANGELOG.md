@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.3.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.2.0...components-v2.3.0) (2026-10-31)
+
+
+### Features
+
+* add a description prop for the canvas's screen-reader text ([#138](https://github.com/edw1nzhao/svelte-p5/issues/138)) ([8fbe625](https://github.com/edw1nzhao/svelte-p5/commit/8fbe625d0e0d178350186eace59c0e797b1fd426))
+
+
+### Bug Fixes
+
+* **components:** make FPSMonitor count draws in on-demand sketches ([#139](https://github.com/edw1nzhao/svelte-p5/issues/139)) ([b83cafc](https://github.com/edw1nzhao/svelte-p5/commit/b83cafc50e8c84c2e03335b81b499584ab89994f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 1.3.0
+  * peerDependencies
+    * svelte-p5 bumped from ^1.0.0 to ^1.3.0
+
 ## [2.2.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.1.1...components-v2.2.0) (2026-10-31)
 
 
