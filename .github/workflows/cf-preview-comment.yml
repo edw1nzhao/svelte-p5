@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Find the open PR for the deployed branch
         id: pr
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const ref = context.payload.deployment.ref;
@@ -52,7 +52,7 @@ jobs:
 
       - name: Post sticky comment with preview URL
         if: steps.pr.outputs.result != ''
-        uses: marocchino/sticky-pull-request-comment@v3
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
         with:
           number: ${{ steps.pr.outputs.result }}
           header: cf-preview
