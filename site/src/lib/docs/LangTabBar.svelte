@@ -40,21 +40,23 @@
 	}
 </script>
 
-<div class="lang-tabs-bar" role="tablist" aria-label="Code language">
-	{#each CODE_LANGS as lang (lang)}
-		{@const isActive = preferences.codeLang === lang}
-		<button
-			type="button"
-			role="tab"
-			aria-selected={isActive}
-			aria-label={lang === 'ts' ? 'TypeScript' : 'JavaScript'}
-			class="lang-tab"
-			class:active={isActive}
-			onclick={() => preferences.setCodeLang(lang)}
-		>
-			{labels[lang]}
-		</button>
-	{/each}
+<div class="lang-tabs-bar">
+	<div class="lang-tabs-list" role="tablist" aria-label="Code language">
+		{#each CODE_LANGS as lang (lang)}
+			{@const isActive = preferences.codeLang === lang}
+			<button
+				type="button"
+				role="tab"
+				aria-selected={isActive}
+				aria-label={lang === 'ts' ? 'TS (TypeScript)' : 'JS (JavaScript)'}
+				class="lang-tab"
+				class:active={isActive}
+				onclick={() => preferences.setCodeLang(lang)}
+			>
+				{labels[lang]}
+			</button>
+		{/each}
+	</div>
 	<button
 		type="button"
 		onclick={copy}
@@ -71,6 +73,10 @@
 </div>
 
 <style>
+	.lang-tabs-list {
+		display: flex;
+		align-items: stretch;
+	}
 	.lang-tabs-bar {
 		display: flex;
 		align-items: stretch;

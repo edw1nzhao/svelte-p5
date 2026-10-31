@@ -48,23 +48,25 @@
 	}
 </script>
 
-<div class="pm-tabs-bar" role="tablist" aria-label="Package manager">
-	{#each tabs as tab (tab.id)}
-		{@const Icon = tab.icon}
-		{@const isActive = preferences.pkgManager === tab.id}
-		<button
-			type="button"
-			role="tab"
-			aria-selected={isActive}
-			aria-label={tab.label}
-			class="pm-tab"
-			class:active={isActive}
-			onclick={() => preferences.setPkgManager(tab.id)}
-		>
-			<Icon class="size-3.5 shrink-0" />
-			<span>{tab.label}</span>
-		</button>
-	{/each}
+<div class="pm-tabs-bar">
+	<div class="pm-tabs-list" role="tablist" aria-label="Package manager">
+		{#each tabs as tab (tab.id)}
+			{@const Icon = tab.icon}
+			{@const isActive = preferences.pkgManager === tab.id}
+			<button
+				type="button"
+				role="tab"
+				aria-selected={isActive}
+				aria-label={tab.label}
+				class="pm-tab"
+				class:active={isActive}
+				onclick={() => preferences.setPkgManager(tab.id)}
+			>
+				<Icon class="size-3.5 shrink-0" />
+				<span>{tab.label}</span>
+			</button>
+		{/each}
+	</div>
 	<button
 		type="button"
 		onclick={copy}
@@ -81,6 +83,10 @@
 </div>
 
 <style>
+	.pm-tabs-list {
+		display: flex;
+		align-items: stretch;
+	}
 	.pm-tabs-bar {
 		display: flex;
 		align-items: stretch;

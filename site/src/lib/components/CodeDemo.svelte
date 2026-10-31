@@ -74,7 +74,7 @@
 	>
 		<div class="flex items-center justify-between gap-3 px-4 py-2 border-b border-slate-800">
 			<div class="flex items-center gap-3 min-w-0">
-				<span class="font-mono text-[0.6875rem] font-medium text-slate-500 uppercase tracking-wider"
+				<span class="font-mono text-[0.6875rem] font-medium text-slate-400 uppercase tracking-wider"
 					>Svelte</span
 				>
 				<div

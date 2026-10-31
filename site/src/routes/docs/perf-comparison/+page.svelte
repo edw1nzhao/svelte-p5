@@ -78,7 +78,7 @@
 						href={`/docs/${data.prev.slug}`}
 						class="group p-4 rounded-lg border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors no-underline"
 					>
-						<div class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-1">
+						<div class="flex items-center gap-2 text-xs font-medium text-slate-500 mb-1">
 							<ArrowLeft class="size-3" />
 							Previous
 						</div>
@@ -93,7 +93,7 @@
 						class="group p-4 rounded-lg border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors no-underline text-right"
 					>
 						<div
-							class="flex items-center justify-end gap-2 text-xs font-medium text-slate-400 mb-1"
+							class="flex items-center justify-end gap-2 text-xs font-medium text-slate-500 mb-1"
 						>
 							Next
 							<ArrowRight class="size-3" />

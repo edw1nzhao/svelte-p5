@@ -81,11 +81,7 @@
 		<div class="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-12 mb-10">
 			<!-- Brand column -->
 			<div class="col-span-2 sm:col-span-1">
-				<a
-					href="/"
-					class="inline-flex items-center gap-2 no-underline mb-3"
-					aria-label="svelte-p5 home"
-				>
+				<a href="/" class="inline-flex items-center gap-2 no-underline mb-3">
 					<Logo class="size-7" />
 					<span class="font-mono font-semibold text-base text-slate-900">svelte-p5</span>
 				</a>
@@ -130,14 +126,14 @@
 					href="https://svelte.dev"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-slate-600 hover:text-slate-900">Svelte</a
+					class="text-slate-600 underline underline-offset-2 hover:text-slate-900">Svelte</a
 				>
 				&middot;
 				<a
 					href="https://p5js.org"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-slate-600 hover:text-slate-900">p5.js</a
+					class="text-slate-600 underline underline-offset-2 hover:text-slate-900">p5.js</a
 				>
 			</div>
 		</div>

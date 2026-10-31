@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 const port = 4181;
 const sitePort = 4182;
-const siteSpec = /(playground|site-[a-z-]+)\.spec\.ts/;
+const siteSpec = /(playground|site-[a-z0-9-]+)\.spec\.ts/;
 
 export default defineConfig({
 	testDir: './tests',
