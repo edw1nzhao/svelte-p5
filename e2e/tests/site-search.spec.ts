@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 
 test('Ctrl+K opens search and a result leads to the matching docs page', async ({ page }) => {
 	await page.goto('/playground');
-	await expect(page.locator('pagefind-modal-trigger')).toBeVisible();
+	await expect(page.locator('pagefind-modal-trigger button')).toBeVisible();
 	await page.keyboard.press('ControlOrMeta+k');
 
 	const input = page.getByRole('searchbox').or(page.getByRole('combobox')).first();
@@ -29,8 +29,9 @@ test('the search trigger is usable at phone width', async ({ page }) => {
 test('the open search modal has no WCAG 2.2 A/AA violations', async ({ page }) => {
 	await page.emulateMedia({ reducedMotion: 'reduce' });
 	await page.goto('/docs');
+	await expect(page.locator('pagefind-modal-trigger button')).toBeVisible();
 	await page.keyboard.press('ControlOrMeta+k');
-	await page.keyboard.type('sketch');
+	await page.getByRole('searchbox').or(page.getByRole('combobox')).first().fill('sketch');
 	await expect(page.locator('pagefind-results a').first()).toBeVisible();
 	const { violations } = await new AxeBuilder({ page })
 		.include('pagefind-modal')
