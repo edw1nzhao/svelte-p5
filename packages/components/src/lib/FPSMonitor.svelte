@@ -23,12 +23,21 @@
 		if (!target) return;
 		const p = target;
 		let raf = 0;
-		let frames = 0;
+		let ticks = 0;
+		let startTime = -1;
+		let startCount = 0;
+		// Count draws rather than read frameRate(), which stays at its last value while
+		// a 'demand' or 'manual' sketch is idle.
 		const tick = () => {
-			frames += 1;
-			if (frames >= sampleFrames) {
-				fps = Math.round(p.frameRate());
-				frames = 0;
+			const time = performance.now();
+			if (startTime < 0) {
+				startTime = time;
+				startCount = p.frameCount;
+			} else if (++ticks >= sampleFrames && time > startTime) {
+				fps = Math.round(((p.frameCount - startCount) * 1000) / (time - startTime));
+				ticks = 0;
+				startTime = time;
+				startCount = p.frameCount;
 			}
 			raf = requestAnimationFrame(tick);
 		};
