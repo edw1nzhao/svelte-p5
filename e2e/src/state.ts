@@ -15,8 +15,14 @@ export interface E2EState {
 	disableFriendlyErrors: boolean | undefined;
 }
 
+export interface TimelineE2EState {
+	currentTime: number;
+	view: { start: number; end: number } | null;
+}
+
 declare global {
 	interface Window {
 		__e2e: E2EState;
+		__timeline: TimelineE2EState;
 	}
 }
