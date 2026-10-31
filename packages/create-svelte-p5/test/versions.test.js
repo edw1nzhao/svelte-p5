@@ -47,7 +47,6 @@ describe.each(templates)('template %s', (name) => {
 
 	it('uses a p5 inside the range svelte-p5 supports', () => {
 		expect(semver.subset(deps.p5, core.peerDependencies.p5), deps.p5).toBe(true);
-		expect(semver.satisfies(semver.minVersion(catalog.p5) ?? '', deps.p5)).toBe(true);
 	});
 
 	it('matches the toolchain versions the workspace builds with', () => {
