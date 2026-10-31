@@ -59,6 +59,14 @@ export const docs: readonly DocEntry[] = [
 		section: 'Concepts'
 	},
 	{
+		slug: 'typescript',
+		title: 'TypeScript',
+		description:
+			'Which p5 types to install, typing sketches, bridge state and instance extensions.',
+		file: 'docs/typescript.md',
+		section: 'Concepts'
+	},
+	{
 		slug: 'upgrading',
 		title: 'Upgrading',
 		description: 'Per-version upgrade notes, the compatibility matrix, and known-bad releases.',
