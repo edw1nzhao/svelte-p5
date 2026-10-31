@@ -4,6 +4,8 @@ On a 2× display, a `<canvas>` renders at 1× and the browser upscales, which lo
 
 ## The easy way
 
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
+
 ```svelte
 <script lang="ts">
 	import { Sketch } from 'svelte-p5-components';
@@ -48,7 +50,7 @@ Pixel-art aesthetics, deliberately crunchy rendering, or anything where you want
 
 Very large canvases on high-DPR displays. A 4K canvas at 3× DPR is a 36-megapixel back buffer; fill-rate and memory are real limits. Cap with `hidpi={Math.min(window.devicePixelRatio, 2)}` (or the equivalent `pixelDensity` call).
 
-Dense small text with a loaded font. OpenType.js path rendering at 3× DPR is even slower than at 1×. Cap pixel density, use a font atlas, or fall back to system fonts.
+Dense small text with a loaded font on p5 1.x. OpenType.js path rendering at 3× DPR is even slower than at 1×. Cap pixel density, use a font atlas, or fall back to system fonts. p5 2 draws loaded fonts natively and is not affected.
 
 ## Things that don't change
 

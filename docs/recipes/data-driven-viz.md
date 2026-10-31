@@ -11,12 +11,14 @@ Don't load CSV/JSON inside `p.setup` with `p.loadJSON()` or `p.loadStrings()` - 
 	import { P5Canvas, createP5Bridge } from 'svelte-p5';
 	import type p5 from 'p5';
 
-	let { data } = $props<{ data: { x: number; y: number; cluster: number }[] }>();
+	let { data }: { data: { x: number; y: number; cluster: number }[] } = $props();
 
 	const ui = createP5Bridge({ pointSize: 6 });
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(600, 400);
+		p.setup = () => {
+			p.createCanvas(600, 400);
+		};
 		p.draw = () => {
 			p.background(245);
 			p.noStroke();
@@ -65,6 +67,8 @@ Then each sketch animates against `timeline.frame`. Pause the timeline; everythi
 
 If your `p.draw` reads the same reactive field multiple times (often the case with proxies or cross-store reads), capture once at the top:
 
+<!-- snippet: declare const p = stub<P5>(); const timeline = stub<{ frame: number }>(); const ui = stub<{ state: { selectedSpeaker: string; visibleRange: [number, number] } }>(); const turnsInRange = stub<(r: [number, number]) => { speaker: string }[]>(); -->
+
 ```ts
 p.draw = () => {
 	const t = timeline.frame;
@@ -85,10 +89,13 @@ For 1–3 fields, this is overkill; for 10+ this is the difference between a dra
 
 p5 doesn't ship scale functions. Don't roll your own - `d3-scale` is one `pnpm add` away and does it correctly (linear, log, time, ordinal, with clamping, padding, ticks, all of it):
 
+<!-- snippet: declare const data = stub<{ date: Date; value: number }[]>(); -->
+
 ```ts
 import { scaleLinear, scaleTime } from 'd3-scale';
+import type p5 from 'p5';
 
-const sketch = (p) => {
+const sketch = (p: p5) => {
 	let xScale: ReturnType<typeof scaleTime>;
 	let yScale: ReturnType<typeof scaleLinear>;
 
@@ -178,6 +185,8 @@ Saves CPU and battery. Only useful when your sketch isn't already animating some
 
 Sketches that mix on-demand rendering with occasional animation (playback, transitions) can gate the loop _inside_ `p.draw` instead of one-shot `redraw()`:
 
+<!-- snippet: declare const p = stub<P5>(); const render = stub<() => void>(); const advanceAnimationIfPlaying = stub<() => void>(); let isPlaying = stub<boolean>(); let isTransitioning = stub<boolean>(); -->
+
 ```ts
 p.draw = () => {
 	render();
@@ -196,6 +205,11 @@ For datasets you're streaming or fetching async, hold a Svelte loading flag and 
 
 ```svelte
 <script lang="ts">
+	import { P5Canvas } from 'svelte-p5';
+	import type p5 from 'p5';
+
+	type DataPoint = { x: number; y: number };
+
 	let loading = $state(true);
 	let data = $state<DataPoint[]>([]);
 
@@ -205,7 +219,7 @@ For datasets you're streaming or fetching async, hold a Svelte loading flag and 
 		loading = false;
 	})();
 
-	const sketch = (p) => {
+	const sketch = (p: p5) => {
 		p.draw = () => {
 			p.background(245);
 			if (loading) {

@@ -10,7 +10,7 @@ pnpm add svelte-p5 p5
 pnpm add svelte-p5-components
 ```
 
-You'll need **Svelte 5** and **Node 22+** (24 recommended). Works in SvelteKit SSR out of the box - `p5` is dynamically imported on the client by the wrapper, so you don't need `{#if browser}` guards.
+You'll need **Svelte 5**, **p5.js 1.11 or later (1.x and 2.x are both supported)** and **Node 22+** (24 recommended). Works in SvelteKit SSR out of the box - `p5` is dynamically imported on the client by the wrapper, so you don't need `{#if browser}` guards.
 
 Coming from `p5-svelte`? See the [migration guide](./recipes/migration-from-p5-svelte.md) first.
 
@@ -28,7 +28,9 @@ If you already know p5 and just want a correct-lifecycle Svelte wrapper:
 	import type p5 from 'p5';
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(600, 400);
+		p.setup = () => {
+			p.createCanvas(600, 400);
+		};
 		p.draw = () => {
 			p.background(240);
 			p.circle(p.mouseX, p.mouseY, 40);
@@ -43,9 +45,13 @@ That's it. The wrapper mounts p5 in instance mode, hands it your sketch, and cle
 
 Need the p5 instance from outside the sketch? Use `bind:instance`:
 
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
+
 ```svelte
 <script lang="ts">
+	import { P5Canvas } from 'svelte-p5';
 	import type p5 from 'p5';
+
 	let instance = $state<p5 | null>(null);
 </script>
 
@@ -65,7 +71,9 @@ When Svelte UI needs to drive sketch state (or vice-versa), skip the subscriptio
 	const bridge = createP5Bridge({ radius: 40, color: '#336699' });
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(400, 400);
+		p.setup = () => {
+			p.createCanvas(400, 400);
+		};
 		p.draw = () => {
 			p.background(240);
 			p.fill(bridge.state.color);
@@ -100,6 +108,8 @@ Import it anywhere. Writes from anywhere propagate to readers. See `docs/example
 
 When you want the 80% case solved:
 
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
+
 ```svelte
 <script lang="ts">
 	import { Sketch, FPSMonitor, DraggableSketch } from 'svelte-p5-components';
@@ -127,4 +137,4 @@ import { disableFES } from 'svelte-p5';
 disableFES();
 ```
 
-And **do not use `p.loadFont()`** with a variable font unless you absolutely need it. See [recipes/performance.md](./recipes/performance.md).
+And on p5 1.x, **avoid `p.loadFont()`** unless you absolutely need it (p5 2 does not have the problem). See [recipes/performance.md](./recipes/performance.md).

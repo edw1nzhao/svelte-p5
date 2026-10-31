@@ -24,7 +24,9 @@ When you have one value (or two) and a single component owns it, just close over
 	let radius = $state(40);
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(400, 400);
+		p.setup = () => {
+			p.createCanvas(400, 400);
+		};
 		p.draw = () => {
 			p.background(240);
 			p.circle(p.mouseX, p.mouseY, radius);
@@ -56,7 +58,9 @@ When you have several related fields you want to group, `createP5Bridge` returns
 	});
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(400, 300);
+		p.setup = () => {
+			p.createCanvas(400, 300);
+		};
 		p.draw = () => {
 			p.background(0, 0, 100);
 			p.fill(bridge.state.hue, 70, 90);
@@ -81,6 +85,8 @@ export function createP5Bridge<T extends object>(initial: T) {
 ```
 
 That's it. The value-add isn't reactivity (which `$state` already provides) - it's _grouping_ and a stable reference you can hand off:
+
+<!-- snippet: skip (ControlPanel and DebugReadout are placeholder app components) -->
 
 ```svelte
 <P5Canvas {sketch} />
@@ -137,11 +143,12 @@ export const dashboard = new DashboardState();
 Anywhere you import `dashboard`, mutations propagate. A toolbar mutates `dashboard.hue`, three sketches read it on the next frame:
 
 ```svelte
-<script>
+<script lang="ts">
 	import { dashboard } from './sharedState.svelte.ts';
 	import { P5Canvas } from 'svelte-p5';
+	import type p5 from 'p5';
 
-	const sketch = (p) => {
+	const sketch = (p: p5) => {
 		p.draw = () => {
 			p.background(dashboard.hue, 30, 100);
 			// `tick` is the master clock - never use p.frameCount here
@@ -168,8 +175,13 @@ No. p5's draw runs every frame and reads from your closure. Svelte's `$state` al
 
 You only need `$effect` if something has to happen _at the moment_ a value changes (e.g. force a redraw on a non-looping sketch):
 
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
+
 ```svelte
 <script lang="ts">
+	import { P5Canvas, createP5Bridge } from 'svelte-p5';
+	import type p5 from 'p5';
+
 	let instance = $state<p5 | null>(null);
 	const bridge = createP5Bridge({ snapshot: 0 });
 
@@ -196,10 +208,11 @@ Bridges aren't one-way. The sketch can write to the same `$state`:
 ```svelte
 <script lang="ts">
 	import { createP5Bridge, P5Canvas } from 'svelte-p5';
+	import type p5 from 'p5';
 
 	const bridge = createP5Bridge({ fps: 0, mouseX: 0, mouseY: 0 });
 
-	const sketch = (p) => {
+	const sketch = (p: p5) => {
 		p.draw = () => {
 			bridge.state.fps = Math.round(p.frameRate());
 			bridge.state.mouseX = p.mouseX;

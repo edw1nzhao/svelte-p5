@@ -159,7 +159,7 @@ as a "this is what your app will experience" claim.
 
 - **Initial mount time.** Both wrappers do the same dynamic `import('p5')`;
   difference is in microseconds.
-- **Bundle size.** Both wrapper components are ~30 lines.
+- **Bundle size.** Both wrappers are small; `svelte-p5` has since grown a little to handle p5 2 and `onReady` timing.
 - **Heap usage.** `performance.memory.usedJSHeapSize` is quantized to
   ~1 MB by Chromium and reads identical for both runs at these sketch sizes.
 - **HiDPI and resize.** That's the `<Sketch>` component's job, not
@@ -177,4 +177,4 @@ materially different numbers,
 `results.json` and environment.
 
 Numbers above were captured on **2026-04-16** with the bench at
-[`bench/`](../bench).
+[`bench/`](../bench), before `svelte-p5` 1.x and p5 2 support. The lifecycle behavior they measure (`instance.remove()` on unmount) has not changed.

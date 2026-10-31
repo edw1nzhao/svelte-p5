@@ -6,7 +6,7 @@
 - **happy-dom** for the DOM environment in the `components` package. Fast, no browser binaries, good enough for every Tier S chrome component in this repo (all HTML-based, none draw directly into a canvas).
 - **@testing-library/svelte** for mounting Svelte 5 components and asserting against the rendered DOM.
 - **@testing-library/user-event** for high-level interaction simulation.
-- **Playwright** (planned) for end-to-end smoke tests against `docs/examples/*` — verifies the full p5 render path in a real browser.
+- **Playwright** for real-browser tests in `e2e/` (`pnpm test:browser`) — verifies the full p5 render path, canvas sizing and pixel density for `<P5Canvas>` and `<Sketch>`.
 
 ## Running tests
 
@@ -37,6 +37,8 @@ pnpm --filter svelte-p5-components test:coverage
 ## Writing a component test
 
 Co-locate tests next to the component using `.test.svelte.ts` (so Svelte 5 runes compile) or `.test.ts` (plain TS):
+
+<!-- snippet: skip (MyComponent.svelte is a placeholder for the component under test) -->
 
 ```ts
 // packages/components/src/lib/MyComponent.test.svelte.ts
@@ -80,4 +82,4 @@ Per-package coverage via `pnpm --filter <pkg> test:coverage` produces a V8 HTML 
 
 ## What about Playwright?
 
-End-to-end tests against `docs/examples/*` are planned. Each example boots, the canvas mounts, a simple interaction happens, and the test asserts no console errors plus a visual snapshot. This catches the happy-dom blind spots (canvas pixel ops, CSS cascade, p5 lifecycle in a real frame loop). See `hosting.md` for how Cloudflare Pages preview deploys make this practical per-PR.
+Real-browser tests live in `e2e/` and run with `pnpm test:browser`. A small harness mounts `<P5Canvas>` and `<Sketch>` in Chromium and asserts the first frame's size and pixel density across sync, async and missing `setup()`. CI runs them against both p5 1.11 and p5 2.x. This catches the happy-dom blind spots (canvas pixel ops, CSS cascade, p5 lifecycle in a real frame loop). Tests against `docs/examples/*` are not written yet.

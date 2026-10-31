@@ -1,13 +1,14 @@
 # Performance
 
-The real p5 perf traps, ordered by how much impact they have. Each one is tied to a specific place in p5's source.
+The real p5 perf traps, ordered by how much impact they have. Each one is tied to a specific place in p5's source; the file and line references are to p5 1.11, and the notes say where p5 2 differs.
 
-## 1. Don't `loadFont()` unless you must
+## 1. On p5 1.x, don't `loadFont()` unless you must
+
+<!-- snippet: declare const p = stub<P5>(); -->
 
 ```ts
-// bad - every p.text() call path-renders glyphs via OpenType.js
-p.font = p.loadFont('/fonts/MyFont.ttf');
-p.textFont(p.font);
+// bad on p5 1.x - every p.text() call path-renders glyphs via OpenType.js
+p.loadFont('/fonts/MyFont.ttf', (font) => p.textFont(font));
 
 // good - p.text() uses native canvas fillText(), 10-100× faster
 p.textFont('MyFont, system-ui, sans-serif');
@@ -15,6 +16,8 @@ p.textFont('MyFont, system-ui, sans-serif');
 ```
 
 p5's `_renderText` ([`src/core/p5.Renderer2D.js:1212-1243`](https://github.com/processing/p5.js/blob/main/src/core/p5.Renderer2D.js)) has two branches. System fonts go through native `drawingContext.fillText`. Loaded OTF/TTF fonts go through OpenType.js, which decomposes every glyph into Bezier curves on every call. A word cloud with 500 labels runs that 500 times per frame.
+
+**p5 2 does not have this trap.** There `loadFont()` registers a CSS `FontFace` and the 2D renderer draws every string with native `fillText`, loaded font or not (checked against p5 2.3.4), so a loaded font costs about the same as a system font.
 
 If you need a specific loaded font, pre-render a fixed vocabulary with `createFontAtlas` (see below) so each glyph is path-rendered once.
 
@@ -29,7 +32,11 @@ p5's Friendly Error System validates arguments on every `map()`, `fill()`, `stro
 
 ## 3. Cache colors, don't call `color()` in loops
 
+<!-- snippet: declare const p = stub<P5>(); const particles = stub<{ id: string; hue: number; x: number; y: number; cssColor: string }[]>(); -->
+
 ```ts
+import { createColorCache } from 'svelte-p5';
+
 // bad - allocates a p5.Color per particle per frame
 for (const pt of particles) {
 	p.fill(p.color(pt.hue, 80, 90));
@@ -37,7 +44,6 @@ for (const pt of particles) {
 }
 
 // good - compute once, reuse
-import { createColorCache } from 'svelte-p5';
 const colors = createColorCache<string>();
 for (const pt of particles) {
 	p.fill(colors.get(pt.id, () => `hsl(${pt.hue}, 80%, 60%)`));
@@ -54,6 +60,8 @@ for (const pt of particles) {
 `p.color()` allocates a `p5.Color`, a typed array, and runs regex on the input - around 5-10µs each. Thousands of particles means milliseconds of GC pressure per frame. Canvas 2D accepts CSS strings directly, so you can sidestep the parser entirely.
 
 ## 4. `drawingContext` in hot loops
+
+<!-- snippet: declare const p = stub<P5>(); const words = stub<{ color: string; label: string; x: number; y: number }[]>(); -->
 
 ```ts
 // bad - p5 wrapper + FES per call, thousands of times per frame
@@ -74,7 +82,9 @@ p5 exposes the raw `CanvasRenderingContext2D` as `drawingContext` ([`src/core/p5
 
 ## 5. Font atlas for fixed vocabularies
 
-If `loadFont()` is unavoidable and you have a known set of strings (speaker names, axis labels, category tags):
+On p5 1.x, if `loadFont()` is unavoidable and you have a known set of strings (speaker names, axis labels, category tags):
+
+<!-- snippet: declare const p = stub<P5>(); const speakerNames = stub<string[]>(); const rows = stub<{ speaker: string; x: number; y: number }[]>(); -->
 
 ```ts
 import { createFontAtlas } from 'svelte-p5';
@@ -110,6 +120,6 @@ Measure before you optimize. DevTools → Performance → record one second of a
 - Long `FunctionCall` entries in the draw path - too much per-frame work.
 - Frequent Minor GC events - allocation in the hot loop (colors, objects, arrays).
 - `drawingContext.fill` dominating - time to skip the wrapper.
-- `_renderPath` dominating - you're in the `loadFont()` slow path. Fix item 1 first.
+- `_renderPath` dominating (p5 1.x) - you're in the `loadFont()` slow path. Fix item 1 first.
 
 Item 1 usually accounts for most of the problem when it applies at all.

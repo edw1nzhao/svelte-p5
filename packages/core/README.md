@@ -26,7 +26,9 @@ Mounts a p5 sketch in instance mode, cleans it up on unmount.
 	import type p5 from 'p5';
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(400, 400);
+		p.setup = () => {
+			p.createCanvas(400, 400);
+		};
 		p.draw = () => {
 			p.background(240);
 			p.circle(p.mouseX, p.mouseY, 40);
@@ -38,6 +40,8 @@ Mounts a p5 sketch in instance mode, cleans it up on unmount.
 ```
 
 The p5 instance is exposed as a bindable prop. Bind it when you need to call into the sketch from Svelte:
+
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
 
 ```svelte
 <script lang="ts">
@@ -53,7 +57,7 @@ The p5 instance is exposed as a bindable prop. Bind it when you need to call int
 
 `instance` is `null` before mount and after unmount, so guard with `?.`.
 
-`onReady` fires once, after `instance` is bound and your `setup()` has finished (awaited if it is `async`), on both p5 1.x and 2.x.
+`onReady` fires once, after `instance` is bound and your `setup()` has finished (awaited if it is `async`), on both p5 1.x and 2.x. With no `setup()` it fires as soon as p5 has started (on p5 2, after its default canvas exists).
 
 ## `createP5Bridge`
 
@@ -67,7 +71,9 @@ A reactive object you can read and write from both sides. No subscriptions, no m
 	const bridge = createP5Bridge({ radius: 40, color: '#336699' });
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(400, 400);
+		p.setup = () => {
+			p.createCanvas(400, 400);
+		};
 		p.draw = () => {
 			p.background(240);
 			p.fill(bridge.state.color);
@@ -89,11 +95,15 @@ For one or two fields you could just as well close over a plain `$state` variabl
 
 Exported from the main entry (and from `./utils` for explicit imports):
 
+<!-- snippet: declare const [x, y, w, h] = stub<number[]>(); -->
+
 ```ts
 import { disableFES, createColorCache, createFontAtlas, hitTest } from 'svelte-p5';
+import type p5 from 'p5';
 
 disableFES(); // call once, before creating any p5 instance (works on p5 1 and 2)
-hitTest.rect(mouseX, mouseY, x, y, w, h);
+
+const overButton = (p: p5) => hitTest.rect(p.mouseX, p.mouseY, x, y, w, h);
 ```
 
 What each does and when to reach for it lives in the [performance recipe](../../docs/recipes/performance.md).
@@ -114,6 +124,8 @@ them instead of casting. `SketchFn<Ext>` types the instance inside the sketch as
 variables that hold the bound instance:
 
 ```ts
+import type { SketchFn, ExtendedP5 } from 'svelte-p5';
+
 interface AppSketchExt {
 	resetView(): void;
 	zoomLevel: number;
@@ -132,6 +144,8 @@ const sketch: SketchFn<AppSketchExt> = (p) => {
 let instance: AppP5 | null = $state(null);
 ```
 
+<!-- snippet: skip (continues the previous fence, whose sketch and instance it uses) -->
+
 ```svelte
 <P5Canvas {sketch} bind:instance />
 <!-- instance is inferred as AppP5 | null; instance?.resetView() type-checks -->
@@ -149,7 +163,7 @@ a minor.
 
 p5 itself is a peer dependency pinned to `>=1.11.0 <3`. p5 1.11+ and 2.x are both supported
 and tested: CI runs the unit tests and a real-browser test of `<P5Canvas>` and `<Sketch>`
-against each. On p5 2, use `svelte-p5` 1.0.1 or later for the `onReady` timing fix.
+against each. On p5 2, use `svelte-p5` 1.1.0 or later for the `onReady` timing fixes.
 
 See [Upgrading](https://svelte-p5.dev/docs/upgrading) for per-version notes and the compatibility matrix.
 

@@ -11,9 +11,14 @@ If a Svelte wrapper doesn't call `remove()` when the component unmounts, every m
 
 ## How `<P5Canvas>` handles it
 
-`<P5Canvas>` is mostly one `onMount` with a teardown:
+`<P5Canvas>` is mostly one `onMount` with a teardown. This is a simplified version; the real one delegates construction to an internal `mountSketch` helper, which also applies `disableFES()` and runs `onReady` after your `setup()`:
+
+<!-- snippet: declare let container = stub<HTMLElement | null>(); const sketch = stub<(p: P5) => void>(); let instance = stub<P5 | null>(); -->
 
 ```ts
+import { onMount } from 'svelte';
+import type p5 from 'p5';
+
 onMount(() => {
 	let local: p5 | null = null;
 	let cancelled = false;
@@ -47,6 +52,8 @@ The `cancelled` flag guards against a race where the component unmounts before `
 The `try/catch` around `remove()` is defensive. During HMR the container can disappear before Svelte runs the teardown, and `remove()` will throw on a missing node.
 
 ## Using the bindable instance
+
+<!-- snippet: declare const sketch = stub<(p: P5) => void>(); -->
 
 ```svelte
 <script lang="ts">

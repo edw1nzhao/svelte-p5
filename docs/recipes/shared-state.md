@@ -13,6 +13,7 @@ class DashboardState {
 	selectedSpeaker = $state<string | null>(null);
 	timelinePosition = $state(0); // 0 to 1
 	paused = $state(false);
+	hoveredId = $state<string | null>(null);
 
 	#raf = 0;
 
@@ -37,12 +38,15 @@ export const dashboard = new DashboardState();
 Then any sketch reads from it:
 
 ```svelte
-<script>
+<script lang="ts">
 	import { P5Canvas } from 'svelte-p5';
+	import type p5 from 'p5';
 	import { dashboard } from './sharedState.svelte.ts';
 
-	const sketch = (p) => {
-		p.setup = () => p.createCanvas(400, 300);
+	const sketch = (p: p5) => {
+		p.setup = () => {
+			p.createCanvas(400, 300);
+		};
 		p.draw = () => {
 			p.background(245);
 			// All three sketches advance from the same tick.
@@ -59,7 +63,7 @@ Then any sketch reads from it:
 And any control mutates it:
 
 ```svelte
-<script>
+<script lang="ts">
 	import { dashboard } from './sharedState.svelte.ts';
 </script>
 
@@ -88,7 +92,11 @@ Pause toggles work the same way - `dashboard.paused = true` stops `tick` from ad
 
 A subtle issue with reactive proxies: if you read the same field five times during one `p.draw` call, you get the value at five potentially different moments. For most cases this doesn't matter (a few microseconds apart, no UI updates in between). But if you have many derived calculations and want them all consistent, snapshot at the top of `draw`:
 
+<!-- snippet: declare const p = stub<P5>(); -->
+
 ```ts
+import { dashboard } from './sharedState.svelte.ts';
+
 p.draw = () => {
 	const tick = dashboard.tick;
 	const speaker = dashboard.selectedSpeaker;
@@ -105,22 +113,18 @@ This pattern shows up in larger viz codebases (e.g. transcript-explorer's `DrawC
 
 ## Cross-highlighting between sketches
 
-Two canvases, hover on one dims items in the other:
+Two canvases, hover on one dims items in the other. The `hoveredId` field on `DashboardState` above is the only shared piece:
 
-```ts
-// sharedState.svelte.ts (additions)
-class DashboardState {
-	// ...
-	hoveredId = $state<string | null>(null);
-}
-```
+<!-- snippet: declare const itemsA = stub<{ id: string; x: number; y: number; color: string }[]>(); -->
 
 ```svelte
 <!-- Sketch A -->
-<script>
+<script lang="ts">
+	import { P5Canvas } from 'svelte-p5';
+	import type p5 from 'p5';
 	import { dashboard } from './sharedState.svelte.ts';
 
-	const sketch = (p) => {
+	const sketch = (p: p5) => {
 		p.draw = () => {
 			for (const item of itemsA) {
 				const dimmed = dashboard.hoveredId !== null && dashboard.hoveredId !== item.id;
@@ -146,7 +150,7 @@ The other sketches read `dashboard.hoveredId` the same way. One source of truth,
 If your state owns a `requestAnimationFrame` loop, make sure you call `dispose()` when the app tears down. For a SvelteKit app, this rarely matters in practice (the page unloads), but it's necessary for testing and HMR cleanliness:
 
 ```svelte
-<script>
+<script lang="ts">
 	import { onDestroy } from 'svelte';
 	import { dashboard } from './sharedState.svelte.ts';
 
