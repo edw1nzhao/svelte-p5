@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.0.0...core-v1.0.1) (2026-10-31)
+
+
+### Bug Fixes
+
+* **core:** p5 2 compatibility for onReady and disableFES ([#103](https://github.com/edw1nzhao/svelte-p5/issues/103)) ([ba55f69](https://github.com/edw1nzhao/svelte-p5/commit/ba55f69a0adf547c27a7069827da7a95273767ac))
+
 ## [1.0.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v0.4.0...core-v1.0.0) (2026-09-20)
 
 
