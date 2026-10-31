@@ -8,7 +8,7 @@ const walk = (root, dir) =>
 		return e.name.endsWith('.md') ? [rel] : [];
 	});
 
-export function collectMarkdown(root, { includeRoot = false } = {}) {
+export function collectMarkdown(root, { includeRoot = true } = {}) {
 	const pkgs = fs.readdirSync(path.join(root, 'packages')).map((p) => `packages/${p}/README.md`);
 	return [
 		...(includeRoot ? ['README.md'] : []),

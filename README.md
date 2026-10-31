@@ -29,7 +29,9 @@ pnpm add svelte-p5 p5
 	import type p5 from 'p5';
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(400, 400);
+		p.setup = () => {
+			p.createCanvas(400, 400);
+		};
 		p.draw = () => {
 			p.background(240);
 			p.circle(p.mouseX, p.mouseY, 40);
@@ -52,7 +54,9 @@ pnpm add svelte-p5-components
 	import type p5 from 'p5';
 
 	const sketch = (p: p5) => {
-		p.setup = () => p.createCanvas(400, 400);
+		p.setup = () => {
+			p.createCanvas(400, 400);
+		};
 		p.draw = () => {
 			p.background(240);
 			p.circle(p.mouseX, p.mouseY, 40);
