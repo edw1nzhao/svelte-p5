@@ -5,7 +5,6 @@ import type p5 from 'p5';
 // components still load against svelte-p5 releases that predate it.
 const KEY = Symbol.for('svelte-p5.sketch-context');
 
-/** The enclosing `<P5Canvas>`'s context, or `undefined` outside one. */
 export function sketchContext(): { readonly instance: p5 | null } | undefined {
 	return getContext(KEY);
 }

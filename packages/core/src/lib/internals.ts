@@ -15,5 +15,4 @@ export const drawable = (p: unknown) => p as Drawable;
 /** True once p5 itself has finished setup; `redraw()` silently does nothing before that. */
 export const setupDone = (p: unknown) => drawable(p)._setupDone !== false;
 
-/** True when a `redraw()` now would be dropped by p5 (before setup, or inside `draw()`). */
 export const redrawBlocked = (p: unknown) => !setupDone(p) || drawable(p)._inUserDraw === true;

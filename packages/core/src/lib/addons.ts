@@ -1,7 +1,4 @@
-/**
- * A p5 2 add-on: the function passed to `p5.registerAddon`. `p5` is the
- * constructor, `fn` is `p5.prototype`, and `lifecycles` takes the hooks.
- */
+/** A function for p5 2's `p5.registerAddon`; `fn` is `p5.prototype`. */
 export type P5Addon = (p5: any, fn: any, lifecycles: P5AddonLifecycles) => void;
 
 /** Hooks an add-on may set. `this` is the sketch instance, so use `function`, not arrows. */
@@ -20,10 +17,7 @@ interface AddonHost {
 
 const registered = new WeakMap<object, WeakSet<P5Addon>>();
 
-/**
- * Registers each add-on once per p5 constructor. p5 has no unregister, so an
- * add-on stays active for every later sketch, including after remounts.
- */
+/** Registers each add-on once per p5 constructor; p5 cannot unregister them. */
 export function registerAddons(Ctor: unknown, addons: readonly P5Addon[] | undefined): void {
 	if (!addons?.length) return;
 	const host = Ctor as AddonHost;

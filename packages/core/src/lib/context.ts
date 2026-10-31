@@ -6,11 +6,8 @@ import type { ExtendedP5 } from './types.js';
 export interface SketchContext<Ext = unknown> {
 	/** The p5 instance once `setup()` has finished; `null` before that and after unmount. Reactive. */
 	readonly instance: ExtendedP5<Ext> | null;
-	/** `true` while `instance` is set. Reactive. */
 	readonly ready: boolean;
-	/** The canvas's loop mode. Reactive. */
 	readonly loop: LoopMode;
-	/** Requests one redraw on the next frame; a no-op while the sketch loops. */
 	invalidate(): void;
 }
 
@@ -21,10 +18,7 @@ export function setSketchContext(context: SketchContext<any>): void {
 	setContext(KEY, context);
 }
 
-/**
- * Reads the sketch context of the nearest enclosing `<P5Canvas>` or `<Sketch>`.
- * Call it during component initialisation. Returns `undefined` outside a canvas.
- */
+/** The enclosing `<P5Canvas>`'s context; call during component init. `undefined` outside one. */
 export function getSketchContext<Ext = unknown>(): SketchContext<Ext> | undefined {
 	return getContext<SketchContext<Ext> | undefined>(KEY);
 }

@@ -8,12 +8,10 @@
 	interface Props {
 		/** Defaults to the instance of the enclosing `<Sketch>` or `<P5Canvas>`. */
 		instance?: p5 | null;
-		/** Passed to `downloadCanvas`: scale, size, format, quality, filename, seed. */
 		options?: ExportOptions;
 		/** Overlay corner inside a canvas, or `'static'` for an ordinary inline button. */
 		position?: Position | 'static';
 		class?: string;
-		/** Button content. Default: "Export PNG" (or the chosen format). */
 		children?: Snippet;
 		onExport?: (blob: Blob) => void;
 		onError?: (error: unknown) => void;

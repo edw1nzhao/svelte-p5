@@ -27,18 +27,12 @@ export interface SketchProps<Ext = unknown> {
 	 * a redraw if your sketch is noLoop-gated.
 	 */
 	onResize?: (instance: ExtendedP5<Ext>, width: number, height: number) => void;
-	/**
-	 * When `draw()` runs: `'always'` (default), `'demand'` or `'manual'`. See
-	 * `P5Canvas`'s `loop`. Resizing redraws in every mode. Needs svelte-p5 1.2.
-	 */
+	/** `P5Canvas`'s loop mode. Needs svelte-p5 1.2. */
 	loop?: 'always' | 'demand' | 'manual';
 	/** Bridges whose changes redraw a `'demand'` sketch. Needs svelte-p5 1.2. */
 	bridge?: { state: object } | readonly { state: object }[];
 	/** p5 2 add-ons registered before the sketch is created. Needs svelte-p5 1.2. */
 	addons?: readonly ((p5: any, fn: any, lifecycles: any) => void)[];
-	/**
-	 * Overlays rendered over the canvas (inside `<P5Canvas>`), e.g. `<FPSMonitor />`.
-	 * Position them absolutely. They can read the instance with `getSketchContext()`.
-	 */
+	/** Absolutely positioned overlays, e.g. `<FPSMonitor />`; they get the sketch context. */
 	children?: Snippet;
 }

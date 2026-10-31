@@ -45,23 +45,12 @@ export interface P5CanvasProps<Ext = unknown> {
 	style?: string;
 	/** Called once, after `instance` is bound and `setup()` has finished (awaited if async), or right after construction if there is no `setup()`. */
 	onReady?: (instance: ExtendedP5<Ext>) => void;
-	/**
-	 * When `draw()` runs. `'always'` (default) keeps p5's loop. `'demand'` stops it
-	 * after setup and redraws once per change to `bridge` state, resize or
-	 * `invalidate()`. `'manual'` redraws only on `invalidate()` and resize.
-	 */
+	/** `'always'` (default) keeps p5's loop; `'demand'` and `'manual'` redraw only when asked. */
 	loop?: LoopMode;
 	/** Bridges whose state the sketch reads; in `'demand'` mode any change to them redraws. */
 	bridge?: { state: object } | readonly { state: object }[];
-	/**
-	 * p5 2 add-ons, registered with `p5.registerAddon` before the sketch is
-	 * created, once per add-on function. Read at mount. Throws on p5 1.x.
-	 */
+	/** p5 2 add-ons, registered once each before the sketch is created. Throws on p5 1.x. */
 	addons?: readonly P5Addon[];
-	/**
-	 * Rendered inside the container, before the canvas, with `position: relative`
-	 * added to it. Use it for absolutely positioned overlays; components in it can
-	 * call `getSketchContext()`.
-	 */
+	/** Overlays rendered in the container, which gets `position: relative`. */
 	children?: Snippet;
 }

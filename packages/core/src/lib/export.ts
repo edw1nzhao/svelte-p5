@@ -9,38 +9,30 @@ export interface ExportOptions {
 	width?: number;
 	/** Output height in pixels; must keep the canvas's aspect ratio when `width` is also set. */
 	height?: number;
-	/** Default `'png'`. */
 	format?: ExportFormat;
-	/** Encoder quality from 0 to 1, for `'jpeg'` and `'webp'`. */
 	quality?: number;
-	/** Download name for `downloadCanvas`. Default: `sketch-<timestamp>[-<seed>].<ext>`. */
 	filename?: string;
-	/** Appended to the default filename, so a downloaded image records the seed that made it. */
+	/** Appended to the default download name. */
 	seed?: string | number;
 }
 
 export interface SteppedFrame {
-	/** 0-based index of this step. */
 	index: number;
-	/** p5's `frameCount` after this step's `draw()`. */
 	frameCount: number;
-	/** Simulated time of this step in ms: `index * 1000 / fps`. */
+	/** `index * 1000 / fps`, in ms. */
 	time: number;
 	canvas: HTMLCanvasElement;
-	/** Encodes this frame. Call it before awaiting anything else if the WEBGL canvas does not preserve its buffer. */
+	/** With `preserveDrawingBuffer: false`, call this before awaiting anything else. */
 	toBlob(format?: ExportFormat, quality?: number): Promise<Blob>;
 }
 
 export interface StepFramesOptions {
-	/** Number of frames to draw. */
 	count: number;
 	/** Sets `deltaTime` to `1000 / fps` before each frame. Default 60. */
 	fps?: number;
-	/** Output pixels per CSS pixel while stepping. Default: the current pixel density. */
+	/** Output pixels per CSS pixel while stepping. */
 	scale?: number;
-	/** Called after each frame and awaited before the next. */
 	onFrame: (frame: SteppedFrame) => unknown;
-	/** Stops stepping after the current frame. */
 	signal?: AbortSignal;
 }
 
@@ -126,12 +118,7 @@ function assertDrawable(p: unknown, what: string) {
 // Nudges density up so a product like 3507.9999 still truncates to the intended pixel size.
 const densityFor = (scale: number) => scale * (1 + 1e-9);
 
-/**
- * Renders the sketch at `scale` (or `width`/`height`) and encodes it. The live
- * canvas keeps its size and density: when the scale differs from the current
- * density, the density is raised, `draw()` runs once, the bitmap is copied, and
- * the density is restored with one more `draw()`. `frameCount` is restored too.
- */
+/** Encodes the sketch at a scale or size, re-rendering via `pixelDensity` when it differs. */
 export async function exportCanvas(instance: object, options: ExportOptions = {}): Promise<Blob> {
 	assertDrawable(instance, 'exportCanvas');
 	const p = host(instance);
@@ -195,11 +182,7 @@ export async function downloadCanvas(instance: object, options: ExportOptions = 
 	return blob;
 }
 
-/**
- * Stops the loop and draws `count` frames one at a time, setting `deltaTime`
- * to `1000 / fps` before each, and awaits `onFrame` after each. `millis()` and
- * other wall-clock reads are not simulated. The loop state is restored after.
- */
+/** Draws `count` frames one at a time with a fixed `deltaTime`; `millis()` is not simulated. */
 export async function stepFrames(instance: object, options: StepFramesOptions): Promise<void> {
 	assertDrawable(instance, 'stepFrames');
 	const { count, fps = 60, scale, onFrame, signal } = options;

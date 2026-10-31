@@ -1,11 +1,6 @@
 import { drawable, redrawBlocked } from './internals.js';
 
-/**
- * How `<P5Canvas>` drives `draw()`.
- * - `'always'`: p5's own loop, every animation frame (p5's default).
- * - `'demand'`: one frame after a change to the `bridge` state, a resize, or `invalidate()`.
- * - `'manual'`: one frame per `invalidate()` (and per resize) only.
- */
+/** When `<P5Canvas>` runs `draw()`: every frame, on change, or only on `invalidate()`. */
 export type LoopMode = 'always' | 'demand' | 'manual';
 
 interface Scheduler {
@@ -67,15 +62,11 @@ function schedulerFor(p: object): Scheduler {
 	return s;
 }
 
-/**
- * Requests one `draw()` on the next animation frame. Calls in the same frame
- * coalesce into one redraw. Does nothing while the sketch is looping.
- */
+/** Requests one coalesced `draw()` on the next animation frame; a no-op while looping. */
 export function invalidate(instance: object | null | undefined): void {
 	if (instance) schedulerFor(instance).invalidate();
 }
 
-/** Applies a loop mode to a ready instance. */
 export function applyLoopMode(instance: object, mode: LoopMode): void {
 	const d = drawable(instance);
 	if (mode === 'always') {
@@ -85,7 +76,6 @@ export function applyLoopMode(instance: object, mode: LoopMode): void {
 	}
 }
 
-/** Cancels pending invalidations for an instance that is being removed. */
 export function disposeInvalidation(instance: object): void {
 	schedulers.get(instance)?.dispose();
 }
