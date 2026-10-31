@@ -1,4 +1,5 @@
 import { getContext, setContext } from 'svelte';
+import type { LoopMode } from './render.js';
 import type { ExtendedP5 } from './types.js';
 
 /** What `<P5Canvas>` (and `<Sketch>`) share with the components rendered inside them. */
@@ -7,6 +8,10 @@ export interface SketchContext<Ext = unknown> {
 	readonly instance: ExtendedP5<Ext> | null;
 	/** `true` while `instance` is set. Reactive. */
 	readonly ready: boolean;
+	/** The canvas's loop mode. Reactive. */
+	readonly loop: LoopMode;
+	/** Requests one redraw on the next frame; a no-op while the sketch loops. */
+	invalidate(): void;
 }
 
 // Symbol.for, so two bundled copies of svelte-p5 still share one key.

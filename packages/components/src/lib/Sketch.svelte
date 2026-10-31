@@ -10,6 +10,8 @@
 		instance = $bindable(null),
 		onReady,
 		onResize,
+		loop,
+		bridge,
 		children
 	}: SketchProps<Ext> = $props();
 
@@ -54,5 +56,5 @@
 </script>
 
 <div bind:this={container} class={className} {style}>
-	<P5Canvas {sketch} bind:instance onReady={handleReady} {children} />
+	<P5Canvas {sketch} bind:instance onReady={handleReady} {loop} {bridge} {children} />
 </div>

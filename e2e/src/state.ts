@@ -42,3 +42,17 @@ declare global {
 		__lifecycle: LifecycleE2EState;
 	}
 }
+
+export interface DemandE2EState {
+	frames: number;
+	ready: boolean;
+	setRadius(r: number): void;
+	invalidate(): void;
+	resize(width: number): void;
+}
+
+declare global {
+	interface Window {
+		__demand: DemandE2EState;
+	}
+}

@@ -1,9 +1,16 @@
 <script lang="ts" generics="Ext = unknown">
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import type p5Type from 'p5';
 	import type { ExtendedP5, P5CanvasProps } from './types.js';
 	import { mountSketch, type SketchCtor, type SketchHost } from './mountSketch.js';
 	import { setSketchContext } from './context.js';
+	import {
+		applyLoopMode,
+		disposeInvalidation,
+		invalidate,
+		trackDeep,
+		type LoopMode
+	} from './render.js';
 
 	let {
 		sketch,
@@ -11,11 +18,21 @@
 		class: className = '',
 		style = 'display: block; width: 100%; height: 100%;',
 		onReady,
+		loop = 'always',
+		bridge,
 		children
 	}: P5CanvasProps<Ext> = $props();
 
 	let container: HTMLDivElement | null = null;
 	let readyInstance: ExtendedP5<Ext> | null = $state(null);
+	// Only transitions are applied, so 'always' never undoes a noLoop() from setup().
+	let appliedLoop: LoopMode = 'always';
+
+	function syncLoop(p: object, mode: LoopMode) {
+		if (mode === appliedLoop) return;
+		appliedLoop = mode;
+		applyLoopMode(p, mode);
+	}
 
 	setSketchContext({
 		get instance() {
@@ -23,7 +40,30 @@
 		},
 		get ready() {
 			return readyInstance !== null;
+		},
+		get loop() {
+			return loop;
+		},
+		invalidate() {
+			invalidate(readyInstance);
 		}
+	});
+
+	$effect(() => {
+		const mode = loop;
+		if (readyInstance) untrack(() => syncLoop(readyInstance!, mode));
+	});
+
+	$effect(() => {
+		const p = readyInstance;
+		if (!p || loop !== 'demand' || !bridge) return;
+		const bridges = Array.isArray(bridge) ? bridge : [bridge];
+		let primed = false;
+		$effect(() => {
+			for (const b of bridges) trackDeep(b.state);
+			if (primed) untrack(() => invalidate(p));
+			primed = true;
+		});
 	});
 
 	onMount(() => {
@@ -42,6 +82,8 @@
 				container,
 				(p) => (instance = p as ExtendedP5<Ext>),
 				(p) => {
+					appliedLoop = 'always';
+					syncLoop(p, loop);
 					readyInstance = p as ExtendedP5<Ext>;
 					onReady?.(p as ExtendedP5<Ext>);
 				}
@@ -50,6 +92,7 @@
 
 		return () => {
 			cancelled = true;
+			if (instance) disposeInvalidation(instance);
 			try {
 				destroy?.();
 			} catch {

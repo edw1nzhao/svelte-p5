@@ -28,6 +28,13 @@ export interface SketchProps<Ext = unknown> {
 	 */
 	onResize?: (instance: ExtendedP5<Ext>, width: number, height: number) => void;
 	/**
+	 * When `draw()` runs: `'always'` (default), `'demand'` or `'manual'`. See
+	 * `P5Canvas`'s `loop`. Resizing redraws in every mode. Needs svelte-p5 1.2.
+	 */
+	loop?: 'always' | 'demand' | 'manual';
+	/** Bridges whose changes redraw a `'demand'` sketch. Needs svelte-p5 1.2. */
+	bridge?: { state: object } | readonly { state: object }[];
+	/**
 	 * Overlays rendered over the canvas (inside `<P5Canvas>`), e.g. `<FPSMonitor />`.
 	 * Position them absolutely. They can read the instance with `getSketchContext()`.
 	 */
