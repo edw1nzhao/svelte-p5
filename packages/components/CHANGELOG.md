@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.2.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.1.1...components-v2.2.0) (2026-10-31)
+
+
+### Features
+
+* sketch context, on-demand rendering, canvas export and addons prop ([#126](https://github.com/edw1nzhao/svelte-p5/issues/126)) ([6e3a83f](https://github.com/edw1nzhao/svelte-p5/commit/6e3a83f97aa584c5e5c2f91b8aeb083ae17b14c3))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 1.2.0
+  * peerDependencies
+    * svelte-p5 bumped from ^1.0.0 to ^1.2.0
+
 ## [2.1.1](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.1.0...components-v2.1.1) (2026-10-31)
 
 

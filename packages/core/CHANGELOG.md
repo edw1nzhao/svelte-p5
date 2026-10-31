@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.1.1...core-v1.2.0) (2026-10-31)
+
+
+### Features
+
+* sketch context, on-demand rendering, canvas export and addons prop ([#126](https://github.com/edw1nzhao/svelte-p5/issues/126)) ([6e3a83f](https://github.com/edw1nzhao/svelte-p5/commit/6e3a83f97aa584c5e5c2f91b8aeb083ae17b14c3))
+
 ## [1.1.1](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.1.0...core-v1.1.1) (2026-10-31)
 
 
