@@ -10,7 +10,9 @@
     "visualization",
     "dashboard",
     "panel",
-    "no-code"
+    "no-code",
+    "sveltekit",
+    "p5js"
   ],
   "repository": {
     "type": "git",
