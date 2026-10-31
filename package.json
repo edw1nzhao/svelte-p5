@@ -28,7 +28,8 @@
     "check:package": "node scripts/check-package-types.mjs",
     "smoke:consumer": "node scripts/consumer-smoke/run.mjs",
     "docs:snippets": "node scripts/check-doc-snippets.mjs",
-    "docs:links": "node scripts/check-doc-links.mjs"
+    "docs:links": "node scripts/check-doc-links.mjs",
+    "check:manifests": "node scripts/check-publish-manifests.mjs"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",

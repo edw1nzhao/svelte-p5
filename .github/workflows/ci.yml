@@ -65,6 +65,10 @@ jobs:
         if: matrix.primary
         run: pnpm check:package
 
+      - name: Check npm would not rewrite manifests
+        if: matrix.primary
+        run: pnpm check:manifests
+
       - name: Consumer smoke (npm, p5 2.x)
         if: matrix.primary
         timeout-minutes: 5
