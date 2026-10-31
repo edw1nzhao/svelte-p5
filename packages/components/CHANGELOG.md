@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.1.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.0.0...components-v2.1.0) (2026-10-31)
+
+
+### Features
+
+* **components:** add a YouTube adapter for the media port ([#114](https://github.com/edw1nzhao/svelte-p5/issues/114)) ([c95fcbf](https://github.com/edw1nzhao/svelte-p5/commit/c95fcbfed4b80b2fe9049ae54d11ac59d44a7294))
+* **components:** add a zoomable view window to the timeline ([#117](https://github.com/edw1nzhao/svelte-p5/issues/117)) ([c7d079f](https://github.com/edw1nzhao/svelte-p5/commit/c7d079faea5ca364950c5cc91de03f79660aa78c))
+
+
+### Documentation
+
+* describe p5 2 support and the p5-svelte path for search ([#111](https://github.com/edw1nzhao/svelte-p5/issues/111)) ([a7331cf](https://github.com/edw1nzhao/svelte-p5/commit/a7331cfed260ded64a47c5b9138042d0e408e80e))
+* test every code sample and link, refresh stale pages ([#115](https://github.com/edw1nzhao/svelte-p5/issues/115)) ([4a57ddd](https://github.com/edw1nzhao/svelte-p5/commit/4a57dddd83052db819b726e28630ab61125fafa7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 1.1.1
+  * peerDependencies
+    * svelte-p5 bumped from ^1.0.0 to ^1.1.1
+
 ## [2.0.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v1.1.2...components-v2.0.0) (2026-10-31)
 
 

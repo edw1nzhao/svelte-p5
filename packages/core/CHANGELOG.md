@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.1.0...core-v1.1.1) (2026-10-31)
+
+
+### Documentation
+
+* describe p5 2 support and the p5-svelte path for search ([#111](https://github.com/edw1nzhao/svelte-p5/issues/111)) ([a7331cf](https://github.com/edw1nzhao/svelte-p5/commit/a7331cfed260ded64a47c5b9138042d0e408e80e))
+* test every code sample and link, refresh stale pages ([#115](https://github.com/edw1nzhao/svelte-p5/issues/115)) ([4a57ddd](https://github.com/edw1nzhao/svelte-p5/commit/4a57dddd83052db819b726e28630ab61125fafa7))
+
 ## [1.1.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.0.1...core-v1.1.0) (2026-10-31)
 
 

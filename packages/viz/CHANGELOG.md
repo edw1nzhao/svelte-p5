@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.1](https://github.com/edw1nzhao/svelte-p5/compare/viz-v0.3.0...viz-v0.3.1) (2026-10-31)
+
+
+### Documentation
+
+* describe p5 2 support and the p5-svelte path for search ([#111](https://github.com/edw1nzhao/svelte-p5/issues/111)) ([a7331cf](https://github.com/edw1nzhao/svelte-p5/commit/a7331cfed260ded64a47c5b9138042d0e408e80e))
+* test every code sample and link, refresh stale pages ([#115](https://github.com/edw1nzhao/svelte-p5/issues/115)) ([4a57ddd](https://github.com/edw1nzhao/svelte-p5/commit/4a57dddd83052db819b726e28630ab61125fafa7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 1.1.1
+  * peerDependencies
+    * svelte-p5 bumped from >=0.4.0 <2 to >=1.1.1
+
 ## [0.3.0](https://github.com/edw1nzhao/svelte-p5/compare/viz-v0.2.4...viz-v0.3.0) (2026-10-31)
 
 
