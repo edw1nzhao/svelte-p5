@@ -256,11 +256,11 @@ importers:
   packages/components:
     dependencies:
       '@neodrag/core':
-        specifier: 3.0.0-next.8
-        version: 3.0.0-next.8
+        specifier: 3.0.0-next.12
+        version: 3.0.0-next.12
       '@neodrag/svelte':
         specifier: 3.0.0-next.8
-        version: 3.0.0-next.8(@neodrag/core@3.0.0-next.8)(svelte@5.57.3(@typescript-eslint/types@8.72.1))
+        version: 3.0.0-next.8(@neodrag/core@3.0.0-next.12)(svelte@5.57.3(@typescript-eslint/types@8.72.1))
     devDependencies:
       '@sveltejs/package':
         specifier: 'catalog:'
@@ -670,8 +670,8 @@ packages:
     peerDependencies:
       svelte: ^5
 
-  '@neodrag/core@3.0.0-next.8':
-    resolution: {integrity: sha512-RNFwbo2w6M7BEzCh7pls68X2h3n+ofFDW1XnGyIzhtJ2bb8J/2VqixOpOlw9NfSJ61xgUC5ymGQbQFg5BKsWBA==}
+  '@neodrag/core@3.0.0-next.12':
+    resolution: {integrity: sha512-NInKt94ePpmwFJZveemnoQYLCL0X8QsdTVTXm/d71SPWitnr8af6fErZMFUCGXJFMEI06JWKgPUjNRMOQDx2Sg==}
 
   '@neodrag/svelte@3.0.0-next.8':
     resolution: {integrity: sha512-VkTnOqiHpAaEK5jp2PqQPEEx5AaNGVoKeoC2TuWd2xuteGOVq7NqQjNC4sxk0HAVysfYOC9YhYOsVyRiKo2LFw==}
@@ -2616,11 +2616,11 @@ snapshots:
     dependencies:
       svelte: 5.57.3(@typescript-eslint/types@8.72.1)
 
-  '@neodrag/core@3.0.0-next.8': {}
+  '@neodrag/core@3.0.0-next.12': {}
 
-  '@neodrag/svelte@3.0.0-next.8(@neodrag/core@3.0.0-next.8)(svelte@5.57.3(@typescript-eslint/types@8.72.1))':
+  '@neodrag/svelte@3.0.0-next.8(@neodrag/core@3.0.0-next.12)(svelte@5.57.3(@typescript-eslint/types@8.72.1))':
     dependencies:
-      '@neodrag/core': 3.0.0-next.8
+      '@neodrag/core': 3.0.0-next.12
       svelte: 5.57.3(@typescript-eslint/types@8.72.1)
 
   '@oxc-project/types@0.156.0': {}
