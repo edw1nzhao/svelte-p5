@@ -24,6 +24,11 @@
 			name: 'Mondrian Transcription',
 			note: 'Movement transcription from video onto floor plans.',
 			href: 'https://github.com/BenRydal/mondrian-transcription'
+		},
+		{
+			name: 'p5 garden',
+			note: 'Generative art toy you play with the mouse or both hands through the webcam.',
+			href: 'https://garden.edwinzhao.com'
 		}
 	];
 </script>
