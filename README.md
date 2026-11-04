@@ -111,6 +111,7 @@ The [getting started guide](https://svelte-p5.dev/docs/getting-started) walks th
 - [Interaction Geography Slicer](https://github.com/BenRydal/igs) (IGS), published at CHI 2025: Shapiro, Hall, Mathur and Zhao, [doi:10.1145/3706598.3713490](https://doi.org/10.1145/3706598.3713490)
 - [Transcript Explorer](https://github.com/BenRydal/transcript-explorer)
 - [Mondrian Transcription](https://github.com/BenRydal/mondrian-transcription)
+- [p5 garden](https://garden.edwinzhao.com) ([source](https://github.com/edw1nzhao/p5-garden)): a generative art toy played with the mouse or both hands through the webcam
 
 ## Documentation
 
