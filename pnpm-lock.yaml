@@ -450,8 +450,8 @@ importers:
         specifier: ^1.2.5
         version: 1.2.5
       '@lucide/svelte':
-        specifier: ^1.65.0
-        version: 1.65.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))
+        specifier: ^1.70.0
+        version: 1.70.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))
       animejs:
         specifier: ^4.5.0
         version: 4.5.0
@@ -796,8 +796,8 @@ packages:
   '@loaderkit/resolve@1.0.6':
     resolution: {integrity: sha512-G8FdIoF5CypfwmD9rl8BXod5HDn8JqB0CCNBXDTaRZ+yRYhARrrSToX1zg1zy9jX3zLqigsELwhT4gNtkdQAUg==}
 
-  '@lucide/svelte@1.65.0':
-    resolution: {integrity: sha512-VfM4Ej7JFYz33WXm/JdqtOsOqRtfca5H9eFcyfcbFthWvbOnvvCerY/YkEk0ZiAvOvqo5hpK3u+opC0zY7Caxw==}
+  '@lucide/svelte@1.70.0':
+    resolution: {integrity: sha512-zvx7K/WLxo82c4ZYqbsfcYUPDVFrq4561xH0NHfSHJJbajj0AONTQ14EO095/WnfI4XUEl1tyS/nbjQNNiNxdQ==}
     peerDependencies:
       svelte: ^5
 
@@ -3082,7 +3082,7 @@ snapshots:
     dependencies:
       '@braidai/lang': 1.1.2
 
-  '@lucide/svelte@1.65.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))':
+  '@lucide/svelte@1.70.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))':
     dependencies:
       svelte: 5.57.3(@typescript-eslint/types@8.72.1)
 
@@ -3527,7 +3527,7 @@ snapshots:
       obug: 3.0.0
       std-env: 4.3.0
       tinyrainbow: 3.2.0
-      vitest: 5.0.5(@types/node@22.20.5)(@vitest/coverage-v8@5.0.5)(happy-dom@21.0.4)(vite@8.3.7(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1))
+      vitest: 5.0.5(@types/node@26.6.6)(@vitest/coverage-v8@5.0.5)(happy-dom@21.0.4)(vite@8.3.7(@types/node@26.6.6)(jiti@2.7.0)(yaml@2.9.1))
 
   '@vitest/istanbul-lib-coverage@1.0.2': {}
 
