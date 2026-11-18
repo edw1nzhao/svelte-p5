@@ -542,6 +542,17 @@
 	// Track is "active" (expanded) while hovered or dragging.
 	const isActive = $derived(isHovered || dragging !== null);
 
+	let focusCameFromKeyboard = $state(false);
+
+	function handleFocusIn(event: FocusEvent) {
+		focusCameFromKeyboard =
+			event.target instanceof Element && event.target.matches(':focus-visible');
+	}
+
+	function handleFocusOut() {
+		focusCameFromKeyboard = false;
+	}
+
 	onDestroy(() => {
 		if (typeof document !== 'undefined') {
 			removeDocListeners();
@@ -556,6 +567,9 @@
 	class:is-dragging={dragging !== null}
 	class:is-zooming={dragging === 'zoom-region'}
 	class:is-panning={dragging === 'pan' || dragging === 'pinch'}
+	class:has-keyboard-focus={focusCameFromKeyboard}
+	onfocusin={handleFocusIn}
+	onfocusout={handleFocusOut}
 	onpointerdown={handleRailPointerDown}
 	onpointermove={handleRailPointerMove}
 	onpointerenter={handleRailPointerEnter}
@@ -758,7 +772,11 @@
 		z-index: 5;
 	}
 
-	.timeline-track:focus-visible {
+	.timeline-track:focus {
+		outline: none;
+	}
+
+	.timeline-track.has-keyboard-focus:focus {
 		outline: 2px solid var(--timeline-accent);
 		outline-offset: 2px;
 		border-radius: 4px;
@@ -873,7 +891,11 @@
 		width: calc(var(--timeline-handle-bar-width) + 1px);
 	}
 
-	.timeline-track__handle:focus-visible {
+	.timeline-track__handle:focus {
+		outline: none;
+	}
+
+	.has-keyboard-focus .timeline-track__handle:focus {
 		outline: 2px solid var(--timeline-accent);
 		outline-offset: 2px;
 		border-radius: 2px;

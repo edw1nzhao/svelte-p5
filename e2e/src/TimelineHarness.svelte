@@ -6,6 +6,8 @@
 	let viewStart = $state<number | undefined>(undefined);
 	let viewEnd = $state<number | undefined>(undefined);
 
+	const withSelection = new URLSearchParams(window.location.search).has('selection');
+
 	const probe: TimelineE2EState = { currentTime: 10, view: null };
 	window.__timeline = probe;
 
@@ -16,5 +18,15 @@
 </script>
 
 <div id="timeline" style="width: 400px; margin: 40px;">
-	<TimelineTrack duration={100} zoomable bind:currentTime bind:viewStart bind:viewEnd />
+	{#if withSelection}
+		<TimelineTrack
+			duration={100}
+			bind:currentTime
+			selectionStart={20}
+			selectionEnd={60}
+			showSelection
+		/>
+	{:else}
+		<TimelineTrack duration={100} zoomable bind:currentTime bind:viewStart bind:viewEnd />
+	{/if}
 </div>
