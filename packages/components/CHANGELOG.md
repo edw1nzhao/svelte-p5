@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.3.0...components-v2.3.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* **components:** keep timeline focus outline for keyboard focus only ([#161](https://github.com/edw1nzhao/svelte-p5/issues/161)) ([ee970b6](https://github.com/edw1nzhao/svelte-p5/commit/ee970b639f2ca27abc1f0fecd7e6a5c847b200a0))
+
 ## [2.3.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.2.0...components-v2.3.0) (2026-10-31)
 
 
