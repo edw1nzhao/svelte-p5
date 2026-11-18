@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.3.1...components-v2.4.0) (2026-11-18)
+
+
+### Features
+
+* **components:** add optional setMuted to MediaPort ([#165](https://github.com/edw1nzhao/svelte-p5/issues/165)) ([51c243d](https://github.com/edw1nzhao/svelte-p5/commit/51c243d221997d5fe95b7fabc5e41938d84e7ce2))
+
 ## [2.3.1](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.3.0...components-v2.3.1) (2026-11-18)
 
 
