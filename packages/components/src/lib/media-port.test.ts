@@ -236,3 +236,14 @@ describe('createMediaSync with a port', () => {
 		expect(first.currentTime).toBe(0);
 	});
 });
+
+describe('htmlMediaPort mute', () => {
+	it('mutes and unmutes the element', () => {
+		const el = { muted: false } as HTMLMediaElement;
+		const port = htmlMediaPort(el);
+		port.setMuted?.(true);
+		expect(el.muted).toBe(true);
+		port.setMuted?.(false);
+		expect(el.muted).toBe(false);
+	});
+});

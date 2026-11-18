@@ -32,6 +32,12 @@ export interface MediaSource {
 export interface MediaPort extends MediaSource {
 	play(): void;
 	pause(): void;
+	/**
+	 * Silences or restores audio without changing the volume.
+	 *
+	 * Optional. A port whose backend has no mute control omits it.
+	 */
+	setMuted?(muted: boolean): void;
 }
 
 /** Wrap an `HTMLMediaElement` as a port. */
@@ -58,6 +64,9 @@ export function htmlMediaPort(el: HTMLMediaElement): MediaPort {
 		},
 		pause() {
 			el.pause();
+		},
+		setMuted(muted) {
+			el.muted = muted;
 		},
 		subscribe(onChange) {
 			const events = ['timeupdate', 'durationchange', 'play', 'pause', 'ended'] as const;
