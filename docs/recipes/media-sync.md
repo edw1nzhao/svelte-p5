@@ -39,7 +39,7 @@ Pass the element. The library wraps it for you.
 
 A YouTube iframe player, a WebAudio graph, a remote transport driven over a socket: none of these are media elements. Write an adapter.
 
-The port is small. `MediaSource` is everything `createMediaSync` reads; `MediaPort` adds `play` and `pause` for `createMediaPlayback`.
+The port is small. `MediaSource` is everything `createMediaSync` reads; `MediaPort` adds `play` and `pause` for `createMediaPlayback`. A port may also offer `setMuted(muted)`; it is optional, so call it as `port.setMuted?.(true)`. `htmlMediaPort` and the YouTube port both implement it.
 
 ```ts
 interface MediaSource {
