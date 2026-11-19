@@ -79,7 +79,6 @@ export function createMediaPlayback(options: MediaPlaybackOptions = {}): MediaPl
 	let isPlaying = $state(false);
 	let activeSnippetIndex = $state(-1);
 
-	// Snippet queue: the start times to play and how long to hold each.
 	let queue: number[] = [];
 	let snippetSeconds = 0;
 

@@ -1,6 +1,3 @@
-// YouTube adapter for the media port. Kept out of the main entry so the library
-// carries no YouTube code or types; callers bring any `YT.Player`-shaped object.
-
 import type { MediaPort } from './media-port.js';
 
 /** The IFrame API's player states, as `getPlayerState()` reports them. */
@@ -95,7 +92,6 @@ export function youTubePort(
 
 	function observe(state: number): number {
 		if (state === PLAYING && holdPaused) {
-			// seekTo from any state but PAUSED starts playback; undo that.
 			holdPaused = false;
 			call(() => player.pauseVideo(), undefined);
 			lastState = PAUSED;

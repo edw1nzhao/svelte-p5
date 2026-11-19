@@ -17,7 +17,7 @@
   "scripts": {
     "build": "pnpm -r --filter './packages/*' build",
     "typecheck": "pnpm -r typecheck",
-    "lint": "prettier --check . && eslint .",
+    "lint": "prettier --check . && eslint . && node scripts/strip-inline-comments.mjs --check",
     "lint:fix": "prettier --write . && eslint . --fix",
     "test": "pnpm -r test",
     "test:browser": "pnpm --filter @svelte-p5/e2e test:browser",

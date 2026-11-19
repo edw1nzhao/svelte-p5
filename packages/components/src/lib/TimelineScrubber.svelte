@@ -8,27 +8,30 @@
 	} from './TimelineTrack.svelte';
 	import { viewZoomLevel, zoomView, type TimelineView } from './timeline-view.js';
 
-	// Stacked player bar for canvas apps. Lays the timeline out like a
-	// video player:
-	//
-	//   [=========================track (full width)==========================]
-	//   [▶ ◀◀ 1×]                                         [00:12 / 03:45]
-	//
-	// Track takes the full width of the component. Controls live on a row
-	// below it: play / skip / speed on the left, time display on the right.
-	// The right-hand value is the selection end when a selection is shown,
-	// otherwise the duration. Clicking it toggles to remaining time.
-	//
-	// The track itself is mostly chrome-free at rest — only the playhead
-	// and a tinted selection band are visible. Hovering the track reveals
-	// grab affordances for the selection handles and grows the playhead
-	// knob. This keeps the resting state quiet without hiding the
-	// existence of the selection range.
-	//
-	// Bindable: currentTime, isPlaying, speed, selectionStart, selectionEnd.
-	// The consumer owns the animation loop that advances currentTime when
-	// isPlaying is true.
-
+	/**
+	 * Stacked player bar for canvas apps. Lays the timeline out like a
+	 * video player:
+	 *
+	 * ```
+	 * [=========================track (full width)==========================]
+	 * [▶ ◀◀ 1×]                                         [00:12 / 03:45]
+	 * ```
+	 *
+	 * Track takes the full width of the component. Controls live on a row
+	 * below it: play / skip / speed on the left, time display on the right.
+	 * The right-hand value is the selection end when a selection is shown,
+	 * otherwise the duration. Clicking it toggles to remaining time.
+	 *
+	 * The track itself is mostly chrome-free at rest — only the playhead
+	 * and a tinted selection band are visible. Hovering the track reveals
+	 * grab affordances for the selection handles and grows the playhead
+	 * knob. This keeps the resting state quiet without hiding the
+	 * existence of the selection range.
+	 *
+	 * Bindable: currentTime, isPlaying, speed, selectionStart, selectionEnd.
+	 * The consumer owns the animation loop that advances currentTime when
+	 * isPlaying is true.
+	 */
 	interface Props {
 		/** Total timeline length. */
 		duration: number;

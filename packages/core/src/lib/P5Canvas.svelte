@@ -28,7 +28,6 @@
 
 	let container: HTMLDivElement | null = null;
 	let readyInstance: ExtendedP5<Ext> | null = $state(null);
-	// Only transitions are applied, so 'always' never undoes a noLoop() from setup().
 	let appliedLoop: LoopMode = 'always';
 
 	function syncLoop(p: object, mode: LoopMode) {
@@ -84,8 +83,6 @@
 			if (cancelled || !container) return;
 			registerAddons(mod.default, addons);
 
-			// The sketch installs its Ext members during construction, so the
-			// instance is already the extended type when it becomes observable.
 			destroy = mountSketch(
 				mod.default as unknown as SketchCtor<p5Type & SketchHost>,
 				(p) => sketch(p as ExtendedP5<Ext>),

@@ -42,7 +42,6 @@ export function mountSketch<P extends SketchHost>(
 		sketch(p);
 		let userSetup = p.setup;
 		if (typeof userSetup !== 'function') {
-			// p5 1 checks `typeof setup === 'undefined'` elsewhere; p5 2 makes its canvas before setup.
 			if (majorVersion(Ctor) < 2) return;
 			userSetup = () => {};
 		}

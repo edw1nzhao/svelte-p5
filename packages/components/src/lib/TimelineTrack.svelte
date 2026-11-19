@@ -48,31 +48,32 @@
 		type TimelineView
 	} from './timeline-view.js';
 
-	// TimelineTrack is a horizontal scrub track for canvas apps. It models
-	// three draggable concepts at once:
-	//
-	//   1. A playhead — where "now" is.
-	//   2. A selection range (optional) — clip start/end handles and a
-	//      tinted band between them. Think Twitch's clip editor, or a
-	//      filter window in a data-viz dashboard.
-	//   3. Labeled segments (optional) — chapters, highlights, etc.
-	//
-	// Interaction model is YouTube-ish:
-	//   - Track is normally thin. Hovering expands it vertically and shows
-	//     a time tooltip + hover guideline.
-	//   - Clicking the rail seeks.
-	//   - The playhead is a visible grabbable knob that grows on hover.
-	//   - Selection handles are visible vertical bars with grip dots;
-	//     dragging them adjusts start/end. Dragging the tinted band
-	//     between them shifts the whole selection.
-	//
-	// The component is unopinionated about playback — it just displays
-	// state and surfaces user intent. Pair with <TimelineScrubber> for a
-	// full player bar, or drive directly from your own animation loop.
-	//
-	// Units are arbitrary (seconds, frames, words) — the track treats
-	// `duration` and everything derived from it as opaque numbers.
-
+	/**
+	 * TimelineTrack is a horizontal scrub track for canvas apps. It models
+	 * three draggable concepts at once:
+	 *
+	 *   1. A playhead — where "now" is.
+	 *   2. A selection range (optional) — clip start/end handles and a
+	 *      tinted band between them. Think Twitch's clip editor, or a
+	 *      filter window in a data-viz dashboard.
+	 *   3. Labeled segments (optional) — chapters, highlights, etc.
+	 *
+	 * Interaction model is YouTube-ish:
+	 *   - Track is normally thin. Hovering expands it vertically and shows
+	 *     a time tooltip + hover guideline.
+	 *   - Clicking the rail seeks.
+	 *   - The playhead is a visible grabbable knob that grows on hover.
+	 *   - Selection handles are visible vertical bars with grip dots;
+	 *     dragging them adjusts start/end. Dragging the tinted band
+	 *     between them shifts the whole selection.
+	 *
+	 * The component is unopinionated about playback — it just displays
+	 * state and surfaces user intent. Pair with <TimelineScrubber> for a
+	 * full player bar, or drive directly from your own animation loop.
+	 *
+	 * Units are arbitrary (seconds, frames, words) — the track treats
+	 * `duration` and everything derived from it as opaque numbers.
+	 */
 	interface Props {
 		/** Total timeline length. */
 		duration: number;
@@ -195,7 +196,6 @@
 		return Math.max(0, Math.min(100, ((t - view.start) / viewWidth) * 100));
 	}
 
-	// Off-view items hide only while zoomed, so the unzoomed track renders as before.
 	function isVisible(t: number): boolean {
 		return !isZoomed || (t >= view.start && t <= view.end);
 	}
@@ -326,8 +326,6 @@
 	}
 
 	function handleRailPointerDown(event: PointerEvent) {
-		// Skip if user grabbed a child that manages its own drag (handles,
-		// segments, the playhead knob, or the selection band drag zone).
 		if ((event.target as HTMLElement).closest('[data-skip-rail]')) return;
 
 		if (zoomable) {
@@ -492,7 +490,6 @@
 		}
 		const raw = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
 		const delta = ((raw * unit) / rect.width) * viewWidth * 0.5;
-		// Let the page scroll when there is nothing left to pan.
 		if (setView(panView(view, delta, safeDuration))) event.preventDefault();
 	}
 
@@ -539,7 +536,6 @@
 	);
 	const selectionEndPercent = $derived(hasSelection ? timeToPercent(selectionEnd as number) : 100);
 
-	// Track is "active" (expanded) while hovered or dragging.
 	const isActive = $derived(isHovered || dragging !== null);
 
 	let focusCameFromKeyboard = $state(false);
@@ -617,7 +613,6 @@
 		{@const selLeft = selectionStartPercent}
 		{@const selWidth = Math.max(0, selectionEndPercent - selectionStartPercent)}
 
-		<!-- Selection band. Draggable as a whole when grabbed away from the handles/playhead. -->
 		<div
 			data-skip-rail
 			class="timeline-track__selection"
@@ -625,17 +620,13 @@
 			style:left="{selLeft}%"
 			style:width="{selWidth}%"
 			onpointerdown={(e) => {
-				// Don't start a body-drag if the user clicked on a child that
-				// handles its own drag (the two handles).
 				if ((e.target as HTMLElement).closest('[data-selection-handle]')) return;
-				// Also don't body-drag if shift-clicking the playhead area.
 				e.stopPropagation();
 				startDrag('selection-body', e);
 			}}
 			aria-hidden="true"
 		></div>
 
-		<!-- Start handle -->
 		{#if isVisible(selectionStart as number)}<div
 				data-skip-rail
 				data-selection-handle
@@ -656,7 +647,6 @@
 				<div class="timeline-track__handle-bar"></div>
 			</div>{/if}
 
-		<!-- End handle -->
 		{#if isVisible(selectionEnd as number)}<div
 				data-skip-rail
 				data-selection-handle
@@ -739,11 +729,7 @@
 		--timeline-handle-hit-width: 22px;
 		--timeline-handle-bar-width: 5px;
 
-		/* Contrast ring drawn around the playhead knob so it reads against any
-		   rail/segment color. Light-mode fallback; consuming apps override for
-		   dark mode. */
 		--timeline-knob-ring: #ffffff;
-		/* Grip dots inset into the selection handle bars. */
 		--timeline-handle-dot: rgba(255, 255, 255, 0.85);
 	}
 
@@ -799,7 +785,6 @@
 		height: var(--timeline-rail-height-active);
 	}
 
-	/* Played-progress fill: 0 → currentTime, sits on top of the rail. */
 	.timeline-track__progress {
 		position: absolute;
 		left: 0;
@@ -817,10 +802,6 @@
 		height: var(--timeline-rail-height-active);
 	}
 
-	/* Selection band: tinted slab between the handles. Drag-offsets the range.
-	   Uses a neutral slate tint so it doesn't compete with the red progress
-	   fill — the metaphors are different (selection = filter range; progress
-	   = playhead position). */
 	.timeline-track__selection {
 		position: absolute;
 		top: 50%;
@@ -841,7 +822,6 @@
 		cursor: grabbing;
 	}
 
-	/* Handles: a wide transparent hit zone with a centered visible bar + grip dots. */
 	.timeline-track__handle {
 		position: absolute;
 		top: 0;
@@ -859,8 +839,6 @@
 		width: var(--timeline-handle-bar-width);
 		height: var(--timeline-rail-height-active);
 		background-color: var(--timeline-accent);
-		/* A vertical column of subtle grip dots, centered on the bar, so the
-		   handle reads as something to grab rather than a plain stripe. */
 		background-image: radial-gradient(
 			circle at center,
 			var(--timeline-handle-dot) 0 1px,
@@ -901,8 +879,6 @@
 		border-radius: 2px;
 	}
 
-	/* Playhead: a vertical line with a circular knob at the current position.
-	   The knob grows on hover/drag; the line fades in with the active state. */
 	.timeline-track__playhead {
 		position: absolute;
 		top: 0;
@@ -945,9 +921,6 @@
 		height: var(--timeline-playhead-size);
 		border-radius: 50%;
 		background: var(--timeline-accent);
-		/* A contrast ring (border) plus a soft drop shadow so the knob lifts off
-		   the rail. The inset white ring keeps it legible over the red progress
-		   fill it sits on top of. */
 		border: 2px solid var(--timeline-knob-ring);
 		box-shadow:
 			0 1px 3px rgba(0, 0, 0, 0.28),

@@ -208,7 +208,6 @@
 		min-height: 0;
 		overflow: hidden;
 
-		/* Themeable via custom properties. Defaults match a neutral gray scale. */
 		--split-divider-bg: #e5e7eb;
 		--split-divider-bg-active: #d1d5db;
 		--split-divider-bg-focus: #3b82f6;

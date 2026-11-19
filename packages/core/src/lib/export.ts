@@ -115,7 +115,6 @@ function assertDrawable(p: unknown, what: string) {
 	}
 }
 
-// Nudges density up so a product like 3507.9999 still truncates to the intended pixel size.
 const densityFor = (scale: number) => scale * (1 + 1e-9);
 
 /** Encodes the sketch at a scale or size, re-rendering via `pixelDensity` when it differs. */
@@ -177,7 +176,6 @@ export async function downloadCanvas(instance: object, options: ExportOptions = 
 	document.body.append(a);
 	a.click();
 	a.remove();
-	// Revoking at once can cancel the download before the browser reads the blob.
 	setTimeout(() => URL.revokeObjectURL(url), 30_000);
 	return blob;
 }
@@ -197,7 +195,6 @@ export async function stepFrames(instance: object, options: StepFramesOptions): 
 	const wasLooping = d.isLooping();
 	const density = p.pixelDensity();
 	d.noLoop();
-	// p5 still runs the frame it already requested after noLoop(); let it pass first.
 	if (wasLooping) await new Promise((resolve) => requestAnimationFrame(resolve));
 	try {
 		if (scale !== undefined && scale !== density) p.pixelDensity(densityFor(scale));

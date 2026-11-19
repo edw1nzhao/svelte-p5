@@ -13,7 +13,7 @@
 
 let counter = $state(100);
 
-export interface WindowHandle {
+interface WindowHandle {
 	readonly z: number;
 	focus(): void;
 }
@@ -25,8 +25,6 @@ export function registerWindow(): WindowHandle {
 			return myZ;
 		},
 		focus() {
-			// Only reassign if we're not already the top window - avoids a
-			// no-op reactive write when the already-focused window gets clicked.
 			if (myZ !== counter) myZ = ++counter;
 		}
 	};

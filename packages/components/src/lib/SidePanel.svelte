@@ -76,8 +76,6 @@
 	let dragStartX = 0;
 	let dragStartWidth = 0;
 
-	// Respect prefers-reduced-motion. Detected once per mount; the slide
-	// transition is the only motion gated on this, so a single read is enough.
 	const prefersReducedMotion =
 		typeof window !== 'undefined' &&
 		typeof window.matchMedia === 'function' &&
