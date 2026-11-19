@@ -43,6 +43,15 @@
       "types": "./dist/export.d.ts",
       "svelte": "./dist/export.js",
       "default": "./dist/export.js"
+    },
+    "./actions": {
+      "types": "./dist/actions.d.ts",
+      "default": "./dist/actions.js"
+    },
+    "./actions/ui": {
+      "types": "./dist/actions-ui.d.ts",
+      "svelte": "./dist/actions-ui.js",
+      "default": "./dist/actions-ui.js"
     }
   },
   "files": [

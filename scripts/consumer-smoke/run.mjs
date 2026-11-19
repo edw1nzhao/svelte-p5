@@ -100,6 +100,8 @@ function assertSurface(html, where) {
 		'svelte-p5-components': ['Sketch', 'FPSMonitor', 'DraggableWindow'],
 		'svelte-p5-components/youtube': ['youTubePort'],
 		'svelte-p5-components/export': ['ExportButton'],
+		'svelte-p5-components/actions': ['createActionRegistry', 'attachActionKeys'],
+		'svelte-p5-components/actions/ui': ['CommandPalette', 'ShortcutCheatsheet'],
 		'svelte-p5-viz': ['createPanelRegistry', 'createSceneState']
 	};
 	for (const [entry, names] of Object.entries(must))
@@ -157,6 +159,8 @@ function sizeReport(dir) {
 		'export-canvas',
 		'step-frames',
 		'export-button',
+		'actions',
+		'actions-ui',
 		'all'
 	];
 	for (const entry of entries) {
@@ -194,6 +198,32 @@ function assertTreeShaking(rows) {
 	if (has('fps-monitor', /DraggableWindow|neodrag|Timeline/)) fail('FPSMonitor pulled in windows');
 	if (has('fps-monitor', /neodrag/) || rows['fps-monitor'].p5Chunk)
 		fail('FPSMonitor pulled in p5/neodrag');
+	if (has('actions', /svelte-p5\/|neodrag|Sketch|Timeline|\.svelte/) || rows.actions.p5Chunk)
+		fail('the actions entry pulled in p5, svelte-p5 or Svelte components');
+	if (has('actions-ui', /svelte-p5\/|neodrag|Sketch|Timeline/) || rows['actions-ui'].p5Chunk)
+		fail('the actions UI entry pulled in p5, svelte-p5 or other components');
+}
+
+function svelteImports(file, seen = new Set()) {
+	if (seen.has(file)) return [];
+	seen.add(file);
+	const code = fs.readFileSync(file, 'utf8');
+	const specs = [...code.matchAll(/(?:from|import)\s*\(?\s*['"](\.[^'"]+)['"]/g)].map((m) => m[1]);
+	return specs.flatMap((spec) => {
+		const target = path.resolve(path.dirname(file), spec);
+		return spec.endsWith('.svelte') ? [target] : svelteImports(target, seen);
+	});
+}
+
+function assertHeadlessActions(dir) {
+	const entry = path.join(dir, 'node_modules/svelte-p5-components/dist/actions.js');
+	const found = svelteImports(entry);
+	if (found.length) throw new Error(`svelte-p5-components/actions imports ${found.join(', ')}`);
+	const probe =
+		"const m = await import('svelte-p5-components/actions');" +
+		"const r = m.createActionRegistry([{ id: 'a', label: 'A', keys: { key: 'a' }, run() {} }], { mac: false });" +
+		"if (r.match({ key: 'a', ctrlKey: false, altKey: false, shiftKey: false, metaKey: false })?.id !== 'a') process.exit(1);";
+	run('node', ['--input-type=module', '-e', probe], dir);
 }
 
 const results = [];
@@ -202,6 +232,8 @@ for (const app of apps) {
 	const dir = scaffold(app);
 	log(`${app}: installing`);
 	run(...install, dir);
+	log(`${app}: headless actions entry in plain Node`);
+	assertHeadlessActions(dir);
 	const installed = JSON.parse(
 		fs.readFileSync(path.join(dir, 'node_modules/p5/package.json'), 'utf8')
 	).version;
