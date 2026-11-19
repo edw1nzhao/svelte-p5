@@ -100,6 +100,12 @@ function assertSurface(html, where) {
 		'svelte-p5-components': ['Sketch', 'FPSMonitor', 'DraggableWindow'],
 		'svelte-p5-components/youtube': ['youTubePort'],
 		'svelte-p5-components/export': ['ExportButton'],
+		'svelte-p5-components/actions': [
+			'createActionRegistry',
+			'attachActionKeys',
+			'CommandPalette',
+			'ShortcutCheatsheet'
+		],
 		'svelte-p5-viz': ['createPanelRegistry', 'createSceneState']
 	};
 	for (const [entry, names] of Object.entries(must))
@@ -157,6 +163,7 @@ function sizeReport(dir) {
 		'export-canvas',
 		'step-frames',
 		'export-button',
+		'actions',
 		'all'
 	];
 	for (const entry of entries) {
@@ -194,6 +201,8 @@ function assertTreeShaking(rows) {
 	if (has('fps-monitor', /DraggableWindow|neodrag|Timeline/)) fail('FPSMonitor pulled in windows');
 	if (has('fps-monitor', /neodrag/) || rows['fps-monitor'].p5Chunk)
 		fail('FPSMonitor pulled in p5/neodrag');
+	if (has('actions', /svelte-p5\/|neodrag|Sketch|Timeline/) || rows.actions.p5Chunk)
+		fail('the actions entry pulled in p5, svelte-p5 or other components');
 }
 
 const results = [];

@@ -159,6 +159,14 @@ export const docs: readonly DocEntry[] = [
 		section: 'Recipes'
 	},
 	{
+		slug: 'recipes/command-palette',
+		title: 'Shortcuts and a command palette',
+		description:
+			'One action list for keyboard shortcuts, a Cmd+K palette and a cheatsheet, from svelte-p5-components/actions.',
+		file: 'docs/recipes/command-palette.md',
+		section: 'Recipes'
+	},
+	{
 		slug: 'recipes/shared-state',
 		title: 'Shared state across sketches',
 		description: 'A reactive class as the single source of truth for a dashboard.',

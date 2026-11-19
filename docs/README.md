@@ -19,6 +19,7 @@
   - [Parameter panels](./recipes/parameter-panels.md) - Tweakpane controls bound to bridge state, presets, URL state
   - [Performance](./recipes/performance.md) - the `loadFont()` trap on p5 1.x, FES, color caching, font atlas, `drawingContext`
   - [Interaction](./recipes/interaction.md) - mouse, touch, hit-testing, syncing hover with UI
+  - [Shortcuts and a command palette](./recipes/command-palette.md) - one action list for keyboard shortcuts, a Cmd+K palette and a cheatsheet
   - [Shared state](./recipes/shared-state.md) - one reactive class across several sketches
   - [Data-driven viz](./recipes/data-driven-viz.md) - loading data, master clocks, on-demand redraws
   - [Syncing to video](./recipes/media-sync.md) - `createMediaSync` and media ports
