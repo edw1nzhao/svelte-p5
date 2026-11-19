@@ -13,7 +13,12 @@
 		type ActionSection,
 		type KeyChord
 	} from './action-registry.js';
-	import { getHighlightSegments, searchActions, type HighlightSegment } from './fuzzy-search.js';
+	import {
+		fuzzyMatch,
+		getHighlightSegments,
+		searchActions,
+		type HighlightSegment
+	} from './fuzzy-search.js';
 	import { createRecentActions, type RecentActions } from './recent-actions.js';
 
 	/**
@@ -128,11 +133,11 @@
 
 	const highlights = $derived(
 		new Map(
-			results.flatMap((result): [string, HighlightSegment[]][] =>
-				result.field === 'label'
-					? [[result.action.id, getHighlightSegments(result.action.label, result.match.indices)]]
-					: []
-			)
+			results.flatMap((result): [string, HighlightSegment[]][] => {
+				const { label, id } = result.action;
+				const match = result.field === 'label' ? result.match : fuzzyMatch(query, label);
+				return match ? [[id, getHighlightSegments(label, match.indices)]] : [];
+			})
 		)
 	);
 
