@@ -5,6 +5,8 @@ export interface ActionKeysOptions {
 	target?: EventTarget;
 	/** Called after an action runs from a shortcut. */
 	onRun?: (action: Action) => void;
+	/** When given, an action that throws is reported here and `onRun` is skipped. Without it the error propagates. */
+	onError?: (error: unknown, action: Action) => void;
 	/** Return true to skip the event. Default `isTypingTarget`. */
 	ignore?: (event: KeyboardEvent) => boolean;
 }
@@ -48,7 +50,16 @@ export function attachActionKeys(
 			event.preventDefault();
 			event.stopPropagation();
 		}
-		found.action.run();
+		if (options.onError) {
+			try {
+				found.action.run();
+			} catch (error) {
+				options.onError(error, found.action);
+				return;
+			}
+		} else {
+			found.action.run();
+		}
 		options.onRun?.(found.action);
 	};
 	target.addEventListener('keydown', listener);

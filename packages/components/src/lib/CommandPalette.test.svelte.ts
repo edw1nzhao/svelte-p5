@@ -50,9 +50,12 @@ function makeActions() {
 	return { actions, ran };
 }
 
-function setup(props: { recentKey?: string } = {}) {
+function setup(
+	props: { recentKey?: string; onError?: (error: unknown, action: Action) => void } = {},
+	extra: Action[] = []
+) {
 	const { actions, ran } = makeActions();
-	const registry = createActionRegistry(actions, {
+	const registry = createActionRegistry([...actions, ...extra], {
 		mac: false,
 		groupLabels: { filter: 'Filter', playback: 'Playback' }
 	});
@@ -162,6 +165,56 @@ describe('<CommandPalette>', () => {
 		expect(dialog()).toBeNull();
 		expect(trigger).toHaveFocus();
 		expect(ran).toEqual([]);
+	});
+
+	it('reports a throwing action to onError, skips onRun, and still closes', async () => {
+		const failure = new Error('boom');
+		const onError = vi.fn();
+		const broken: Action = {
+			id: 'broken',
+			label: 'Broken Action',
+			run: () => {
+				throw failure;
+			}
+		};
+		const { user, onRun } = setup({ onError }, [broken]);
+		await user.keyboard('{Control>}k{/Control}');
+		await user.keyboard('broken{Enter}');
+		expect(onError).toHaveBeenCalledWith(failure, broken);
+		expect(onRun).not.toHaveBeenCalled();
+		expect(dialog()).toBeNull();
+	});
+
+	it('lets a throwing action propagate without onError', async () => {
+		const failure = new Error('boom');
+		const broken: Action = {
+			id: 'broken',
+			label: 'Broken Action',
+			run: () => {
+				throw failure;
+			}
+		};
+		const { user, onRun } = setup({}, [broken]);
+		await user.keyboard('{Control>}k{/Control}');
+		await user.keyboard('broken');
+		const input = within(dialog()!).getByRole('combobox');
+		const enter = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+		const reported: unknown[] = [];
+		const onWindowError = (event: ErrorEvent) => {
+			reported.push(event.error);
+			event.preventDefault();
+		};
+		window.addEventListener('error', onWindowError);
+		let thrown: unknown;
+		try {
+			input.dispatchEvent(enter);
+		} catch (error) {
+			thrown = error;
+		} finally {
+			window.removeEventListener('error', onWindowError);
+		}
+		expect([thrown, ...reported]).toContain(failure);
+		expect(onRun).not.toHaveBeenCalled();
 	});
 
 	it('closes on a backdrop click', async () => {

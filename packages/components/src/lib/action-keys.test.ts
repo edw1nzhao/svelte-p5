@@ -108,6 +108,55 @@ describe('attachActionKeys', () => {
 		expect(run).toHaveBeenCalledTimes(1);
 	});
 
+	it('lets a throwing action propagate when there is no onError', () => {
+		const failure = new Error('boom');
+		const registry = createActionRegistry([
+			{
+				id: 'a',
+				label: 'A',
+				keys: { key: 'a' },
+				run: () => {
+					throw failure;
+				}
+			}
+		]);
+		const listeners: EventListener[] = [];
+		const target = new EventTarget();
+		target.addEventListener = (
+			_type: string,
+			listener: EventListenerOrEventListenerObject | null
+		) => {
+			if (typeof listener === 'function') listeners.push(listener);
+		};
+		const onRun = vi.fn();
+		cleanup.push(attachActionKeys(registry, { target, onRun }));
+		expect(listeners).toHaveLength(1);
+		const event = new KeyboardEvent('keydown', { key: 'a', cancelable: true });
+		expect(() => listeners[0]?.(event)).toThrow(failure);
+		expect(onRun).not.toHaveBeenCalled();
+	});
+
+	it('reports a throwing action to onError and skips onRun', () => {
+		const failure = new Error('boom');
+		const registry = createActionRegistry([
+			{
+				id: 'a',
+				label: 'A',
+				keys: { key: 'a' },
+				run: () => {
+					throw failure;
+				}
+			}
+		]);
+		const onRun = vi.fn();
+		const onError = vi.fn();
+		cleanup.push(attachActionKeys(registry, { onRun, onError }));
+		const event = press(document.body, { key: 'a' });
+		expect(onError).toHaveBeenCalledWith(failure, registry.get('a'));
+		expect(onRun).not.toHaveBeenCalled();
+		expect(event.defaultPrevented).toBe(true);
+	});
+
 	it('stops listening after detach', () => {
 		const run = vi.fn();
 		const { detach } = setup([{ id: 'a', label: 'A', keys: { key: 'a' }, run }]);

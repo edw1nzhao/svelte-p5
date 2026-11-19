@@ -1,3 +1,3 @@
-import { CommandPalette, attachActionKeys } from 'svelte-p5-components/actions';
+import { createActionRegistry, attachActionKeys } from 'svelte-p5-components/actions';
 
-console.log(CommandPalette, attachActionKeys);
+console.log(createActionRegistry, attachActionKeys);

@@ -49,7 +49,7 @@
 		closeLabel?: string;
 		/** Sections to show and their order. Default: every group, in registry order. */
 		sections?: readonly ActionSection[];
-		/** Content under the list, such as a hint about the key that opens it. */
+		/** Content under the list, in normal inline flow; `<kbd>` inside it is styled as a key chip. */
 		footer?: Snippet;
 		class?: string;
 	}
@@ -208,6 +208,7 @@
 		position: absolute;
 		inset: 0;
 		background: var(--shortcut-cheatsheet-backdrop, rgba(0, 0, 0, 0.5));
+		backdrop-filter: var(--shortcut-cheatsheet-backdrop-filter, none);
 		animation: shortcut-cheatsheet-fade 150ms ease-out;
 	}
 
@@ -324,7 +325,8 @@
 		gap: 4px;
 	}
 
-	.shortcut-cheatsheet__kbd {
+	.shortcut-cheatsheet__kbd,
+	.shortcut-cheatsheet__footer :global(kbd) {
 		padding: 1px 6px;
 		border: 1px solid var(--shortcut-cheatsheet-kbd-border, rgba(0, 0, 0, 0.15));
 		border-radius: 4px;
@@ -346,8 +348,8 @@
 	}
 
 	.shortcut-cheatsheet__footer {
-		display: flex;
-		justify-content: center;
+		display: block;
+		text-align: center;
 		margin-top: 20px;
 		padding-top: 16px;
 		border-top: 1px solid var(--shortcut-cheatsheet-border, rgba(0, 0, 0, 0.12));

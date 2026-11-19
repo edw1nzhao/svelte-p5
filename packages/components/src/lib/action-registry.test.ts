@@ -88,6 +88,54 @@ describe('createActionRegistry', () => {
 		});
 	});
 
+	describe('shift matching', () => {
+		const r = createActionRegistry(
+			[
+				action('speed-up', { keys: [{ key: '=' }, { key: '+' }] }),
+				action('help', { keys: { key: '?', shift: true } }),
+				action('slash', { keys: { key: '/', shift: false } }),
+				action('redo', { keys: { key: 'z', mod: true, shift: true } }),
+				action('undo', { keys: { key: 'z', mod: true } }),
+				action('zoom', { keys: { key: 'z' } }),
+				action('back', { keys: { key: 'ArrowLeft' } })
+			],
+			{ mac: false }
+		);
+
+		it('fires a symbol chord with or without Shift held', () => {
+			expect(r.match(key('+', { shiftKey: true }))?.id).toBe('speed-up');
+			expect(r.match(key('+'))?.id).toBe('speed-up');
+			expect(r.match(key('=', { shiftKey: true }))?.id).toBe('speed-up');
+		});
+
+		it('honours an explicit shift on a symbol chord', () => {
+			expect(r.match(key('?', { shiftKey: true }))?.id).toBe('help');
+			expect(r.match(key('?'))).toBeUndefined();
+			expect(r.match(key('/'))?.id).toBe('slash');
+			expect(r.match(key('/', { shiftKey: true }))).toBeUndefined();
+		});
+
+		it('matches mod+shift+z arriving as "Z"', () => {
+			expect(r.match(key('Z', { ctrlKey: true, shiftKey: true }))?.id).toBe('redo');
+			expect(r.match(key('z', { ctrlKey: true }))?.id).toBe('undo');
+		});
+
+		it('does not fire a plain letter while Shift is held', () => {
+			expect(r.match(key('z'))?.id).toBe('zoom');
+			expect(r.match(key('Z', { shiftKey: true }))).toBeUndefined();
+		});
+
+		it('keeps exact Shift matching for named keys', () => {
+			expect(r.match(key('ArrowLeft'))?.id).toBe('back');
+			expect(r.match(key('ArrowLeft', { shiftKey: true }))).toBeUndefined();
+		});
+
+		it('still requires Ctrl, Alt and Meta to match on symbols', () => {
+			expect(r.match(key('+', { ctrlKey: true }))).toBeUndefined();
+			expect(r.match(key('+', { altKey: true }))).toBeUndefined();
+		});
+	});
+
 	describe('conflicts', () => {
 		it('is empty when every chord is unique', () => {
 			const r = createActionRegistry([
@@ -110,6 +158,27 @@ describe('createActionRegistry', () => {
 			const b = action('b', { keys: { key: 'z', ctrl: true } });
 			expect(createActionRegistry([a, b], { mac: false }).conflicts).toHaveLength(1);
 			expect(createActionRegistry([a, b], { mac: true }).conflicts).toHaveLength(0);
+		});
+
+		it('does not report = and + as a conflict', () => {
+			const r = createActionRegistry([
+				action('a', { keys: { key: '=' } }),
+				action('b', { keys: { key: '+' } })
+			]);
+			expect(r.conflicts).toEqual([]);
+		});
+
+		it('uses the shift rules: an unshifted symbol overlaps a shifted one, letters fold case', () => {
+			const q = action('q', { keys: { key: '?' } });
+			const qs = action('qs', { keys: { key: '?', shift: true } });
+			const lower = action('lower', { keys: { key: 'r' } });
+			const upper = action('upper', { keys: { key: 'R' } });
+			const shifted = action('shifted', { keys: { key: 'R', shift: true } });
+			const r = createActionRegistry([q, qs, lower, upper, shifted], { mac: false });
+			expect(r.conflicts).toEqual([
+				{ keys: '?', actions: [q, qs] },
+				{ keys: 'R', actions: [lower, upper] }
+			]);
 		});
 
 		it('ignores an action repeating its own chord', () => {
@@ -194,7 +263,7 @@ describe('formatKeys', () => {
 		expect(formatKeys({ key: 'ArrowRight' }, pc)).toBe('→');
 		expect(formatKeys({ key: 'ArrowUp' }, pc)).toBe('↑');
 		expect(formatKeys({ key: 'ArrowDown' }, pc)).toBe('↓');
-		expect(formatKeys({ key: 'Escape' }, pc)).toBe('Escape');
+		expect(formatKeys({ key: 'Escape' }, pc)).toBe('Esc');
 		expect(formatKeys({ key: 'Home' }, pc)).toBe('Home');
 		expect(formatKeys({ key: 'R', shift: true }, pc)).toBe('Shift+R');
 		expect(formatKeys({ key: '?', shift: true }, pc)).toBe('Shift+?');
@@ -215,6 +284,23 @@ describe('formatKeys', () => {
 			'⌃⌥⇧⌘A'
 		);
 		expect(formatKeys({ key: ' ' }, mac)).toBe('Space');
+	});
+
+	it('gives named keys short names on both platforms', () => {
+		for (const opts of [pc, mac]) {
+			expect(formatKeys({ key: 'Escape' }, opts)).toBe('Esc');
+			expect(formatKeys({ key: 'Enter' }, opts)).toBe('Enter');
+			expect(formatKeys({ key: 'Backspace' }, opts)).toBe('Backspace');
+			expect(formatKeys({ key: 'Delete' }, opts)).toBe('Del');
+			expect(formatKeys({ key: 'Tab' }, opts)).toBe('Tab');
+			expect(formatKeys({ key: 'PageDown' }, opts)).toBe('PgDn');
+		}
+		expect(formatKeys({ key: 'Escape', shift: true }, mac)).toBe('⇧Esc');
+	});
+
+	it('shows Shift on a symbol only when the chord sets it', () => {
+		expect(formatKeys({ key: '+' }, pc)).toBe('+');
+		expect(formatKeys({ key: '?', shift: true }, pc)).toBe('Shift+?');
 	});
 
 	it('formatActionKeys lists each distinct chord once', () => {

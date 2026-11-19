@@ -1,6 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { cleanup, render, screen, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
+import { createRawSnippet, type Snippet } from 'svelte';
 import { createActionRegistry, type Action, type ActionSection } from './action-registry.js';
 import ActionsHarness from './tests/ActionsHarness.svelte';
 
@@ -33,10 +34,10 @@ const sections: ActionSection[] = [
 	{ id: 'data', label: 'Data', groups: ['filter', 'clear'] }
 ];
 
-async function openSheet(mac = false) {
+async function openSheet(mac = false, footer?: Snippet) {
 	const registry = createActionRegistry(actions, { mac });
 	const user = userEvent.setup();
-	render(ActionsHarness, { props: { registry, sections } });
+	render(ActionsHarness, { props: { registry, sections, footer } });
 	const trigger = screen.getByRole('button', { name: 'Show shortcuts' });
 	await user.click(trigger);
 	return { user, trigger, sheet: screen.getByRole('dialog', { name: 'Keyboard Shortcuts' }) };
@@ -100,5 +101,15 @@ describe('<ShortcutCheatsheet>', () => {
 		expect(sheetQuery()).not.toBeNull();
 		await user.click(document.querySelector('.shortcut-cheatsheet__backdrop')!);
 		expect(sheetQuery()).toBeNull();
+	});
+
+	it('renders the footer snippet in normal flow with its spaces and a key chip', async () => {
+		const footer = createRawSnippet(() => ({
+			render: () => '<span>Press <kbd>?</kbd> anytime to show this dialog</span>'
+		}));
+		const { sheet } = await openSheet(false, footer);
+		const el = sheet.querySelector('.shortcut-cheatsheet__footer');
+		expect(el?.textContent).toBe('Press ? anytime to show this dialog');
+		expect(within(sheet).getByText('?', { selector: 'kbd' })).toBeInTheDocument();
 	});
 });

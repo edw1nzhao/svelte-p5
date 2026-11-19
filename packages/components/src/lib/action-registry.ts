@@ -1,11 +1,15 @@
 import type { Snippet } from 'svelte';
 
 /**
- * One key combination. Modifiers must match exactly: a chord without `shift`
- * does not fire while Shift is held.
+ * One key combination. Ctrl, Alt and Meta must match exactly. Letters match
+ * either case and Shift must match exactly, so `{ key: 'z', mod: true, shift: true }`
+ * fires on Cmd/Ctrl+Shift+Z. A single non-letter character such as `+` or `?`
+ * ignores Shift unless the chord sets `shift`, because keyboard layouts differ
+ * on which characters need it. Named keys (`'ArrowLeft'`, `'Escape'`, `' '`)
+ * match Shift exactly.
  */
 export interface KeyChord {
-	/** `KeyboardEvent.key`, compared exactly: `'k'`, `'K'`, `' '`, `'ArrowLeft'`, `'?'`. */
+	/** `KeyboardEvent.key`: `'k'`, `' '`, `'ArrowLeft'`, `'?'`. Letters match either case. */
 	key: string;
 	/** Cmd on macOS, Ctrl elsewhere. */
 	mod?: boolean;
@@ -61,7 +65,7 @@ export interface ActionGroup {
 	actions: Action[];
 }
 
-/** Two actions bound to the same chord on the registry's platform. */
+/** Two actions that one keypress could fire, on the registry's platform. */
 export interface ActionConflict {
 	/** The shared chord, formatted for the registry's platform. */
 	keys: string;
@@ -115,7 +119,7 @@ interface ResolvedChord {
 	key: string;
 	ctrl: boolean;
 	alt: boolean;
-	shift: boolean;
+	shift: boolean | null;
 	meta: boolean;
 }
 
@@ -131,12 +135,20 @@ export function chordsOf(action: Pick<Action, 'keys'>): KeyChord[] {
 	return Array.isArray(action.keys) ? action.keys : [action.keys];
 }
 
+function isLetter(key: string): boolean {
+	return key.length === 1 && key.toLowerCase() !== key.toUpperCase();
+}
+
+function isSymbol(key: string): boolean {
+	return key.length === 1 && key !== ' ' && !isLetter(key);
+}
+
 function resolve(chord: KeyChord, mac: boolean): ResolvedChord {
 	return {
-		key: chord.key,
+		key: isLetter(chord.key) ? chord.key.toLowerCase() : chord.key,
 		ctrl: !!chord.ctrl || (!!chord.mod && !mac),
 		alt: !!chord.alt,
-		shift: !!chord.shift,
+		shift: isSymbol(chord.key) && chord.shift === undefined ? null : !!chord.shift,
 		meta: !!chord.meta || (!!chord.mod && mac)
 	};
 }
@@ -146,15 +158,15 @@ function sameChord(a: ResolvedChord, b: ResolvedChord): boolean {
 		a.key === b.key &&
 		a.ctrl === b.ctrl &&
 		a.alt === b.alt &&
-		a.shift === b.shift &&
+		(a.shift === null || b.shift === null || a.shift === b.shift) &&
 		a.meta === b.meta
 	);
 }
 
-/** Whether a keyboard event is exactly this chord. */
+/** Whether a keyboard event fires this chord, by the rules on `KeyChord`. */
 export function chordMatches(chord: KeyChord, event: KeyInput, options: { mac: boolean }): boolean {
 	return sameChord(resolve(chord, options.mac), {
-		key: event.key,
+		key: isLetter(event.key) ? event.key.toLowerCase() : event.key,
 		ctrl: event.ctrlKey,
 		alt: event.altKey,
 		shift: event.shiftKey,
@@ -167,7 +179,11 @@ const KEY_NAMES: Readonly<Record<string, string>> = {
 	ArrowLeft: '←',
 	ArrowRight: '→',
 	ArrowUp: '↑',
-	ArrowDown: '↓'
+	ArrowDown: '↓',
+	Escape: 'Esc',
+	Delete: 'Del',
+	PageUp: 'PgUp',
+	PageDown: 'PgDn'
 };
 
 function keyName(key: string): string {
@@ -176,18 +192,19 @@ function keyName(key: string): string {
 
 /**
  * Formats a chord for display: `⇧⌘S` on macOS, `Ctrl+Shift+S` elsewhere.
- * Space reads `Space`, arrows are glyphs, single characters are upper-cased.
+ * Space reads `Space`, arrows are glyphs, `Escape` is `Esc`, `Delete` is `Del`,
+ * single characters are upper-cased, other named keys read as written.
  */
 export function formatKeys(chord: KeyChord, options: { mac: boolean }): string {
 	const c = resolve(chord, options.mac);
 	const key = keyName(c.key);
 	if (options.mac) {
-		return `${c.ctrl ? '⌃' : ''}${c.alt ? '⌥' : ''}${c.shift ? '⇧' : ''}${c.meta ? '⌘' : ''}${key}`;
+		return `${c.ctrl ? '⌃' : ''}${c.alt ? '⌥' : ''}${c.shift === true ? '⇧' : ''}${c.meta ? '⌘' : ''}${key}`;
 	}
 	const parts: string[] = [];
 	if (c.ctrl) parts.push('Ctrl');
 	if (c.alt) parts.push('Alt');
-	if (c.shift) parts.push('Shift');
+	if (c.shift === true) parts.push('Shift');
 	if (c.meta) parts.push('Meta');
 	parts.push(key);
 	return parts.join('+');

@@ -141,7 +141,7 @@ Documented on [svelte-p5.dev](https://svelte-p5.dev/docs):
 
 - **Timeline:** `<TimelineTrack>` and `<TimelineScrubber>`, with segments, selection, hover previews and an optional zoomable view window. See [Timeline zoom](https://svelte-p5.dev/docs/recipes/timeline-zoom).
 - **Media:** `createMediaSync` and `createMediaPlayback` keep a sketch's clock in step with a `<video>` or any `MediaPort`. See [Media sync](https://svelte-p5.dev/docs/recipes/media-sync). A YouTube adapter lives at `svelte-p5-components/youtube`; see [YouTube](https://svelte-p5.dev/docs/recipes/youtube).
-- **Shortcuts:** `svelte-p5-components/actions` has an action registry, a keyboard shortcut handler, `<CommandPalette>` and `<ShortcutCheatsheet>`, all driven by one action list. See [Shortcuts and a command palette](https://svelte-p5.dev/docs/recipes/command-palette).
+- **Shortcuts:** one action list drives keyboard shortcuts, a command palette and a cheatsheet. `svelte-p5-components/actions` has the registry and the shortcut handler in plain TypeScript, importable from Node; `svelte-p5-components/actions/ui` has `<CommandPalette>` and `<ShortcutCheatsheet>`. See [Shortcuts and a command palette](https://svelte-p5.dev/docs/recipes/command-palette).
 - **Layout and UI:** `<SplitPane>`, `<CanvasFrame>`, `<ActivityBar>`, `<SidePanel>`, `<ContextMenu>`, `<EntityToggleList>` and `<HoverTooltip>`.
 
 ## Stability

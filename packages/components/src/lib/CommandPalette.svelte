@@ -72,6 +72,8 @@
 		sections?: readonly ActionSection[];
 		/** Called after an action runs from the palette. */
 		onRun?: (action: Action) => void;
+		/** When given, an action that throws is reported here and `onRun` is skipped. Without it the error propagates. */
+		onError?: (error: unknown, action: Action) => void;
 		/** Chords that toggle the palette from anywhere on the page. `[]` turns this off. */
 		openKeys?: readonly KeyChord[];
 		class?: string;
@@ -85,6 +87,7 @@
 		recentKey,
 		sections,
 		onRun,
+		onError,
 		openKeys = [{ key: 'k', mod: true }],
 		class: className = ''
 	}: Props = $props();
@@ -193,7 +196,16 @@
 	function runAction(action: Action) {
 		close();
 		recents?.add(action.id);
-		action.run();
+		if (onError) {
+			try {
+				action.run();
+			} catch (error) {
+				onError(error, action);
+				return;
+			}
+		} else {
+			action.run();
+		}
 		onRun?.(action);
 	}
 
@@ -381,6 +393,7 @@
 		position: absolute;
 		inset: 0;
 		background: var(--command-palette-backdrop, rgba(0, 0, 0, 0.5));
+		backdrop-filter: var(--command-palette-backdrop-filter, none);
 		animation: command-palette-fade 150ms ease-out;
 	}
 
