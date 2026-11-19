@@ -34,8 +34,8 @@ catalogs:
       specifier: ^21.0.4
       version: 21.0.4
     p5:
-      specifier: ^2.3.4
-      version: 2.3.4
+      specifier: ^2.4.0
+      version: 2.4.0
     publint:
       specifier: ^0.3.25
       version: 0.3.25
@@ -121,7 +121,7 @@ importers:
     dependencies:
       p5:
         specifier: 'catalog:'
-        version: 2.3.4
+        version: 2.4.0
       svelte-p5:
         specifier: workspace:*
         version: link:../packages/core
@@ -149,7 +149,7 @@ importers:
     dependencies:
       p5:
         specifier: 'catalog:'
-        version: 2.3.4
+        version: 2.4.0
       svelte-p5:
         specifier: workspace:*
         version: link:../../../packages/core
@@ -180,7 +180,7 @@ importers:
     dependencies:
       p5:
         specifier: 'catalog:'
-        version: 2.3.4
+        version: 2.4.0
       svelte-p5:
         specifier: workspace:*
         version: link:../../../packages/core
@@ -214,7 +214,7 @@ importers:
     dependencies:
       p5:
         specifier: 'catalog:'
-        version: 2.3.4
+        version: 2.4.0
       svelte-p5:
         specifier: workspace:*
         version: link:../../../packages/core
@@ -248,7 +248,7 @@ importers:
     dependencies:
       p5:
         specifier: 'catalog:'
-        version: 2.3.4
+        version: 2.4.0
       svelte-p5:
         specifier: workspace:*
         version: link:../packages/core
@@ -316,7 +316,7 @@ importers:
         version: 21.0.4
       p5:
         specifier: 'catalog:'
-        version: 2.3.4
+        version: 2.4.0
       publint:
         specifier: 'catalog:'
         version: 0.3.25
@@ -349,7 +349,7 @@ importers:
         version: 7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.8(@types/node@26.6.6)(jiti@2.7.0)(yaml@2.9.1))
       p5:
         specifier: 'catalog:'
-        version: 2.3.4
+        version: 2.4.0
       publint:
         specifier: 'catalog:'
         version: 0.3.25
@@ -397,7 +397,7 @@ importers:
         version: 5.0.5(vitest@5.0.5)
       p5:
         specifier: 'catalog:'
-        version: 2.3.4
+        version: 2.4.0
       publint:
         specifier: 'catalog:'
         version: 0.3.25
@@ -460,7 +460,7 @@ importers:
         version: 1.9.4
       p5:
         specifier: 'catalog:'
-        version: 2.3.4
+        version: 2.4.0
       svelte-p5:
         specifier: workspace:*
         version: link:../packages/core
@@ -792,6 +792,9 @@ packages:
 
   '@lezer/lr@1.4.12':
     resolution: {integrity: sha512-On9HU4oMMiHPMkQDgoTnGahjgG5n/MkN38CgG77sMraKLL+3JBbeQNi1FcCXV9QRqwF9/BUXP3caHyJC1fBOTQ==}
+
+  '@limzykenneth/tl-util@0.0.1':
+    resolution: {integrity: sha512-s7mR7HzSY7HUBzsVQWQzGm6GTGYOlJy/Y4WctTPtHepKIXYIB93mDrFggclEg/WqnWNP951shh2VAqDPZllGFw==}
 
   '@loaderkit/resolve@1.0.6':
     resolution: {integrity: sha512-G8FdIoF5CypfwmD9rl8BXod5HDn8JqB0CCNBXDTaRZ+yRYhARrrSToX1zg1zy9jX3zLqigsELwhT4gNtkdQAUg==}
@@ -1838,12 +1841,6 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  i18next-browser-languagedetector@4.3.1:
-    resolution: {integrity: sha512-KIToAzf8zwWvacgnRwJp63ase26o24AuNUlfNVJ5YZAFmdGhsJpmFClxXPuk9rv1FMI4lnc8zLSqgZPEZMrW4g==}
-
-  i18next@19.9.2:
-    resolution: {integrity: sha512-0i6cuo6ER6usEOtKajUUDj92zlG+KArFia0857xxiEHAQcUwh/RtOQocui1LPJwunSYT574Pk64aNva1kwtxZg==}
-
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
@@ -2147,8 +2144,8 @@ packages:
     resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
     engines: {node: '>=10'}
 
-  p5@2.3.4:
-    resolution: {integrity: sha512-bU5oNunn4L51hFu3+b6+zAQj+sPIlVyY0JmUCjABVytYwjNwf06EKFiLQgU70z5HPW58qTHRf5G8vM8gNtfbng==}
+  p5@2.4.0:
+    resolution: {integrity: sha512-6y9X+2pjZjc1ZdLbSmJ2eyqFor3U1Ml+oeecG7069YjZXpeyurpchpnC5JCJOzUlEMypaembDo8PEMjStbuOMg==}
 
   package-manager-detector@1.9.0:
     resolution: {integrity: sha512-zAMfbta9nPA8AKkA4WdmNAT8R8s6Dk0/xwPsqNnRidMFcLo1YkLuPDTgs2f64XdzS8vbLNnoJ+uUIkgbz7oRHA==}
@@ -3078,6 +3075,8 @@ snapshots:
   '@lezer/lr@1.4.12':
     dependencies:
       '@lezer/common': 1.5.5
+
+  '@limzykenneth/tl-util@0.0.1': {}
 
   '@loaderkit/resolve@1.0.6':
     dependencies:
@@ -4031,14 +4030,6 @@ snapshots:
 
   husky@9.1.7: {}
 
-  i18next-browser-languagedetector@4.3.1:
-    dependencies:
-      '@babel/runtime': 7.29.10
-
-  i18next@19.9.2:
-    dependencies:
-      '@babel/runtime': 7.29.10
-
   ignore@5.3.2: {}
 
   ignore@7.0.14: {}
@@ -4298,7 +4289,7 @@ snapshots:
     dependencies:
       p-limit: 3.1.0
 
-  p5@2.3.4:
+  p5@2.4.0:
     dependencies:
       '@davepagurek/bezier-path': 0.0.7
       '@japont/unicode-range': 1.0.0
@@ -4307,11 +4298,11 @@ snapshots:
       colorjs.io: 0.6.1
       escodegen: 2.1.0
       gifenc: 1.0.3
-      i18next: 19.9.2
-      i18next-browser-languagedetector: 4.3.1
       libtess: 1.2.2
       omggif: 1.0.10
       pako: 2.2.0
+      tl-util: '@limzykenneth/tl-util@0.0.1'
+      zimmerframe: 1.1.5
       zod: 4.6.7
 
   package-manager-detector@1.9.0: {}

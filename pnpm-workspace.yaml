@@ -17,7 +17,7 @@ catalog:
   '@types/youtube': ^0.3.0
   '@vitest/coverage-v8': ^5.0.5
   happy-dom: ^21.0.4
-  p5: ^2.3.4
+  p5: ^2.4.0
   publint: ^0.3.25
   svelte: ^5.57.3
   svelte-check: ^4.7.8
