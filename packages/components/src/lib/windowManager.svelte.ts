@@ -13,7 +13,7 @@
 
 let counter = $state(100);
 
-export interface WindowHandle {
+interface WindowHandle {
 	readonly z: number;
 	focus(): void;
 }

@@ -101,7 +101,7 @@ export interface TickerScheduler {
 	clearInterval(id: number): void;
 }
 
-export const defaultScheduler: TickerScheduler = {
+const defaultScheduler: TickerScheduler = {
 	raf: (cb) => requestAnimationFrame(cb),
 	cancelRaf: (id) => cancelAnimationFrame(id),
 	interval: (cb, ms) => setInterval(cb, ms) as unknown as number,
