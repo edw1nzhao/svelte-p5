@@ -14,6 +14,7 @@ function makeActions() {
 			id: 'trails',
 			label: 'Toggle Movement Trails',
 			description: 'Show or hide movement paths',
+			keywords: ['movement'],
 			group: 'filter',
 			keys: { key: 'm' },
 			checked: () => trails,
@@ -109,6 +110,23 @@ describe('<CommandPalette>', () => {
 		expect(options[0]).toHaveTextContent('Toggle Stop Points');
 		const marks = [...options[0]!.querySelectorAll('mark')].map((m) => m.textContent);
 		expect(marks.join('')).toBe('Stop');
+	});
+
+	it('marks the label when it matches, even if a keyword ranked the action', async () => {
+		const { user } = setup();
+		await user.keyboard('{Control>}k{/Control}');
+		await user.keyboard('movement');
+		const option = within(dialog()!).getByRole('option', { name: /Toggle Movement Trails/ });
+		const marks = [...option.querySelectorAll('mark')].map((m) => m.textContent);
+		expect(marks.join('')).toBe('Movement');
+	});
+
+	it('leaves the label unmarked when only the description matches', async () => {
+		const { user } = setup();
+		await user.keyboard('{Control>}k{/Control}');
+		await user.keyboard('paths');
+		const option = within(dialog()!).getByRole('option', { name: /Toggle Movement Trails/ });
+		expect(option.querySelectorAll('mark')).toHaveLength(0);
 	});
 
 	it('says so when nothing matches', async () => {
