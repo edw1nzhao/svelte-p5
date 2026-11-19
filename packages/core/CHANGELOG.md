@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.3.0...core-v1.3.1) (2026-11-19)
+
+
+### Refactors
+
+* remove inline comments and unused internal exports ([#173](https://github.com/edw1nzhao/svelte-p5/issues/173)) ([f944494](https://github.com/edw1nzhao/svelte-p5/commit/f94449440b39c877507d93c926eb7dbcf1097a9c))
+
 ## [1.3.0](https://github.com/edw1nzhao/svelte-p5/compare/core-v1.2.0...core-v1.3.0) (2026-10-31)
 
 
