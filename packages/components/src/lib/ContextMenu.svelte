@@ -93,17 +93,11 @@
 	let focusedIndex = $state(-1);
 	let previouslyFocused: HTMLElement | null = null;
 
-	// Respect prefers-reduced-motion. Detected once per mount; re-reading is
-	// cheap but unnecessary — animation duration is the only thing gated on
-	// this so the CSS handles the reduced case via a @media rule anyway.
 	const prefersReducedMotion =
 		typeof window !== 'undefined' &&
 		typeof window.matchMedia === 'function' &&
 		window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	// Measure after mount so auto-flip has real dimensions to work with. The
-	// ResizeObserver also catches the case where items / labels change while
-	// the menu is open.
 	$effect(() => {
 		if (!menuEl) return;
 		const el = menuEl;
@@ -119,16 +113,12 @@
 		return () => ro.disconnect();
 	});
 
-	// Focus + dismiss wiring. Only attaches while open, and captures the
-	// previously-focused element so we can restore focus on close.
 	$effect(() => {
 		if (!open) return;
 		previouslyFocused = (document.activeElement as HTMLElement | null) ?? null;
 		const firstEnabled = items.findIndex((it) => !it.disabled);
 		focusedIndex = firstEnabled;
 
-		// Attach after a microtask so our own opening pointerdown doesn't
-		// immediately get interpreted as an outside click.
 		let attached = false;
 		const attach = () => {
 			if (attached) return;
@@ -148,7 +138,6 @@
 				window.removeEventListener('resize', handleWindowResize);
 				window.removeEventListener('scroll', handleWindowScroll, true);
 			}
-			// Restore focus to whatever owned it before the menu opened.
 			if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
 				previouslyFocused.focus({ preventScroll: true });
 			}
@@ -156,8 +145,6 @@
 		};
 	});
 
-	// When the focused index changes, actually move DOM focus to that item so
-	// keyboard users see a visible focus ring and activate on Enter.
 	$effect(() => {
 		if (!open) return;
 		if (focusedIndex < 0 || !menuEl) return;
@@ -177,15 +164,12 @@
 		const pad = 4;
 		const { x, y } = anchor;
 
-		// Horizontal: prefer the right of the anchor; flip to the left if it
-		// would overflow. Clamp inside the viewport either way.
 		let left = x;
 		if (measuredWidth > 0 && left + measuredWidth + pad > vpW) {
 			left = x - measuredWidth;
 		}
 		left = Math.max(pad, Math.min(vpW - measuredWidth - pad, left));
 
-		// Vertical: prefer below the anchor; flip above if it would overflow.
 		let top = y;
 		if (measuredHeight > 0 && top + measuredHeight + pad > vpH) {
 			top = y - measuredHeight;

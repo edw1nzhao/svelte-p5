@@ -11,7 +11,6 @@ export interface SketchContext<Ext = unknown> {
 	invalidate(): void;
 }
 
-// Symbol.for, so two bundled copies of svelte-p5 still share one key.
 const KEY = Symbol.for('svelte-p5.sketch-context');
 
 export function setSketchContext(context: SketchContext<any>): void {

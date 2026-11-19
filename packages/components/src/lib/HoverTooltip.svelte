@@ -1,21 +1,23 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 
-	// Position-aware tooltip, anchored to a screen-space point.
-	//
-	// Canvas apps hover hit-test results and want a floating tooltip that
-	// tracks the pointer, flips to the other side when it would hit the
-	// viewport edge, and doesn't swallow canvas input. HoverTooltip is the
-	// minimum-viable version: pass `anchor` coordinates (page space) and
-	// `show`; the tooltip measures itself after mount and picks the side
-	// that fits.
-	//
-	// No floating-ui dependency — the edge-flip logic is tiny and handles
-	// the common cases. If you need multi-reference positioning, portal
-	// nesting, or collision detection against arbitrary boundaries, reach
-	// for @floating-ui/dom directly.
-	//
-	// See the package README for a usage example.
+	/**
+	 * Position-aware tooltip, anchored to a screen-space point.
+	 *
+	 * Canvas apps hover hit-test results and want a floating tooltip that
+	 * tracks the pointer, flips to the other side when it would hit the
+	 * viewport edge, and doesn't swallow canvas input. HoverTooltip is the
+	 * minimum-viable version: pass `anchor` coordinates (page space) and
+	 * `show`; the tooltip measures itself after mount and picks the side
+	 * that fits.
+	 *
+	 * No floating-ui dependency — the edge-flip logic is tiny and handles
+	 * the common cases. If you need multi-reference positioning, portal
+	 * nesting, or collision detection against arbitrary boundaries, reach
+	 * for @floating-ui/dom directly.
+	 *
+	 * See the package README for a usage example.
+	 */
 	interface Props {
 		/** Tooltip content. */
 		children: Snippet;
@@ -48,8 +50,6 @@
 	let measuredWidth = $state(0);
 	let measuredHeight = $state(0);
 
-	// Remeasure whenever content changes. The ResizeObserver handles dynamic
-	// content (e.g. tooltip copy updating mid-hover).
 	$effect(() => {
 		if (!tooltipEl) return;
 		const el = tooltipEl;
@@ -77,7 +77,6 @@
 			right: x + measuredWidth + offset <= vpW
 		};
 
-		// Order of preference: requested side first, then opposite axis, then fallbacks.
 		const order: Side[] =
 			preferredSide === 'top'
 				? ['top', 'bottom', 'right', 'left']
@@ -105,8 +104,6 @@
 			top = y - measuredHeight / 2;
 		}
 
-		// Clamp within viewport so the tooltip can't spill over an edge when the
-		// anchor is jammed against one.
 		left = Math.max(4, Math.min(vpW - measuredWidth - 4, left));
 		top = Math.max(4, Math.min(vpH - measuredHeight - 4, top));
 

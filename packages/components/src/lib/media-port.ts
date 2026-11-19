@@ -59,7 +59,6 @@ export function htmlMediaPort(el: HTMLMediaElement): MediaPort {
 			el.currentTime = time;
 		},
 		play() {
-			// play() rejects under autoplay policies; that is not an error here.
 			el.play()?.catch(() => {});
 		},
 		pause() {
@@ -78,8 +77,6 @@ export function htmlMediaPort(el: HTMLMediaElement): MediaPort {
 	};
 }
 
-// Duck-typed rather than `instanceof HTMLMediaElement`, which is not defined
-// during SSR and would throw before the element check could run.
 function isPort(src: unknown): src is MediaSource {
 	return !!src && typeof (src as MediaSource).seek === 'function';
 }

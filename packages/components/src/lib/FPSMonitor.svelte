@@ -26,8 +26,6 @@
 		let ticks = 0;
 		let startTime = -1;
 		let startCount = 0;
-		// Count draws rather than read frameRate(), which stays at its last value while
-		// a 'demand' or 'manual' sketch is idle.
 		const tick = () => {
 			const time = performance.now();
 			if (startTime < 0) {

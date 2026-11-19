@@ -15,7 +15,4 @@ export {
 	type SteppedFrame
 } from './export.js';
 
-// Re-export utils from the main entry for convenience - users doing
-// `import { disableFES } from 'svelte-p5'` get the same
-// helpers they'd get from `.../utils`. Tree-shakeable via `sideEffects: false`.
 export * from './utils/index.js';

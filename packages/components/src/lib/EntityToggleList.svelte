@@ -20,21 +20,22 @@
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	// Entity visibility/color toggle panel.
-	//
-	// Canvas apps that render N separately-colored series (speakers,
-	// actors, clusters, channels) nearly always grow a panel like this:
-	// a row of buttons with a colored swatch and a label, each toggling
-	// the corresponding entity's visibility in the viz. Optional color
-	// editing. Optional grouping (family, cluster). Optional overflow
-	// expander once the list exceeds a threshold.
-	//
-	// The list binds `entities[].visible` back via callbacks rather than
-	// by mutating the prop in place — consumers keep their own authoritative
-	// state and this component stays stateless.
-	//
-	// See the package README for a usage example.
-
+	/**
+	 * Entity visibility/color toggle panel.
+	 *
+	 * Canvas apps that render N separately-colored series (speakers,
+	 * actors, clusters, channels) nearly always grow a panel like this:
+	 * a row of buttons with a colored swatch and a label, each toggling
+	 * the corresponding entity's visibility in the viz. Optional color
+	 * editing. Optional grouping (family, cluster). Optional overflow
+	 * expander once the list exceeds a threshold.
+	 *
+	 * The list binds `entities[].visible` back via callbacks rather than
+	 * by mutating the prop in place — consumers keep their own authoritative
+	 * state and this component stays stateless.
+	 *
+	 * See the package README for a usage example.
+	 */
 	interface Props {
 		/** The list of entities. */
 		entities: Entity[];
@@ -263,9 +264,6 @@
 			Segoe UI,
 			sans-serif;
 
-		/* Defaults derive from currentColor so the list inherits the
-		 * embedding chrome's theme. Consumers can still override any
-		 * of these individually. */
 		--entity-swatch-size: 14px;
 		--entity-btn-bg: transparent;
 		--entity-btn-bg-hover: color-mix(in srgb, currentColor 8%, transparent);

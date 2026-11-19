@@ -123,8 +123,6 @@ export function createMediaSync(options: MediaSyncOptions = {}): MediaSync {
 			read();
 			poller = createPoller(read, isPlaying, {
 				scheduler: options.scheduler,
-				// A subscribing port announces its own resume; one that cannot
-				// must be checked for it, or a paused source would never restart.
 				idleMs: port.subscribe ? 0 : IDLE_POLL_MS
 			});
 			if (port.subscribe) {

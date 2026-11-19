@@ -72,3 +72,19 @@ Apps that cross this boundary - drawing buttons in the canvas, simulating text i
 ## Versioning
 
 `svelte-p5` and `svelte-p5-components` follow semantic versioning: within a major, minor and patch releases never break a documented API, and anything that does carries `BREAKING CHANGE:` in its commit so release-please bumps the major. `svelte-p5-viz` is still `0.x` and unstable by design; pin an exact version. See [Upgrading](./upgrading.md) for what each release means for you.
+
+## Implementation notes
+
+Constraints in the source that the code alone does not explain. Keep them in mind before simplifying the code they describe.
+
+- **`<P5Canvas>` loop mode.** Only transitions of `loop` are applied, so the initial `'always'` never undoes a `noLoop()` called in `setup()`.
+- **`mountSketch` without `setup()`.** On p5 1 a missing `setup` is left undefined, because p5 1 checks `typeof setup === 'undefined'` elsewhere. p5 2 makes its canvas before `setup()`, so there a missing `setup` is replaced by an empty one and wrapped like any other.
+- **Sketch context key.** It is `Symbol.for('svelte-p5.sketch-context')`, so two bundled copies of `svelte-p5` still share one key.
+- **`exportCanvas`.** The scale is nudged up by a factor of `1 + 1e-9` so a product like 3507.9999 still truncates to the intended pixel size. After `noLoop()` p5 still runs the frame it already requested, so a looping sketch waits one animation frame before rendering. The download's object URL is revoked after 30 s because revoking at once can cancel the download before the browser reads the blob.
+- **`<Sketch>` pixel density.** p5 defaults to `devicePixelRatio`, so `hidpi={false}` must call `pixelDensity(1)` explicitly. The resize observer skips no-op sizes, which also swallows its initial callback that would otherwise repeat the sizing done on ready.
+- **`<FPSMonitor>`.** It counts draws instead of reading `frameRate()`, which keeps its last value while a `'demand'` or `'manual'` sketch is idle.
+- **`<DraggableWindow>`.** neodrag's own `axis` option zeroes the locked axis, so an internal plugin holds it at its drag-start value instead. In `'parent'` mode a `ResizeObserver` watches the parent as well, because a flex or grid container resizing does not fire `window` `resize`.
+- **`<ContextMenu>`.** The outside-click listeners attach after a microtask so the pointerdown that opened the menu is not read as an outside click.
+- **`<TimelineTrack>` wheel panning.** `preventDefault()` is called only when the view actually moved, so the page scrolls once there is nothing left to pan.
+- **Media ports.** `htmlMediaPort` swallows the `play()` rejection that autoplay policies produce. Ports are detected by duck typing because `HTMLMediaElement` is not defined during SSR. `createMediaSync` polls an idle source only when its port cannot `subscribe`: a subscribing port announces its own resume, one that cannot would otherwise never restart after a pause.
+- **YouTube port.** `seekTo` starts playback from any state except paused, so after a seek that should not play the adapter pauses the player again once it reports playing.
