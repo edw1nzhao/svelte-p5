@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.4](https://github.com/edw1nzhao/svelte-p5/compare/viz-v0.3.3...viz-v0.3.4) (2026-11-19)
+
+
+### Refactors
+
+* remove inline comments and unused internal exports ([#173](https://github.com/edw1nzhao/svelte-p5/issues/173)) ([f944494](https://github.com/edw1nzhao/svelte-p5/commit/f94449440b39c877507d93c926eb7dbcf1097a9c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * svelte-p5 bumped to 1.3.1
+  * peerDependencies
+    * svelte-p5 bumped from >=0.4.0 <2 to >=1.3.1
+
 ## [0.3.3](https://github.com/edw1nzhao/svelte-p5/compare/viz-v0.3.2...viz-v0.3.3) (2026-10-31)
 
 
