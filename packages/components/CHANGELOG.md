@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.5.0...components-v2.5.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* **components:** highlight a matching label in the command palette ([#171](https://github.com/edw1nzhao/svelte-p5/issues/171)) ([2f561bb](https://github.com/edw1nzhao/svelte-p5/commit/2f561bb309b40551fa2920a0e9ce9cb9a6442acc))
+
 ## [2.5.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.4.0...components-v2.5.0) (2026-11-19)
 
 
