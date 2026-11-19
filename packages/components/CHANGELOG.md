@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.4.0...components-v2.5.0) (2026-11-19)
+
+
+### Features
+
+* **components:** add actions entry with command palette and cheatsheet ([#168](https://github.com/edw1nzhao/svelte-p5/issues/168)) ([63280e6](https://github.com/edw1nzhao/svelte-p5/commit/63280e6f42099138b65ad44bf4dbf94f21f0570f))
+
 ## [2.4.0](https://github.com/edw1nzhao/svelte-p5/compare/components-v2.3.1...components-v2.4.0) (2026-11-18)
 
 
