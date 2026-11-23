@@ -8,7 +8,7 @@ packages:
 # Centralized devDep versions — referenced as "catalog:" in each
 # package.json so Renovate/dependabot touches one file instead of five.
 catalog:
-  '@sveltejs/package': ^3.0.2
+  '@sveltejs/package': ^3.0.3
   '@sveltejs/vite-plugin-svelte': ^7.3.1
   '@testing-library/jest-dom': ^7.0.1
   '@testing-library/svelte': ^5.4.2
